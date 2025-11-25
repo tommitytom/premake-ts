@@ -1,0 +1,25 @@
+{
+  "name": "premake-ts",
+  "version": "1.0.0",
+  "description": "TypeScript-based Premake configuration generator",
+  "type": "module",
+  "main": "src/main.ts",
+  "scripts": {
+    "start": "node --experimental-strip-types --disable-warning=DEP0190 src/main.ts",
+    "test": "node --experimental-strip-types src/main.ts test/premake.ts"
+  },
+  "keywords": [
+    "premake",
+    "typescript",
+    "build"
+  ],
+  "author": "Tom Yaxley",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "typescript": "^5.7.0"
+  },
+  "dependencies": {
+    "openai": "^6.9.1"
+  }
+}
