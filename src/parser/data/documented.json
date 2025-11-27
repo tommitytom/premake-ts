@@ -3338,5 +3338,78 @@
     "parameter": "`values` specifies one or more lines to be written to the Makefile.",
     "availability": "Premake 5.0 or later.",
     "examples": "```lua\nmakesettings [[\n  ifeq ($(strip $(DEVKITPPC)),)\n    $(error \"DEVKITPPC environment variable is not set\")'\n  endif\n  include $(DEVKITPPC)/wii_rules'\n]]\n```"
+  },
+  {
+    "allowed": [
+      "Default",
+      "Web",
+      "Razor",
+      "Worker",
+      "Blazor",
+      "WindowsDesktop",
+      "MSTest"
+    ],
+    "kind": "string",
+    "name": "dotnetsdk",
+    "scope": "project",
+    "scopes": [
+      "project"
+    ],
+    "description": "Selects a .NET SDK\n\n```lua\ndotnetsdk \"SDK\"\n```\n\nFor more information see the MSDN documentation [here](https://learn.microsoft.com/en-us/dotnet/core/project-sdk/overview)",
+    "parameter": "`SDK` is one of:\n\n * [Default](https://learn.microsoft.com/en-us/dotnet/core/project-sdk/msbuild-props)\n * [Web](https://learn.microsoft.com/en-us/aspnet/core/razor-pages/web-sdk?toc=%2Fdotnet%2Fnavigate%2Ftools-diagnostics%2Ftoc.json&bc=%2Fdotnet%2Fbreadcrumb%2Ftoc.json)\n * [Razor](https://learn.microsoft.com/en-us/aspnet/core/razor-pages/sdk?toc=%2Fdotnet%2Fnavigate%2Ftools-diagnostics%2Ftoc.json&bc=%2Fdotnet%2Fbreadcrumb%2Ftoc.json)\n * [Worker](https://learn.microsoft.com/en-us/dotnet/core/extensions/workers)\n * [Blazor](https://learn.microsoft.com/en-us/aspnet/core/blazor/)\n * [WindowsDesktop](https://learn.microsoft.com/en-us/dotnet/core/project-sdk/msbuild-props-desktop?view=aspnetcore-8.0)\n * [MSTest](https://learn.microsoft.com/en-us/dotnet/core/testing/unit-testing-mstest-sdk):  Requires a version be specified.",
+    "availability": "Premake 5.0 beta5 or later.\n\nVisual studio is the only toolset currently supported.",
+    "examples": "```lua\ndotnetsdk \"Web\"\n```\n\n```lua\ndotnetsdk \"Web/3.4.0\"\n```\n\nA custom SDK can be specified using the following:\n```lua\npremake.api.addAllowed(\"dotnetsdk\", \"CustomSDK\") -- add the custom SDK to allowed values for dotnetsdk\ndotnetsdk \"CustomSDK\"\n\ndotnetsdk \"CustomSDK/3.4.0\" -- Specifying a version with a custom SDK is also supported\n```"
+  },
+  {
+    "allowed": [],
+    "kind": "string",
+    "name": "workspace",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "description": "Creates a new workspace.\n\n```lua\nworkspace (\"name\")\n```\n\nWorkspaces are the top-level objects in a Premake build script, and are synonymous with a Visual Studio solution. Each workspace contains one or more projects, which in turn contain the settings to generate a single binary target.",
+    "parameter": "`name` is a unique name for the workspace. If a workspace with the given name already exists, it is made active and returned.\n\nIf no name is given, the current workspace scope is returned, and also made active.\n\nIf \"\\*\" is used, the \"root\" configuration scope, which applies to all workspaces, is selected and nil is returned.\n\nBy default, the project name will be used as the file name of the generated project file; be careful with spaces and special characters. You can override this default with the [filename](filename.md) call.",
+    "availability": "Premake 4.0 or later.",
+    "examples": "Create a new workspace named \"MyWorkspace\", with debug and release build configurations.\n```lua\nworkspace \"MyWorkspace\"\n   configurations { \"Debug\", \"Release\" }\n```"
+  },
+  {
+    "allowed": [],
+    "kind": "string",
+    "name": "project",
+    "scope": "workspace",
+    "scopes": [
+      "workspace"
+    ],
+    "description": "Creates a new project within the scope of a workspace.  After a project is invoked, any previous filter settings are cleared (i.e., reset).\n\n```lua\nproject (\"name\")\n```\n\nProjects contain all of the settings necessary to build a single binary target, and are synonymous with a Visual Studio project. These settings include the list of source code files, the programming language used by those files, compiler flags, include directories, and which libraries to link against.\n\nEvery project belongs to a workspace.",
+    "parameter": "`name` is the name for the project, which must be unique within the workspace which contains the project. If a project with the given name already exists, it is made active and returned.\n\nIf no name is given, the current project scope is returned, and also made active.\n\nIf \"\\*\" is used, the containing workspace, which applies to all workspaces, is made active and nil is returned.\n\nBy default, the project name will be used as the file name of the generated project file; be careful with spaces and special characters. You can override this default with the [filename](filename.md) call.",
+    "availability": "Premake 4.0 or later.",
+    "examples": "Create a new project named \"MyProject\". Note that a workspace must exist to contain the project. The indentation is for readability and is optional.\n\n```lua\nworkspace \"MyWorkspace\"\n   configurations { \"Debug\", \"Release\" }\n\nproject \"MyProject\"\n   kind \"ConsoleApp\"\n   language \"C++\"\n```"
+  },
+  {
+    "allowed": [],
+    "kind": "string",
+    "name": "group",
+    "scope": "workspace",
+    "scopes": [
+      "workspace"
+    ],
+    "description": "Starts a \"workspace group\", a virtual folder to contain one or more projects.\n\n```lua\ngroup(\"name\")\n```",
+    "parameter": "`name` is the name of the virtual folder, as it should appear in the IDE. Nested groups may be created by separating the names with forward slashes.",
+    "availability": "5.0 or later.",
+    "examples": "```lua\nworkspace \"MyWorkspace\"\n\n-- put the projects \"Tests1\" and \"Tests2\" in a virtual folder named \"Tests\"\n\ngroup \"Tests\"\n\n    project \"Tests1\"\n      -- Tests1 stuff goes here\n\n   project \"Tests2\"\n      -- Tests2 stuff goes here\n\n-- Any project defined after the call to group() will go into that group. The\n-- project can be defined in a different script though.\n\ngroup \"Tests\"\n\n    include \"tests/tests1\"\n    include \"tests/tests2\"\n\n-- Groups can be nested with forward slashes, like a file path.\n\ngroup \"Tests/Unit\"\n\n-- To \"close\" a group and put projects back at the root level use\n-- an empty string for the name.\n\ngroup \"\"\n\n   project \"TestHarness\"\n```\n\nThe group value is latched the first time a project is declared but it can be overriden later:\n\n```lua\nlocal prj = project \"Tests1\"\nprj.group = \"NotActuallyATest\"\n```\n\nor\n\n```lua\nproject(\"Tests1\").group = \"NotActuallyATest\"\n```"
+  },
+  {
+    "allowed": [],
+    "kind": "string",
+    "name": "filter",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "description": "Limits the subsequent build settings to a particular environment.\n\n```lua\nfilter { \"prefix:keywords\" }\n```\n\nAny settings that appear after this function in the script will be applied only to those contexts that match all of the listed keywords. See below for some usage examples.",
+    "parameter": "`keywords` is a list of identifiers, prefixed by the field against which they should be tested. When all of the keywords in this list match the current context, the settings that follow the `filter` statement will be applied. If any of the keywords fail this test, the settings are ignored. Keywords may contain wildcards, and are not case-sensitive. See below for examples.\n\nEach keyword must include a prefix to specify which field should be tested. The following field prefixes are currently supported:\n\n  * [action](globals/premake_ACTION.md)\n  * [architecture](architecture.md)\n  * [configurations](configurations.md)\n  * [files](files.md)\n  * [kind](kind.md)\n  * [language](language.md)\n  * [options](globals/premake_OPTIONS.md)\n  * [platforms](platforms.md)\n  * [system](system.md)\n  * [toolset](toolset.md)\n\nKeywords may use the `\\*` and `\\*\\*` wildcards to match more than one term or file. You may also use the modifiers `not` and `or` to build more complex conditions. Again, see the examples below for more information.",
+    "availability": "Premake 5.0 or later.",
+    "examples": "Define a new symbol which applies only to debug builds.\n\n```lua\nworkspace \"MyWorkspace\"\n  configurations { \"Debug\", \"Release\" }\n\nfilter \"configurations:Debug\"\n  defines { \"_DEBUG\" }\n```\n\nIf no field prefix is specified in the keyword, \"configurations\" is used as a default.\n\n```lua\nfilter \"Debug\"\n  defines { \"_DEBUG\" }\n```\n\nDefine a symbol only when targeting Visual Studio 2010.\n\n```lua\nfilter \"action:vs2010\"\n  defines { \"VISUAL_STUDIO_2005\" }\n```\n\nWildcards can be used to match multiple terms. Define a symbol for all versions of Visual Studio.\n\n```lua\nfilter \"action:vs*\"\n  defines { \"VISUAL_STUDIO\" }\n```\n\nThe **or** modifier may be used when several values are possible. Define a value just for library targets.\n\n```lua\nfilter \"kind:SharedLib or StaticLib\"\n  defines { \"LIBRARY_TARGET\" }\n```\n\nWhen multiple keywords are listed, an implicit **and** is assumed between them. Define compiler options only when using GNU Make and GCC.\n\n```lua\nfilter { \"action:gmake*\", \"toolset:gcc\" }\n  buildoptions {\n    \"-Wall\", \"-Wextra\", \"-Werror\"\n  }\n```\n\nIf any keyword pattern fails to match the current context, the entire filter is skipped over. Lua's curly bracket list syntax must be used when multiple keywords are present.\n\nAdd a suffix to the debug versions of libraries.\n\n```lua\n-- (configurations == \"Debug\") and (kind == SharedLib or kind == \"StaticLib\")\nfilter { \"Debug\", \"kind:SharedLib or StaticLib\" }\n  targetsuffix \"_d\"\n\n-- Could also be written as\nfilter { \"Debug\", \"kind:*Lib\" }\n  targetsuffix \"_d\"\n```\n\nApply settings based on the presence of a [custom command line option](Command-Line-Arguments.md).\n\n```lua\n-- Using an option like --localized\nfilter \"options:localized\"\n  files { \"src/localizations/**\" }\n\n-- Using an option like --renderer=opengl\nfilter \"options:renderer=opengl\"\n  files { \"src/opengl/**.cpp\" }\n```\n\nAlthough support is currently limited, you may also apply settings to a particular file or set of files. This example sets the build action for all PNG image files.\n\n```lua\nfilter \"files:*.png\"\n  buildaction \"Embed\"\n```\n\nIn the case of files you may also use the **\\*\\*** wildcard, which will recurse into subdirectories.\n\n```lua\nfilter \"files:**.png\"\n  buildaction \"Embed\"\n```\n\nYou can also use **not** to apply the settings to all environments where the identifier is not set.\n\n```lua\nfilter \"system:not windows\"\n  defines { \"NOT_WINDOWS\" }\n```\n\nYou can combine different prefixes within a single keyword.\n\n```lua\nfilter \"system:windows or language:C#\"\n```\n\nFinally, you can reset the filter and remove all active keywords by passing the function an empty table.\n\n```lua\nfilter {}\n```"
   }
 ]

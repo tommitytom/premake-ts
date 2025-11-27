@@ -14,12 +14,17 @@ const __dirname = path.dirname(__filename);
  * @param filename The name of the file to load
  * @returns The parsed JSON array or an empty array if file doesn't exist
  */
-export function loadExistingData<T>(filename: string): T[] {
+export function loadData<T>(filename: string): T[] {
 	const filePath = path.join(__dirname, filename);
 	if (fs.existsSync(filePath)) {
 		return JSON.parse(fs.readFileSync(filePath, 'utf-8'));
 	}
 	return [];
+}
+
+export function saveData<T>(data: T[], filename: string): void {
+	const filePath = path.join(__dirname, filename);
+	fs.writeFileSync(filePath, JSON.stringify(data, null, 2), 'utf-8');
 }
 
 /**

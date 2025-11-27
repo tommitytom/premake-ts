@@ -3350,4 +3350,138 @@ export interface ConfigScopeGenerated {
 	 */
 	undefines(...symbols: string[]): this;
 
+	/**
+	 * Creates a new workspace.
+	 * Workspaces are the top-level objects in a Premake build script, and are synonymous with a Visual Studio solution. Each workspace contains one or more projects, which in turn contain the settings to generate a single binary target.
+	 * 
+	 * 
+	 * Premake 4.0 or later.
+	 * @param name A unique name for the workspace. If a workspace with the given name already exists, it is made active and returned. If no name is given, the current workspace scope is returned, and also made active. If '*' is used, the 'root' configuration scope, which applies to all workspaces, is selected and nil is returned.
+	 * 
+	 * ### Examples
+	 * Create a new workspace named "MyWorkspace", with debug and release build configurations.
+	 * ```lua
+	 * workspace "MyWorkspace"
+	 *    configurations { "Debug", "Release" }
+	 * ```
+	 */
+	workspace(name: string): this;
+
+	/**
+	 * Limits the subsequent build settings to a particular environment.
+	 * Any settings that appear after this function in the script will be applied only to those contexts that match all of the listed keywords. See below for some usage examples.
+	 * 
+	 * 
+	 * Premake 5.0 or later.
+	 * @param keywords A list of identifiers, prefixed by the field against which they should be tested.
+	 * 
+	 * ### Examples
+	 * Define a new symbol which applies only to debug builds.
+	 * 
+	 * ```lua
+	 * workspace "MyWorkspace"
+	 *   configurations { "Debug", "Release" }
+	 * 
+	 * filter "configurations:Debug"
+	 *   defines { "_DEBUG" }
+	 * ```
+	 * 
+	 * If no field prefix is specified in the keyword, "configurations" is used as a default.
+	 * 
+	 * ```lua
+	 * filter "Debug"
+	 *   defines { "_DEBUG" }
+	 * ```
+	 * 
+	 * Define a symbol only when targeting Visual Studio 2010.
+	 * 
+	 * ```lua
+	 * filter "action:vs2010"
+	 *   defines { "VISUAL_STUDIO_2005" }
+	 * ```
+	 * 
+	 * Wildcards can be used to match multiple terms. Define a symbol for all versions of Visual Studio.
+	 * 
+	 * ```lua
+	 * filter "action:vs*"
+	 *   defines { "VISUAL_STUDIO" }
+	 * ```
+	 * 
+	 * The **or** modifier may be used when several values are possible. Define a value just for library targets.
+	 * 
+	 * ```lua
+	 * filter "kind:SharedLib or StaticLib"
+	 *   defines { "LIBRARY_TARGET" }
+	 * ```
+	 * 
+	 * When multiple keywords are listed, an implicit **and** is assumed between them. Define compiler options only when using GNU Make and GCC.
+	 * 
+	 * ```lua
+	 * filter { "action:gmake*", "toolset:gcc" }
+	 *   buildoptions {
+	 *     "-Wall", "-Wextra", "-Werror"
+	 *   }
+	 * ```
+	 * 
+	 * If any keyword pattern fails to match the current context, the entire filter is skipped over. Lua's curly bracket list syntax must be used when multiple keywords are present.
+	 * 
+	 * Add a suffix to the debug versions of libraries.
+	 * 
+	 * ```lua
+	 * -- (configurations == "Debug") and (kind == SharedLib or kind == "StaticLib")
+	 * filter { "Debug", "kind:SharedLib or StaticLib" }
+	 *   targetsuffix "_d"
+	 * 
+	 * -- Could also be written as
+	 * filter { "Debug", "kind:*Lib" }
+	 *   targetsuffix "_d"
+	 * ```
+	 * 
+	 * Apply settings based on the presence of a [custom command line option](Command-Line-Arguments.md).
+	 * 
+	 * ```lua
+	 * -- Using an option like --localized
+	 * filter "options:localized"
+	 *   files { "src/localizations/**" }
+	 * 
+	 * -- Using an option like --renderer=opengl
+	 * filter "options:renderer=opengl"
+	 *   files { "src/opengl/**.cpp" }
+	 * ```
+	 * 
+	 * Although support is currently limited, you may also apply settings to a particular file or set of files. This example sets the build action for all PNG image files.
+	 * 
+	 * ```lua
+	 * filter "files:*.png"
+	 *   buildaction "Embed"
+	 * ```
+	 * 
+	 * In the case of files you may also use the **\*\*** wildcard, which will recurse into subdirectories.
+	 * 
+	 * ```lua
+	 * filter "files:**.png"
+	 *   buildaction "Embed"
+	 * ```
+	 * 
+	 * You can also use **not** to apply the settings to all environments where the identifier is not set.
+	 * 
+	 * ```lua
+	 * filter "system:not windows"
+	 *   defines { "NOT_WINDOWS" }
+	 * ```
+	 * 
+	 * You can combine different prefixes within a single keyword.
+	 * 
+	 * ```lua
+	 * filter "system:windows or language:C#"
+	 * ```
+	 * 
+	 * Finally, you can reset the filter and remove all active keywords by passing the function an empty table.
+	 * 
+	 * ```lua
+	 * filter {}
+	 * ```
+	 */
+	filter(keywords: string): this;
+
 }

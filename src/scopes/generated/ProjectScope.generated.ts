@@ -5,6 +5,7 @@ export type SharedLibTypeType = 'OSXBundle' | 'OSXFramework' | 'XCTest'
 export type LanguageType = 'C' | 'C++' | 'C#' | 'F#'
 export type JustMyCodeType = 'On' | 'Off'
 export type OpenMpType = 'On' | 'Off'
+export type DotNetSdkType = 'Default' | 'Web' | 'Razor' | 'Worker' | 'Blazor' | 'WindowsDesktop' | 'MSTest'
 export interface ProjectScopeGenerated {
 	/**
 	 * Specifies the application icon resource.
@@ -499,5 +500,42 @@ export interface ProjectScopeGenerated {
 	 * ```
 	 */
 	nuGetSource(url: string): this;
+
+	/**
+	 * Selects a .NET SDK
+	 * For more information see the MSDN documentation [here](https://learn.microsoft.com/en-us/dotnet/core/project-sdk/overview)
+	 * 
+	 * 
+	 * Premake 5.0 beta5 or later.
+	 * 
+	 * Visual studio is the only toolset currently supported.
+	 * @param SDK
+	 * Available options:
+	 * - `Default`
+	 * - `Web`
+	 * - `Razor`
+	 * - `Worker`
+	 * - `Blazor`
+	 * - `WindowsDesktop`
+	 * - `MSTest`: Requires a version be specified.
+	 * 
+	 * ### Examples
+	 * ```lua
+	 * dotnetsdk "Web"
+	 * ```
+	 * 
+	 * ```lua
+	 * dotnetsdk "Web/3.4.0"
+	 * ```
+	 * 
+	 * A custom SDK can be specified using the following:
+	 * ```lua
+	 * premake.api.addAllowed("dotnetsdk", "CustomSDK") -- add the custom SDK to allowed values for dotnetsdk
+	 * dotnetsdk "CustomSDK"
+	 * 
+	 * dotnetsdk "CustomSDK/3.4.0" -- Specifying a version with a custom SDK is also supported
+	 * ```
+	 */
+	dotNetSdk(SDK: DotNetSdkType): this;
 
 }

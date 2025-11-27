@@ -61,4 +61,86 @@ export interface WorkspaceScopeGenerated {
 	 */
 	editorIntegration(value: boolean): this;
 
+	/**
+	 * Creates a new project within the scope of a workspace.  After a project is invoked, any previous filter settings are cleared (i.e., reset).
+	 * Projects contain all of the settings necessary to build a single binary target, and are synonymous with a Visual Studio project. These settings include the list of source code files, the programming language used by those files, compiler flags, include directories, and which libraries to link against.
+	 * 
+	 * Every project belongs to a workspace.
+	 * 
+	 * 
+	 * Premake 4.0 or later.
+	 * @param name The name for the project, which must be unique within the workspace.
+	 * Available options:
+	 * - `*`: The containing workspace, which applies to all workspaces, is made active and nil is returned.
+	 * 
+	 * ### Examples
+	 * Create a new project named "MyProject". Note that a workspace must exist to contain the project. The indentation is for readability and is optional.
+	 * 
+	 * ```lua
+	 * workspace "MyWorkspace"
+	 *    configurations { "Debug", "Release" }
+	 * 
+	 * project "MyProject"
+	 *    kind "ConsoleApp"
+	 *    language "C++"
+	 * ```
+	 */
+	project(name: string): this;
+
+	/**
+	 * Starts a "workspace group", a virtual folder to contain one or more projects.
+	 * 
+	 * 
+	 * 5.0 or later.
+	 * @param name The name of the virtual folder, as it should appear in the IDE. Nested groups may be created by separating the names with forward slashes.
+	 * 
+	 * ### Examples
+	 * ```lua
+	 * workspace "MyWorkspace"
+	 * 
+	 * -- put the projects "Tests1" and "Tests2" in a virtual folder named "Tests"
+	 * 
+	 * group "Tests"
+	 * 
+	 *     project "Tests1"
+	 *       -- Tests1 stuff goes here
+	 * 
+	 *    project "Tests2"
+	 *       -- Tests2 stuff goes here
+	 * 
+	 * -- Any project defined after the call to group() will go into that group. The
+	 * -- project can be defined in a different script though.
+	 * 
+	 * group "Tests"
+	 * 
+	 *     include "tests/tests1"
+	 *     include "tests/tests2"
+	 * 
+	 * -- Groups can be nested with forward slashes, like a file path.
+	 * 
+	 * group "Tests/Unit"
+	 * 
+	 * -- To "close" a group and put projects back at the root level use
+	 * -- an empty string for the name.
+	 * 
+	 * group ""
+	 * 
+	 *    project "TestHarness"
+	 * ```
+	 * 
+	 * The group value is latched the first time a project is declared but it can be overriden later:
+	 * 
+	 * ```lua
+	 * local prj = project "Tests1"
+	 * prj.group = "NotActuallyATest"
+	 * ```
+	 * 
+	 * or
+	 * 
+	 * ```lua
+	 * project("Tests1").group = "NotActuallyATest"
+	 * ```
+	 */
+	group(name: string): this;
+
 }

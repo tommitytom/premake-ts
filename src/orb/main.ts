@@ -200,7 +200,7 @@ function resolveModulePaths(orbs: IModuleOrb[]) {
 }
 
 function setupWorkspace(w: WorkspaceScope) {
-	w.configurations(['Debug', 'Release']);
+	w.configurations('Debug', 'Release');
 	w.architecture('x86_64');
 	w.location('build/' + w.action);
 	w.cppDialect('C++20');

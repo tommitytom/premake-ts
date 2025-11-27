@@ -47,6 +47,17 @@ function generateFunction(field: SanitizedField): string {
 	if (hasDescription) {
 		items.push(field.description);
 	}
+
+	if (field.parameter.description && field.parameter.description !== '') {
+		if (items.length) items.push('');
+		items.push(field.parameter.description);
+	}
+
+	if (field.parameter.additional && field.parameter.additional !== '') {
+		if (items.length) items.push('');
+		items.push(field.parameter.additional);
+	}
+
 	if (hasOptions) {
 		if (items.length) items.push('');
 		items.push('Options:');
