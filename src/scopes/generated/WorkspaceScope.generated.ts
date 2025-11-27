@@ -1,7 +1,6 @@
 // Auto-generated file. Do not edit directly.
 
 export type PreferredToolArchitectureType = 'Default' | 'x86' | 'x86_64'
-
 export interface WorkspaceScopeGenerated {
 	/**
 	 * Specify the startup project for a workspace.
@@ -9,7 +8,7 @@ export interface WorkspaceScopeGenerated {
 	 * 
 	 * 
 	 * 5.0 or later.
-	 * @param name The name of the startup project. This should match the name provided in the call to project(), where the project is defined.
+	 * @param name The name of the startup project, which should match the name provided in the call to project() when the project is defined.
 	 * 
 	 * ### Examples
 	 * ```lua
@@ -31,16 +30,35 @@ export interface WorkspaceScopeGenerated {
 	 * 
 	 * 
 	 * Premake 5.0.0 alpha 12 or later.
-	 * @param value Available options:
+	 * @param value
+	 * Available options:
 	 * - `Default`: needs documentation.
 	 * - `x86`: needs documentation.
 	 * - `x86_64`: needs documentation.
 	 * 
-	 * ### Examples
-	 * ```lua
-	 * preferredtoolarchitecture "value"
-	 * ```
 	 */
 	preferredToolArchitecture(value: PreferredToolArchitectureType): this;
+
+	/**
+	 * Turns the Editor Integration feature on. This is simply a hint to the action to add extra information into the generated workspace that allows an IDE to know which/where and how premake was executed. This is currently really only implemented for the Visual Studio action, but other actions may use this too in the future.
+	 * 
+	 * There is a plugin that allows re-execution of the premake step from within Visual Studio, which can be found here:
+	 * https://github.com/tvandijck/PremakeExtension
+	 * If no value is set for a configuration, the toolset's default setting (usually "Off") will be used.
+	 * 
+	 * 
+	 * Premake 5.0 or later.
+	 * @param value A boolean value that can be set to 'On' or 'Off'.
+	 * Available options:
+	 * - `On`
+	 * - `Off`
+	 * 
+	 * ### Examples
+	 * ```lua
+	 * -- Turn on IDE integration
+	 * editorintegration "On"
+	 * ```
+	 */
+	editorIntegration(value: boolean): this;
 
 }

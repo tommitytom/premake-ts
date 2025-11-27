@@ -1,21 +1,20 @@
-I am going to provide you with a description of a parameter passed to a function and potentially some other information. I would like you to extract the information and present it in a JSON object with the following structure:
+I am going to provide you with a description of a parameter passed to a function and potentially some other information. I would like you to extract the parameter information and present it in a JSON object with the following structure:
 
 ```json
 {
-  "parameters": {
-    "paramName": {
-      "description": "Description of the parameter.",
-      "options": [
-        { "name": "Foo", "description": "Foo description." },
-        { "name": "Bar", "description": "Bar description." }
-      ]
-    }
-  },
+  "name": "paramName",
+  "description": "Description of the parameter.",
+  "options": [
+    { "name": "Foo", "description": "Foo description." },
+    { "name": "Bar", "description": "Bar description." }
+  ],
   "additional": "Any additional information found in the text."
 }
 ```
 
-All "description", "options" and "additional" fields are optional.
+A parameter must *ALWAYS* have a description. If there is no obvious description provided, you should generate something appropriate.
+All "options" and "additional" fields are optional, as are option descriptions.
+If the parameter name has spaces in it, format it as lower_snake_case.
 If there are option items in a markdown table, you can ignore the headers. Always treat them as "option" and "description". Here is an example:
 
 Provided markdown:
@@ -33,14 +32,11 @@ Ensure that you have the correct value set.
 Expected result:
 ```json
 {
-  "parameters": {
-    "value": {
-      "options": [
-        { "name": "On", "description": "Treat headers included with angle brackets as external." },
-        { "name": "Off", "description": "Default. Headers are treated normally." }
-      ]
-    }
-  },
+  "name": "value",
+  "options": [
+    { "name": "On", "description": "Treat headers included with angle brackets as external." },
+    { "name": "Off", "description": "Default. Headers are treated normally." }
+  ],
   "additional": "Ensure that you have the correct value set."
 }
 ```
@@ -56,19 +52,23 @@ Provided markdown:
 Expected result:
 ```json
 {
-  "parameters": {
-    "type": {
-      "description": "Specifies whether the feature is enabled or disabled.",
-      "options": [
-        { "name": "On" },
-        { "name": "Off" }
-      ]
-    }
-  }
+  "name": "value",
+  "description": "Specifies whether the feature is enabled or disabled.",
+  "options": [
+    { "name": "On" },
+    { "name": "Off" }
+  ]
 }
 ```
 
 Your response should contain only the JSON and the enclosing code marks. DO NOT enclose strings in check marks (`) if they are not in the original text.
 
-This is the text I would like you to process:
+Here is a description of the function the contains the parameter:
+```
+{{FUNCTION_DESCRIPTION}}
+```
 
+This is the parameter text I would like you to process:
+```
+{{PARAMETER_DESCRIPTION}}
+```

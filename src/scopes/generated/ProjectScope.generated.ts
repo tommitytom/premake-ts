@@ -3,7 +3,8 @@
 export type ResourceGeneratorType = 'internal' | 'public'
 export type SharedLibTypeType = 'OSXBundle' | 'OSXFramework' | 'XCTest'
 export type LanguageType = 'C' | 'C++' | 'C#' | 'F#'
-
+export type JustMyCodeType = 'On' | 'Off'
+export type OpenMpType = 'On' | 'Off'
 export interface ProjectScopeGenerated {
 	/**
 	 * Specifies the application icon resource.
@@ -19,21 +20,18 @@ export interface ProjectScopeGenerated {
 	 *    icon "MyProject.ico"
 	 * ```
 	 */
-	icon(name: any): this;
+	icon(name: string): this;
 
 	/**
 	 * 
 	 * 
 	 * 
 	 * Premake 5.0.0 alpha 12 or later.
-	 * @param value Available options:
-	 * - `internal`: needs documentation.
-	 * - `public`: needs documentation.
+	 * @param value
+	 * Available options:
+	 * - `internal`
+	 * - `public`
 	 * 
-	 * ### Examples
-	 * ```lua
-	 * resourcegenerator "value"
-	 * ```
 	 */
 	resourceGenerator(value: ResourceGeneratorType): this;
 
@@ -85,22 +83,19 @@ export interface ProjectScopeGenerated {
 	 * configurations { "Debug", "Release", "DebugDLL", "ReleaseDLL" }
 	 * ```
 	 */
-	configurations(names: string[]): this;
+	configurations(...names: string[]): this;
 
 	/**
 	 * 
 	 * 
 	 * 
 	 * Premake 5.0.0 alpha 12 or later.
-	 * @param value Available options:
+	 * @param value
+	 * Available options:
 	 * - `OSXBundle`: needs documentation.
 	 * - `OSXFramework`: needs documentation.
 	 * - `XCTest`: needs documentation.
 	 * 
-	 * ### Examples
-	 * ```lua
-	 * sharedlibtype "value"
-	 * ```
 	 */
 	sharedLibType(value: SharedLibTypeType): this;
 
@@ -109,11 +104,12 @@ export interface ProjectScopeGenerated {
 	 * 
 	 * 
 	 * `C`, `C++`, and `C#` are available in Premake 4.0 or later. Others are 5.0 or later.
-	 * @param lang Available options:
-	 * - `C`: Built-in; always available
-	 * - `C++`: Built-in; always available
-	 * - `C#`: Built-in; always available
-	 * - `F#`: Built-in; always available
+	 * @param lang The language identifier used by the project.
+	 * Available options:
+	 * - `C`: Built-in; always available.
+	 * - `C++`: Built-in; always available.
+	 * - `C#`: Built-in; always available.
+	 * - `F#`: Built-in; always available.
 	 * 
 	 * ### Examples
 	 * Set the project language to C++.
@@ -136,13 +132,7 @@ export interface ProjectScopeGenerated {
 	 * 
 	 * 
 	 * 5.0 or later.
-	 * @param wks_cfg The workspace configuration being mapped. Available options:
-	 * - `string representing a build configuration`
-	 * - `string representing a platform`
-	 * - `table holding a build configuration/platform pair`
-	 * @param prj_cfg The project configuration to which the workspace configuration should be mapped. Available options:
-	 * - `string`
-	 * - `build configuration/platform pair`
+	 * @param value
 	 * 
 	 * ### Examples
 	 * The workspace contains four build configurations, while the project contains only the standard Debug and Release. Map the extra workspace configurations to Debug and Release.
@@ -181,7 +171,7 @@ export interface ProjectScopeGenerated {
 	 * project "MyHostProject"
 	 * ```
 	 */
-	configMap(wks_cfg: any): this;
+	configMap(value: any): this;
 
 	/**
 	 * Sets the base directory for a configuration, from with other paths contained by the configuration will be made relative at export time.
@@ -189,22 +179,18 @@ export interface ProjectScopeGenerated {
 	 * 
 	 * 
 	 * Premake 4.4 or later.
-	 * @param value An absolute path, from which other paths contained by the configuration should be made relative.
+	 * @param value An absolute path from which other paths contained by the configuration should be made relative.
 	 * 
 	 */
-	baseDir(value: any): this;
+	baseDir(value: string): this;
 
 	/**
 	 * - This page was auto-generated. Feel free to help us improve the documentation by creating a pull request.
 	 * 
 	 * 
 	 * Premake 5.0.0 beta 1 or later.
-	 * @param value
+	 * @param value Needs documentation.
 	 * 
-	 * ### Examples
-	 * ```lua
-	 * fastuptodate (value)
-	 * ```
 	 */
 	fastUpToDate(value: boolean): this;
 
@@ -241,12 +227,8 @@ export interface ProjectScopeGenerated {
 	 * 
 	 * 
 	 * Premake 5.0.0 alpha 14 or later.
-	 * @param value
+	 * @param value Needs documentation.
 	 * 
-	 * ### Examples
-	 * ```lua
-	 * xcodesystemcapabilities (value)
-	 * ```
 	 */
 	xcodeSystemCapabilities(value: boolean): this;
 
@@ -274,6 +256,248 @@ export interface ProjectScopeGenerated {
 	 * location ("../build/" .. _ACTION)
 	 * ```
 	 */
-	location(path: any): this;
+	location(path: string): this;
+
+	/**
+	 * Specifies a set of build platforms, which act as another configuration axis when building.
+	 * The platforms listed here are just names to be displayed in the IDE, with no intrinsic meaning. A platform named "x86_64" will not create a 64-bit build; the appropriate architecture still must be specified. For more information, see [Configurations and Platforms](Configurations-and-Platforms.md).
+	 * 
+	 * 
+	 * Premake 5.0 or later.
+	 * @param names A list of platform names. Spaces are allowed, but may make using certain Premake features, such as command-line configuration selection, more difficult.
+	 * 
+	 * ### Examples
+	 * Specify debug and release configurations for a workspace, with static and shared library "platforms" in 32- and 64-bit variations.
+	 * 
+	 * ```lua
+	 * workspace "MyWorkspace"
+	 *   configurations { "Debug", "Release" }
+	 *   platforms { "Static32", "Shared32", "Static64", "Shared64" }
+	 * 
+	 *   filter "platforms:Static32"
+	 *     kind "StaticLib"
+	 *     architecture "x32"
+	 * 
+	 *   filter "platforms:Static64"
+	 *     kind "StaticLib"
+	 *     architecture "x64"
+	 * 
+	 *   filter "platforms:Shared32"
+	 *     kind "SharedLib"
+	 *     architecture "x32"
+	 * 
+	 *   filter "platforms:Shared64"
+	 *     kind "SharedLib"
+	 *     architecture "x64"
+	 * ```
+	 */
+	platforms(...names: string[]): this;
+
+	/**
+	 * Specifies the default build platform for a workspace.
+	 * If `platform_name` has not been defined using [`platforms`](platforms.md) the default platform will not change from the generic one i.e. the first one passed to [`platforms`](platforms.md).
+	 * 
+	 * 
+	 * Premake 5.0.0 alpha 12 or later.
+	 * @param platform_name Is the name of the platform you want to use as default.
+	 * 
+	 * ### Examples
+	 * ```lua
+	 * workspace "MyWorkspace"
+	 *   configurations { "Debug", "Release" }
+	 *   platforms { "Static32", "Shared32", "Static64", "Shared64" }
+	 *   defaultplatform "Shared64" -- Default platform from "Static32" to "Shared64"
+	 * 
+	 *   filter "platforms:Static32"
+	 *     kind "StaticLib"
+	 *     architecture "x32"
+	 * 
+	 *   filter "platforms:Static64"
+	 *     kind "StaticLib"
+	 *     architecture "x64"
+	 * 
+	 *   filter "platforms:Shared32"
+	 *     kind "SharedLib"
+	 *     architecture "x32"
+	 * 
+	 *   filter "platforms:Shared64"
+	 *     kind "SharedLib"
+	 *     architecture "x64"
+	 * 
+	 * ```
+	 */
+	defaultPlatform(platform_name: string): this;
+
+	/**
+	 * Imports one or more [custom rules](Custom-Rules.md) into a project.
+	 * 
+	 * 
+	 * Premake 5.0 or later.
+	 * @param rule_names Specifies a list of one or more names of custom rules, which must be defined elsewhere in the project scripts.
+	 * 
+	 */
+	rules(...rule_names: string[]): this;
+
+	/**
+	 * Selects the tools version which is used to build a project.
+	 * If no version is specified for a configuration, the build tool will define the a default version.
+	 * 
+	 * 
+	 * Premake 5.0 and later. Versions are currently only implemented for Visual Studio 2017+.
+	 * @param identifier A string identifier for the toolset version.
+	 * 
+	 * ### Examples
+	 * Specify tool version 14.27.29110 of the toolset.
+	 * 
+	 * ```lua
+	 * toolsversion "14.27.29110"
+	 * ```
+	 */
+	toolsVersion(identifier: string): this;
+
+	/**
+	 * Sets the [Universally Unique Identifier](http://en.wikipedia.org/wiki/UUID) (UUID) for a project.
+	 * UUIDs are synonymous (for Premake's purposes) with [Globally Unique Identifiers](http://en.wikipedia.org/wiki/Globally_Unique_Identifier) (GUID).
+	 * 
+	 * Premake automatically assigns a UUID to each project, which is used by the Visual Studio generators to identify the project within a workspace. This UUID is essentially random and will change each time the project file is generated. If you are storing the generated Visual Studio project files in a version control system, this will create a lot of unnecessary deltas. Using the `uuid` function, you can assign a fixed UUID to each project which never changes, removing the randomness from the generated projects.
+	 * 
+	 * 
+	 * Premake 4.0 or later.
+	 * @param project_uuid The UUID for the current project. It should take the form '01234567-ABCD-ABCD-ABCD-0123456789AB'. You can use the Visual Studio guidgen tool to create new UUIDs, or a website like www.famkruithof.net/uuid/uuidgen, or run Premake once to generate Visual Studio files and copy the assigned UUIDs.
+	 * 
+	 * ### Examples
+	 * Set the UUID for a current project.
+	 * 
+	 * ```lua
+	 * uuid "BE2461B7-236F-4278-81D3-F0D476F9A4C0"
+	 * ```
+	 */
+	uuid(project_uuid: string): this;
+
+	/**
+	 * Places files into groups or "virtual paths", rather than the default behavior of mirroring the filesystem in IDE-based projects. So you could, for instance, put all header files in a group called "Headers", no matter where they appeared in the source tree.
+	 * Note that Lua tables do not maintain any ordering between key-value pairs, so there is no precedence between the supplied rules. That is, you can't write a rule that rewrites the results of an earlier rule, since there is no guarantee in which order the rules will run.
+	 * 
+	 * 
+	 * Premake 4.4 or later.
+	 * @param file_patterns A list of key/value pairs that map file patterns to the group in which they should appear.
+	 * 
+	 * ### Examples
+	 * Place all header files into a virtual path called "Headers". Any directory information is removed, so a path such as `src/lua/lua.h` will appear in the IDE as `Headers/lua.h`.
+	 * 
+	 * ```lua
+	 * vpaths { ["Headers"] = "**.h" }
+	 * ```
+	 * 
+	 * You may also specify multiple file patterns using the table syntax.
+	 * 
+	 * ```lua
+	 * vpaths {
+	 *    ["Headers"] = { "**.h", "**.hxx", "**.hpp" }
+	 * }
+	 * ```
+	 * 
+	 * It is also possible to include the file's path in the virtual group. Using the same example as above, this rule will appear in the IDE as `Headers/src/lua/lua.h`.
+	 * 
+	 * ```lua
+	 * vpaths { ["Headers/*"] = "**.h" }
+	 * ```
+	 * 
+	 * Any directory information explicitly provided in the pattern will be removed from the replacement. This rule will appear in the IDE as `Headers/lua/lua.h`.
+	 * 
+	 * ```lua
+	 * vpaths { ["Headers/*"] = "src/**.h" }
+	 * ```
+	 * 
+	 * You can also use virtual paths to remove extra directories from the IDE. For instance, this rule will cause the previous example to appear as `lua/lua.h`, removing the `src` part of the path from *all* files.
+	 * 
+	 * ```lua
+	 * vpaths { ["*"] = "src" }
+	 * ```
+	 * 
+	 * And of course, you can specify more than one rule at a time.
+	 * 
+	 * ```lua
+	 * vpaths {
+	 *    ["Headers"] = "**.h",
+	 *    ["Sources/*"] = {"**.c", "**.cpp"},
+	 *    ["Docs"] = "**.txt"
+	 * }
+	 * ```
+	 */
+	vPaths(file_patterns: any): this;
+
+	/**
+	 * Sets the root namespace of a project.
+	 * By default, the root namespace for a project which match the target (assembly) name. This function allows you to override that default.
+	 * 
+	 * Currently, this is only applicable to Visual Studio C# projects.
+	 * 
+	 * 
+	 * Premake 5.0 or later.
+	 * @param name The desired root namespace for the project.
+	 * 
+	 * ### Examples
+	 * ```lua
+	 * project "MyProject"
+	 *    namespace "MyCompany.MyProject"
+	 * ```
+	 */
+	namespace(name: string): this;
+
+	/**
+	 * Enables or disables Visual Studio Just My Code debugging feature by passing /JMC option to the compiler. This applies only to VS C++ projects.
+	 * If no value is set for a configuration, the toolset's default option (usually "On") will be performed.
+	 * 
+	 * 
+	 * Premake 5.0 or later.
+	 * 
+	 * Visual Studio 2017 version 15.8 or later.
+	 * @param value
+	 * Available options:
+	 * - `On`: Turn on JustMyCode debugging support.
+	 * - `Off`: Turn off JustMyCode debugging support.
+	 * 
+	 */
+	justMyCode(value: JustMyCodeType): this;
+
+	/**
+	 * Imports custom .props files for Visual Studio.
+	 * 
+	 * 
+	 * Premake 5.0.0 alpha 12 or later.
+	 * @param value Needs documentation.
+	 * 
+	 */
+	buildCustomizations(...value: string[]): this;
+
+	/**
+	 * Enables or disables [OpenMP](https://en.wikipedia.org/wiki/OpenMP).
+	 * If no value is set for a configuration, the toolset's default OpenMP option (usually "Off") will be performed.
+	 * 
+	 * 
+	 * Premake 5.0-beta1 or later for Visual Studio 2010+ and the MSC toolset.
+	 * Premake 5.0-beta2 or later for the GCC and Clang toolsets and for xcode.
+	 * @param value Enables or disables OpenMP.
+	 * Available options:
+	 * - `On`: Turn on OpenMP.
+	 * - `Off`: Turn off OpenMP.
+	 * 
+	 */
+	openMp(value: OpenMpType): this;
+
+	/**
+	 * Used to specify the NuGet package source. Only NuGet "galleries" are currently supported. Defaults to the official NuGet Gallery at nuget.org.
+	 * 
+	 * 
+	 * Premake 5.0.0 alpha 12 or later.
+	 * @param url The NuGet v3 feed URL.
+	 * 
+	 * ### Examples
+	 * ```lua
+	 * nugetsource "https://api.nuget.org/v3/index.json"
+	 * ```
+	 */
+	nuGetSource(url: string): this;
 
 }

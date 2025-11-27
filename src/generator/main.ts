@@ -1,5 +1,5 @@
 import { pathToFileURL } from 'node:url';
-import { resolve } from 'node:path';
+import { resolve, dirname, join, basename } from 'node:path';
 import fs from 'node:fs';
 import { spawn } from 'node:child_process';
 import { generate } from './generator.ts';
@@ -26,13 +26,16 @@ function runPremake(args: string[]): Promise<number> {
 }
 
 async function main() {
-	const scriptArgs = process.argv.slice(2);
-	const scriptPath = 'test/premake5.ts';
+	const args = process.argv.slice(2);
 
-	if (!scriptPath) {
-		console.error('Error: Please provide a script path as an argument');
-		console.error('Usage: node --experimental-strip-types main.ts <script.ts>');
-		process.exit(1);
+	// Parse --file argument
+	let scriptPath = 'premake5.ts'; // Default to premake5.ts in current directory
+	const fileArgIndex = args.findIndex(arg => arg.startsWith('--file='));
+
+	if (fileArgIndex !== -1) {
+		scriptPath = args[fileArgIndex].split('=')[1];
+		// Remove --file from args so it's not passed to premake
+		args.splice(fileArgIndex, 1);
 	}
 
 	try {
@@ -42,9 +45,15 @@ async function main() {
 
 		const result = generate(module.default);
 
-		fs.writeFileSync('test/premake5.lua', result, 'utf-8');
+		// Write the Lua file to the same directory as the TypeScript file
+		const scriptDir = dirname(absolutePath);
+		const luaFileName = basename(scriptPath, '.ts') + '.lua';
+		const luaFilePath = join(scriptDir, luaFileName);
 
-		runPremake(['--file=test/premake5.lua', ...scriptArgs]);
+		fs.writeFileSync(luaFilePath, result, 'utf-8');
+
+		// Pass the generated Lua file path to premake
+		runPremake([`--file=${luaFilePath}`, ...args]);
 	} catch (error) {
 		console.error('Error running script:', error);
 		process.exit(1);

@@ -1,4 +1,5 @@
 import type { ProjectScope, WorkspaceScope } from "./scopes.ts";
+import fields from "../parser/data/fields.json" with { type: "json" };
 
 interface ICommand {
 	name: string;
@@ -7,6 +8,15 @@ interface ICommand {
 
 export class PremakeScope {
 	private _commands: ICommand[] = [];
+	private _action = 'vs2022';
+
+	get action(): string {
+		return this._action;
+	}
+
+	addCommands(commands: ICommand[]) {
+		this._commands.push(...commands);
+	}
 
 	command(name: string, args?: string | string[]) {
 		this._commands.push({ name, args });
@@ -49,7 +59,14 @@ export class PremakeScope {
 
 				// Otherwise, create a function that calls command()
 				return (...args: any[]) => {
-					this.command(prop as string, args.length === 1 ? args[0] : args);
+					const field = fields.find(f => f.name === prop.toString().toLowerCase())!;
+
+					if (field.kind?.startsWith('list:')) {
+						this.command(prop as string, args);
+					} else {
+						this.command(prop as string, args[0]);
+					}
+
 					return proxy as T;
 				};
 			}

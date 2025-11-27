@@ -15,7 +15,7 @@ export type AtlType = 'Off' | 'Dynamic' | 'Static'
 export type CompileAsType = 'Default' | 'C' | 'C++' | 'Objective-C' | 'Objective-C++' | 'Module' | 'ModulePartition' | 'HeaderUnit'
 export type CallingconventionType = 'Cdecl' | 'FastCall' | 'StdCall' | 'VectorCall'
 export type FloatAbiType = 'soft' | 'softfp' | 'hard'
-export type IOSFamilyType = 'iPhone/iPod touch' | 'iPad' | 'Universal'
+export type IosFamilyType = 'iPhone/iPod touch' | 'iPad' | 'Universal'
 export type SwiftVersionType = '4.0' | '4.2' | '5.0'
 export type ShaderAssemblerType = 'NoListing' | 'AssemblyCode' | 'AssemblyCodeAndHex'
 export type LinkSectionDataType = 'On' | 'Off'
@@ -26,8 +26,37 @@ export type ThumbModeType = 'thumb' | 'arm' | 'disabled'
 export type StlType = 'none' | 'gabi++' | 'stlport' | 'gnu' | 'libc++'
 export type StaticRuntimeType = 'Default' | 'On' | 'Off'
 export type MfcType = 'Default' | 'Off' | 'On' | 'Static' | 'Dynamic'
-export type InlineSVisibilityType = 'Default' | 'Hidden'
-
+export type InlinesvisibilityType = 'Default' | 'Hidden'
+export type EndianType = 'Default' | 'Little' | 'Big'
+export type ToolChainVersionType = 'remote' | 'wsl' | 'wsl2' | '4.6' | '4.8' | '4.9' | '3.4' | '3.5' | '3.6' | '3.8' | '5.0'
+export type IsaExtensionsType = 'MOVBE' | 'POPCNT' | 'PCLMUL' | 'LZCNT' | 'BMI' | 'BMI2' | 'F16C' | 'AES' | 'FMA' | 'FMA4' | 'RDRND'
+export type DebugFormatType = 'Default' | 'c7' | 'Dwarf' | 'SplitDwarf'
+export type CDialectType = 'Default' | 'C89' | 'C90' | 'C99' | 'C11' | 'C17' | 'C23' | 'gnu89' | 'gnu90' | 'gnu99' | 'gnu11' | 'gnu17' | 'gnu23'
+export type EnableModulesType = 'On' | 'Off'
+export type EnableUnityBuildType = 'On' | 'Off'
+export type UseStandardPreprocessorType = 'On' | 'Off'
+export type FloatingPointType = 'Default' | 'Fast' | 'Strict'
+export type KindType = 'ConsoleApp' | 'Makefile' | 'None' | 'SharedLib' | 'StaticLib' | 'WindowedApp' | 'Utility' | 'SharedItems' | 'Packaging'
+export type OmitFramePointerType = 'Default' | 'On' | 'Off'
+export type ShaderModelType = '2.0' | '3.0' | '4.0_level_9_1' | '4.0_level_9_3' | '4.0' | '4.1' | '5.0' | '5.1' | 'rootsig_1.0' | 'rootsig_1.1' | '6.0' | '6.1' | '6.2' | '6.3' | '6.4' | '6.5' | '6.6'
+export type CppDialectType = 'Default' | 'C++latest' | 'C++98' | 'C++0x' | 'C++11' | 'C++1y' | 'C++14' | 'C++1z' | 'C++17' | 'C++2a' | 'C++20' | 'C++2b' | 'C++23' | 'gnu++98' | 'gnu++0x' | 'gnu++11' | 'gnu++1y' | 'gnu++14' | 'gnu++1z' | 'gnu++17' | 'gnu++2a' | 'gnu++20' | 'gnu++2b' | 'gnu++23'
+export type NativeWCharType = 'Default' | 'On' | 'Off'
+export type PicType = 'Off' | 'On'
+export type BuildStlModulesType = 'On' | 'Off'
+export type DebuggerType = 'Default' | 'GDB' | 'LLDB' | 'VisualStudioLocal' | 'VisualStudioRemote' | 'VisualStudioWebBrowser' | 'VisualStudioWebService'
+export type CharacterSetType = 'Default' | 'ASCII' | 'MBCS' | 'Unicode'
+export type DebuggerTypeType = 'Mixed' | 'NativeOnly' | 'ManagedOnly' | 'NativeWithManagedCore'
+export type LinkerType = 'Default' | 'LLD'
+export type LinkGroupsType = 'Off' | 'On'
+export type ClrType = 'Off' | 'On' | 'Pure' | 'Safe' | 'Unsafe' | 'NetCore'
+export type ExternalWarningsType = 'Off' | 'Default' | 'High' | 'Extra' | 'Everything'
+export type VisibilityType = 'Default' | 'Hidden' | 'Internal' | 'Protected'
+export type WarningsType = 'Off' | 'Default' | 'High' | 'Extra' | 'Everything'
+export type EditAndContinueType = 'Default' | 'On' | 'Off'
+export type OptimizeType = 'Off' | 'On' | 'Debug' | 'Size' | 'Speed' | 'Full'
+export type DpiAwarenessType = 'Default' | 'None' | 'High' | 'HighPerMonitor'
+export type RttiType = 'Default' | 'On' | 'Off'
+export type ShaderTypeType = 'Effect' | 'Vertex' | 'Pixel' | 'Geometry' | 'Hull' | 'Domain' | 'Compute' | 'Library' | 'Mesh' | 'Amplification' | 'Texture' | 'RootSignature'
 export interface ConfigScopeGenerated {
 	/**
 	 * Selects the compiler, linker, etc. which are used to build a project or configuration.
@@ -35,7 +64,8 @@ export interface ConfigScopeGenerated {
 	 * 
 	 * 
 	 * Premake 5.0 and later. Versions are currently only implemented for Visual Studio 2010+.
-	 * @param identifier A string identifier for the toolset. Premake includes the following toolsets by default. Available options:
+	 * @param identifier A string identifier for the toolset.
+	 * Available options:
 	 * - `clang`: [Clang](http://clang.llvm.org)
 	 * - `dotnet`: The system's default C# compiler
 	 * - `gcc`: [GNU Compiler Collection](https://gcc.gnu.org)
@@ -68,7 +98,8 @@ export interface ConfigScopeGenerated {
 	 * 
 	 * Premake 5.0 or later.
 	 * Visual Studio 2019 version or later.
-	 * @param value Available options:
+	 * @param value
+	 * Available options:
 	 * - `On`: Treat headers included with angle brackets as external.
 	 * - `Off`: Default. Headers are treated normally.
 	 * 
@@ -80,21 +111,18 @@ export interface ConfigScopeGenerated {
 	 * 
 	 * 
 	 * Premake 5.0.0 alpha 14 or later.
-	 * @param value
+	 * @param value Needs documentation.
 	 * 
-	 * ### Examples
-	 * ```lua
-	 * shaderoptions (value)
-	 * ```
 	 */
-	shaderOptions(value: string[]): this;
+	shaderOptions(...value: string[]): this;
 
 	/**
 	 * Tells the compiler when it should inline functions.
 	 * 
 	 * 
 	 * Premake 5.0 or later.
-	 * @param value Available options:
+	 * @param value
+	 * Available options:
 	 * - `Default`: Allow the compiler to use its default inlining behavior.
 	 * - `Disabled`: Turn off inlining entirely.
 	 * - `Explicit`: Only inline functions explicitly marked with the `inline` keyword.
@@ -109,16 +137,13 @@ export interface ConfigScopeGenerated {
 	 * 
 	 * 
 	 * Premake 5.0.
-	 * @param value Specifies the desired level of optimization. Available options:
+	 * @param value Specifies the desired level of optimization.
+	 * Available options:
 	 * - `Off`: No strict aliasing tests will be performed.
 	 * - `Level1`
 	 * - `Level2`
 	 * - `Level3`
 	 * 
-	 * ### Examples
-	 * ```lua
-	 * strictaliasing "Level1"
-	 * ```
 	 */
 	strictAliasing(value: StrictAliasingType): this;
 
@@ -131,16 +156,14 @@ export interface ConfigScopeGenerated {
 	 * @param path The output file system location for the build log file.
 	 * 
 	 */
-	buildLog(path: any): this;
+	buildLog(path: string): this;
 
 	/**
 	 * Turns on/off the automatic linking of `.obj` files that are output by custom build commands. The default behaviour is to link `.obj` files when they are output by custom build commands.
 	 * 
 	 * 
 	 * Premake 5.0 or later.
-	 * @param value Available options:
-	 * - `On`
-	 * - `Off`
+	 * @param value A boolean value that can be either 'On' or 'Off'.
 	 * 
 	 * ### Examples
 	 * Use [custom build commands](Custom-Build-Commands.md) to copy Wavefront .obj model files around without the linker trying to link them:
@@ -170,8 +193,7 @@ export interface ConfigScopeGenerated {
 	 * 
 	 * 
 	 * Premake 4.0 and up.
-	 * @param name The name of the precompiled header, as it is specified in the #include statements of the project source code. Available options:
-	 * - `myproject.h`
+	 * @param name The name of the precompiled header, as it is specified in the #include statements of the project source code.
 	 * 
 	 */
 	pchHeader(name: string): this;
@@ -184,10 +206,6 @@ export interface ConfigScopeGenerated {
 	 * Premake 4.0 or later.
 	 * @param ext The new file extension, including the leading dot.
 	 * 
-	 * ### Examples
-	 * ```lua
-	 * implibextension ".mpi"
-	 * ```
 	 */
 	impLibExtension(ext: string): this;
 
@@ -195,9 +213,7 @@ export interface ConfigScopeGenerated {
 	 * Adds files to a project.
 	 * 
 	 * 
-	 * @param file_list Specifies one or more file patterns. File paths should be specified relative to the currently executing script file. File patterns may contain the `*` wildcard to match against files in the current directory, or the `**` wildcard to perform a recursive match. Available options:
-	 * - `* wildcard`: Matches files in the current directory.
-	 * - `** wildcard`: Performs a recursive match for files.
+	 * @param file_list Specifies one or more file patterns. File paths should be specified relative to the currently executing script file. File patterns may contain the `*` wildcard to match against files in the current directory, or the `**` wildcard to perform a recursive match.
 	 * 
 	 * ### Examples
 	 * Add two files from to the current project, from the same directory that contains the script.
@@ -228,14 +244,15 @@ export interface ConfigScopeGenerated {
 	 *   files { "src/mac/*.h", "src/mac/*.cpp" }
 	 * ```
 	 */
-	files(file_list: any): this;
+	files(...file_list: string[]): this;
 
 	/**
 	 * The **linktimeoptimization** function specifies whether or not the toolset should perform link time optimization.
 	 * 
 	 * 
 	 * Premake 5.0-beta4 and later
-	 * @param value Available options:
+	 * @param value Specifies whether or not to use link time optimization.
+	 * Available options:
 	 * - `Off`: No LTO to be performed.
 	 * - `On`: LTO optimization enabled.
 	 * - `Default`: Default LTO optimizations for the toolset or exporter.
@@ -248,14 +265,11 @@ export interface ConfigScopeGenerated {
 	 * 
 	 * 
 	 * Premake 5.0.0 alpha 12 or later.
-	 * @param value Available options:
+	 * @param value
+	 * Available options:
 	 * - `on`
 	 * - `off`
 	 * 
-	 * ### Examples
-	 * ```lua
-	 * largeaddressaware "value"
-	 * ```
 	 */
 	largeAddressAware(value: boolean): this;
 
@@ -264,7 +278,8 @@ export interface ConfigScopeGenerated {
 	 * 
 	 * 
 	 * Premake 5.0 or later.
-	 * @param value Available options:
+	 * @param value Specifies the system architecture to be targeted by the configuration.
+	 * Available options:
 	 * - `universal`: The universal binaries supported by iOS and macOS
 	 * - `x86`
 	 * - `x86_64`
@@ -283,6 +298,10 @@ export interface ConfigScopeGenerated {
 	 * - `aarch64`: Only supported in VSAndroid projects
 	 * - `mips`: Only supported in VSAndroid projects
 	 * - `mips64`: Only supported in VSAndroid projects
+	 * - `i386`: Alias for `x86`
+	 * - `amd64`: Alias for `x86_64`
+	 * - `x32`: Alias for `x86`; There is intent to deprecate this
+	 * - `x64`: Alias for `x86_64`; There is intent to deprecate this
 	 * 
 	 * ### Examples
 	 * Set up 32- and 64-bit Windows builds.
@@ -306,11 +325,12 @@ export interface ConfigScopeGenerated {
 	 * 
 	 * 
 	 * Premake 5.0 or later.
-	 * @param value Available options:
+	 * @param value Specifies the target operating system.
+	 * Available options:
 	 * - `aix`
 	 * - `android`
 	 * - `bsd`
-	 * - `emscripten`
+	 * - `emscripten`: Supported only for the gmake and gmakelegacy actions.
 	 * - `haiku`
 	 * - `ios`
 	 * - `linux`
@@ -347,10 +367,6 @@ export interface ConfigScopeGenerated {
 	 * Premake 5.0.0 alpha 14 or later.
 	 * @param value A number specifying the target Android API level.
 	 * 
-	 * ### Examples
-	 * ```lua
-	 * androidapilevel (21)
-	 * ```
 	 */
 	androidApiLevel(value: any): this;
 
@@ -391,14 +407,10 @@ export interface ConfigScopeGenerated {
 	 * 
 	 * 
 	 * Premake 5.0.0 alpha 14 or later.
-	 * @param value
+	 * @param value Needs documentation.
 	 * 
-	 * ### Examples
-	 * ```lua
-	 * shaderdefines (value)
-	 * ```
 	 */
-	shaderDefines(value: string[]): this;
+	shaderDefines(...value: string[]): this;
 
 	/**
 	 * Passes arguments directly to the image tool command line without translation.
@@ -411,7 +423,7 @@ export interface ConfigScopeGenerated {
 	 * @param options A list of image tools flags and options.
 	 * 
 	 */
-	imageOptions(options: string[]): this;
+	imageOptions(...options: string[]): this;
 
 	/**
 	 * Choose the type of runtime library to use.
@@ -419,7 +431,8 @@ export interface ConfigScopeGenerated {
 	 * 
 	 * 
 	 * Premake 5.0 or later.
-	 * @param type Available options:
+	 * @param type Specifies the type of runtime library to use.
+	 * Available options:
 	 * - `Debug`
 	 * - `Release`
 	 * 
@@ -439,12 +452,8 @@ export interface ConfigScopeGenerated {
 	 * 
 	 * 
 	 * Premake 5.0.0 alpha 14 or later.
-	 * @param value
+	 * @param value needs documentation.
 	 * 
-	 * ### Examples
-	 * ```lua
-	 * shadervariablename (value)
-	 * ```
 	 */
 	shaderVariableName(value: string): this;
 
@@ -463,7 +472,7 @@ export interface ConfigScopeGenerated {
 	 * undefines { "DEBUG", "TRACE" }
 	 * ```
 	 */
-	undefines(symbols: string[]): this;
+	undefines(...symbols: string[]): this;
 
 	/**
 	 * Replaces some function calls with intrinsic or otherwise special forms of the function that help your application run faster.
@@ -472,14 +481,11 @@ export interface ConfigScopeGenerated {
 	 * 
 	 * 
 	 * Premake 5.0.0 alpha 12 or later.
-	 * @param value Available options:
+	 * @param value
+	 * Available options:
 	 * - `on`: Enables intrinsic functions which generate faster, but possibly longer code.
 	 * - `off`: Disables intrinsic functions.
 	 * 
-	 * ### Examples
-	 * ```lua
-	 * intrinsics "On"
-	 * ```
 	 */
 	intrinsics(value: boolean): this;
 
@@ -489,12 +495,13 @@ export interface ConfigScopeGenerated {
 	 * 
 	 * 
 	 * Premake 5.0 or later.
-	 * @param switch An identifier for symbol information. Available options:
+	 * @param value An identifier for symbol information.
+	 * Available options:
 	 * - `Default`: Always available.
 	 * - `Off`: Always available.
 	 * - `On`: Always available.
-	 * - `FastLink`: Visual Studio 2015 or newer.
-	 * - `Full`: Visual Studio 2017 or newer.
+	 * - `FastLink`: Available in Visual Studio 2015 or newer.
+	 * - `Full`: Available in Visual Studio 2017 or newer.
 	 * 
 	 * ### Examples
 	 * This project generates debug symbol information for better debugging.
@@ -504,7 +511,7 @@ export interface ConfigScopeGenerated {
 	 *     symbols "On"
 	 * ```
 	 */
-	symbols(switch: SymbolsType): this;
+	symbols(value: SymbolsType): this;
 
 	/**
 	 * Sets the working directory for the integrated debugger.
@@ -522,21 +529,17 @@ export interface ConfigScopeGenerated {
 	 *    debugdir "bin/debug"
 	 * ```
 	 */
-	debugDir(path: any): this;
+	debugDir(path: string): this;
 
 	/**
 	 * - This page was auto-generated. Feel free to help us improve the documentation by creating a pull request.
 	 * 
 	 * 
 	 * Premake 5.0.0 beta 1 or later.
-	 * @param value
+	 * @param value needs documentation.
 	 * 
-	 * ### Examples
-	 * ```lua
-	 * conformancemode (value)
-	 * ```
 	 */
-	conformanceMode(value: boolean): this;
+	conformancemode(value: boolean): this;
 
 	/**
 	 * Specify the program entry point, e.g. `main()`.
@@ -578,7 +581,7 @@ export interface ConfigScopeGenerated {
 	 * includedirsafter { "../includes/**" }
 	 * ```
 	 */
-	includeDirsAfter(paths: any): this;
+	includeDirsAfter(...paths: string[]): this;
 
 	/**
 	 * Only used by Visual Studio .NET targets.
@@ -587,12 +590,8 @@ export interface ConfigScopeGenerated {
 	 * 
 	 * 
 	 * Premake 5.0.0 alpha 12 or later.
-	 * @param value
+	 * @param value Needs documentation.
 	 * 
-	 * ### Examples
-	 * ```lua
-	 * customtoolnamespace "value"
-	 * ```
 	 */
 	customToolNamespace(value: string): this;
 
@@ -602,7 +601,8 @@ export interface ConfigScopeGenerated {
 	 * 
 	 * 
 	 * Premake 5.0.
-	 * @param level Specifies the desired level of vector processing instructions. Available options:
+	 * @param level Specifies the desired level of vector processing instructions.
+	 * Available options:
 	 * - `Default`: Use the toolset's default vector extension settings.
 	 * - `AVX`: Use Advanced Vector Extensions.
 	 * - `AVX2`: Use Advanced Vector Extensions 2.
@@ -648,7 +648,7 @@ export interface ConfigScopeGenerated {
 	 * externalincludedirs { "../includes/**" }
 	 * ```
 	 */
-	externalIncludeDirs(paths: any): this;
+	externalIncludeDirs(...paths: string[]): this;
 
 	/**
 	 * - Specifies 1, 2, 4, 8, 16-byte boundary for struct member alignment.
@@ -656,17 +656,14 @@ export interface ConfigScopeGenerated {
 	 * 
 	 * Premake 5.0.0 alpha 14 or later for visual studio (non-clang).
 	 * Premake 5.0.0 beta 7 for others
-	 * @param value Available options:
+	 * @param value Specifies the boundary for struct member alignment.
+	 * Available options:
 	 * - `1`
 	 * - `2`
 	 * - `4`
 	 * - `8`
 	 * - `16`
 	 * 
-	 * ### Examples
-	 * ```lua
-	 * structmemberalign (1)
-	 * ```
 	 */
 	structMemberAlign(value: StructMemberAlignType): this;
 
@@ -675,7 +672,8 @@ export interface ConfigScopeGenerated {
 	 * 
 	 * 
 	 * Premake 5.0 or later.
-	 * @param value Available options:
+	 * @param value
+	 * Available options:
 	 * - `Software`: Generate software floating-point emulation code.
 	 * - `Hardware`: Generate code for a hardware FPU.
 	 * 
@@ -698,24 +696,25 @@ export interface ConfigScopeGenerated {
 	 *    debugargs { "--append", "somefile.txt" }
 	 * ```
 	 */
-	debugArgs(args: string[]): this;
+	debugArgs(...args: string[]): this;
 
 	/**
 	 * Specifies the runtime search paths used by the runtime shared library dynamic loader. OSX and Linux-specific.
 	 * 
 	 * 
 	 * Premake 5.0 or later.
-	 * @param paths Specifies a list of runtime search path directories used by shared library dynamic loader. Paths should be specified relative to the currently running script file.
+	 * @param paths Specifies a list of runtime search path directories used by shared library dynamic loader.
 	 * 
 	 */
-	runPathDirs(paths: any): this;
+	runPathDirs(...paths: string[]): this;
 
 	/**
 	 * Specifies specific compiler warnings that should be interpreted as errors.
 	 * 
 	 * 
 	 * Premake 5.0 or later. Special value `All` available since Premake 5.0-beta5 or later.
-	 * @param warnings A list of warnings to interpret as errors. Available options:
+	 * @param warnings Specifies specific compiler warnings that should be interpreted as errors.
+	 * Available options:
 	 * - `All`: Treat all compiler warnings as errors.
 	 * 
 	 * ### Examples
@@ -729,7 +728,7 @@ export interface ConfigScopeGenerated {
 	 * filter {}
 	 * ```
 	 */
-	fatalWarnings(warnings: string[]): this;
+	fatalWarnings(...warnings: string[]): this;
 
 	/**
 	 * Specifies the bundle extension for the MacOSX bundle.
@@ -739,10 +738,6 @@ export interface ConfigScopeGenerated {
 	 * Premake 5.0 beta 7 or later.
 	 * @param ext The new bundle extension, including the leading dot.
 	 * 
-	 * ### Examples
-	 * ```lua
-	 * targetbundleextension ".zmf"
-	 * ```
 	 */
 	targetBundleExtension(ext: string): this;
 
@@ -751,7 +746,8 @@ export interface ConfigScopeGenerated {
 	 * 
 	 * 
 	 * Premake 5.0 or later.
-	 * @param value Available options:
+	 * @param value
+	 * Available options:
 	 * - `Off`: Do not use ATL (default).
 	 * - `Dynamic`: Link the ATL libraries dynamically.
 	 * - `Static`: Link the ATL libraries statically.
@@ -764,9 +760,10 @@ export interface ConfigScopeGenerated {
 	 * 
 	 * 
 	 * Premake 5.0.0 alpha 12 or later.
-	 * @param value Available options:
-	 * - `on`: generated file should be compiled.
-	 * - `off`: generated file should not be compiled.
+	 * @param value
+	 * Available options:
+	 * - `on`: Generated file should be compiled.
+	 * - `off`: Generated file should not be compiled.
 	 * 
 	 * ### Examples
 	 * ```lua
@@ -802,14 +799,15 @@ export interface ConfigScopeGenerated {
 	 *     symbolspath '$(OutDir)$(TargetName).pdb'
 	 * ```
 	 */
-	symbolsPath(filename: any): this;
+	symbolsPath(filename: string): this;
 
 	/**
 	 * 
 	 * 
 	 * 
 	 * Premake 5.0.0 alpha 13 or later. The options **Module**, **ModulePartition** and **HeaderUnit** are only available in Premake 5.0-beta1 or later and only implemented for Visual Studio 2019+.
-	 * @param value Available options:
+	 * @param value Specifies the compilation mode.
+	 * Available options:
 	 * - `Default`: Compile based on file extensions that have been built into premake.
 	 * - `C`: Compile as a C source file.
 	 * - `C++`: Compile as a C++ source file.
@@ -832,7 +830,8 @@ export interface ConfigScopeGenerated {
 	 * 
 	 * 
 	 * Premake 5.0 or later.
-	 * @param value Available options:
+	 * @param value
+	 * Available options:
 	 * - `Cdecl`
 	 * - `FastCall`
 	 * - `StdCall`
@@ -846,7 +845,7 @@ export interface ConfigScopeGenerated {
 	 * 
 	 * 
 	 * Premake 4.4 or later.
-	 * @param message The message to be displayed.
+	 * @param message The message to be displayed before starting execution of any specified pre-link commands.
 	 * 
 	 * ### Examples
 	 * ```lua
@@ -862,15 +861,12 @@ export interface ConfigScopeGenerated {
 	 * 
 	 * 
 	 * Premake 5.0.0 alpha 14 or later.
-	 * @param value Available options:
+	 * @param value
+	 * Available options:
 	 * - `soft`: Compiler will generate library calls for floating-point operations.
 	 * - `softfp`: Compiler will generate code using hardware floating-point instructions, but still uses the soft-float calling conventions.
 	 * - `hard`: Compiler will generate floating-point instructions using FPU-specific calling conventions.
 	 * 
-	 * ### Examples
-	 * ```lua
-	 * floatabi "soft"
-	 * ```
 	 */
 	floatAbi(value: FloatAbiType): this;
 
@@ -887,39 +883,33 @@ export interface ConfigScopeGenerated {
 	 * implibdir "../Libraries"
 	 * ```
 	 */
-	impLibDir(path: any): this;
+	impLibDir(path: string): this;
 
 	/**
 	 * - This page was auto-generated. Feel free to help us improve the documentation by creating a pull request.
 	 * 
 	 * 
 	 * Premake 5.0.0 alpha 14 or later.
-	 * @param value Available options:
+	 * @param value
+	 * Available options:
 	 * - `iPhone/iPod touch`: needs documentation
 	 * - `iPad`: needs documentation
 	 * - `Universal`: needs documentation
 	 * 
-	 * ### Examples
-	 * ```lua
-	 * iosfamily (value)
-	 * ```
 	 */
-	iOSFamily(value: IOSFamilyType): this;
+	iosFamily(value: IosFamilyType): this;
 
 	/**
 	 * - This page was auto-generated. Feel free to help us improve the documentation by creating a pull request.
 	 * 
 	 * 
 	 * Premake 5.0.0 beta 1 or later.
-	 * @param value Available options:
-	 * - `4.0`: needs documentation
-	 * - `4.2`: needs documentation
-	 * - `5.0`: needs documentation
+	 * @param value
+	 * Available options:
+	 * - `4.0`
+	 * - `4.2`
+	 * - `5.0`
 	 * 
-	 * ### Examples
-	 * ```lua
-	 * swiftversion (value)
-	 * ```
 	 */
 	swiftVersion(value: SwiftVersionType): this;
 
@@ -928,15 +918,12 @@ export interface ConfigScopeGenerated {
 	 * 
 	 * 
 	 * Premake 5.0.0 alpha 14 or later.
-	 * @param value Available options:
+	 * @param value
+	 * Available options:
 	 * - `NoListing`
 	 * - `AssemblyCode`
 	 * - `AssemblyCodeAndHex`
 	 * 
-	 * ### Examples
-	 * ```lua
-	 * shaderassembler (value)
-	 * ```
 	 */
 	shaderAssembler(value: ShaderAssemblerType): this;
 
@@ -945,10 +932,10 @@ export interface ConfigScopeGenerated {
 	 * 
 	 * 
 	 * Premake 5.0 or later.
-	 * @param commands A list of commands to execute.
+	 * @param commands A list of commands to execute immediately as the debugger starts, before connecting to the target process.
 	 * 
 	 */
-	debugStartUpCommands(commands: string[]): this;
+	debugStartupCommands(...commands: string[]): this;
 
 	/**
 	 * Passes arguments directly to the linker command line without translation.
@@ -965,27 +952,27 @@ export interface ConfigScopeGenerated {
 	 *   linkoptions { "`wx-config --libs`" }
 	 * ```
 	 */
-	linkOptions(options: string[]): this;
+	linkOptions(...options: string[]): this;
 
 	/**
 	 * Specifies a list of paths to search for source code while debugging.
 	 * 
 	 * 
 	 * Premake 5.0 or later.
-	 * @param paths A list of paths the debugger will use to search for source files.
+	 * @param paths A list of paths that the debugger will use to search for source files.
 	 * 
 	 */
-	debugSearchPaths(paths: any): this;
+	debugSearchPaths(...paths: string[]): this;
 
 	/**
 	 * Specifies commands to be executed upon connection of the debugger to a remote process.
 	 * 
 	 * 
 	 * Premake 5.0 or later.
-	 * @param commands A list of commands to execute.
+	 * @param commands A list of commands to execute upon connection of the debugger to a remote process.
 	 * 
 	 */
-	debugConnectCommands(commands: string[]): this;
+	debugConnectCommands(...commands: string[]): this;
 
 	/**
 	 * Specifies the remote debug port.
@@ -1017,7 +1004,7 @@ export interface ConfigScopeGenerated {
 	 * includedirs { "../includes/**" }
 	 * ```
 	 */
-	includeDirs(paths: any): this;
+	includeDirs(...paths: string[]): this;
 
 	/**
 	 * Specifies to use the 'extended-remote' protocol, which instructs GDB to maintain a persistent connection to gdbserver.
@@ -1070,7 +1057,7 @@ export interface ConfigScopeGenerated {
 	 * 
 	 * ```
 	 */
-	rebuildCommands(commands: string[]): this;
+	rebuildCommands(...commands: string[]): this;
 
 	/**
 	 * Specifies one or more shell commands to be executed to clean a [Makefile project](Makefile-Projects.md).
@@ -1103,24 +1090,25 @@ export interface ConfigScopeGenerated {
 	 * 
 	 * ```
 	 */
-	cleanCommands(commands: string[]): this;
+	cleanCommands(...commands: string[]): this;
 
 	/**
 	 * Specifies the C# language level.
 	 * 
 	 * 
 	 * Premake 5.0 or later.
-	 * @param value a string specifying the C# language level.
+	 * @param value Specifies the C# language level.
 	 * 
 	 */
-	csversion(value: string): this;
+	csVersion(value: string): this;
 
 	/**
 	 * Enable or disable instrumented performance profiling support for binaries.
 	 * 
 	 * 
 	 * Premake 5.0-beta6 or later.
-	 * @param Value Available options:
+	 * @param value
+	 * Available options:
 	 * - `On`: Turn on instrumented performance profiling.
 	 * - `Off`: Turn off instrumented performance profiling.
 	 * 
@@ -1131,14 +1119,15 @@ export interface ConfigScopeGenerated {
 	 *     profile "On"
 	 * ```
 	 */
-	profile(Value: boolean): this;
+	profile(value: boolean): this;
 
 	/**
 	 * Emit each data item in a separate section. This help linker optimizations to remove unused data.
 	 * 
 	 * 
 	 * Premake 5.0.0 beta 4 or later for Visual Studio 2022 and later, only applies to Visual Studio Android projects.
-	 * @param value Available options:
+	 * @param value
+	 * Available options:
 	 * - `On`
 	 * - `Off`
 	 * 
@@ -1150,11 +1139,12 @@ export interface ConfigScopeGenerated {
 	 * 
 	 * 
 	 * Premake 5.0 or later.
-	 * @param value Available options:
+	 * @param value
+	 * Available options:
 	 * - `Default`: Use the toolset's default setting for exceptions.
 	 * - `On`: Turn on exceptions.
 	 * - `Off`: Turn off exceptions.
-	 * - `SEH`: Turn on exceptions and use [structured exception handling](https://msdn.microsoft.com/en-us/library/windows/desktop/ms680657(v=vs.85).aspx) when available.
+	 * - `SEH`: Turn on exceptions and use structured exception handling when available.
 	 * - `CThrow`
 	 * - `UnwindTables`
 	 * 
@@ -1205,7 +1195,7 @@ export interface ConfigScopeGenerated {
 	 * 
 	 * ```
 	 */
-	buildCommands(commands: string[]): this;
+	buildCommands(...commands: string[]): this;
 
 	/**
 	 * *Missing documentation*
@@ -1221,25 +1211,22 @@ export interface ConfigScopeGenerated {
 	 * 
 	 * 
 	 * Premake 5.0 or later.
-	 * @param value_list Specifies the desired `fsanitize` options to enable. Available options:
-	 * - `Address`: Enables compiler support for AddressSanitizer (ASan). Notes: Visual Studio support starts with 2019 16.9.
-	 * - `Fuzzer`: Enables support for LibFuzzer, a coverage-guided fuzzing library. Notes: Unsupported with GCC. Visual Studio support starts with 2019 16.9.
-	 * - `Thread`: Enables compiler support for ThreadSanitizer (TSan). Notes: GCC & Clang only.
-	 * - `UndefinedBehavior`: Enables compiler support for UndefinedBehaviorSanitizer (UBSan). Notes: GCC & Clang only.
+	 * @param value_list Specifies the desired `fsanitize` options to enable.
+	 * Available options:
+	 * - `Address`: Enables compiler support for AddressSanitizer (ASan). Visual Studio support starts with 2019 16.9.
+	 * - `Fuzzer`: Enables support for LibFuzzer, a coverage-guided fuzzing library. Unsupported with GCC. Visual Studio support starts with 2019 16.9.
+	 * - `Thread`: Enables compiler support for ThreadSanitizer (TSan). GCC & Clang only.
+	 * - `UndefinedBehavior`: Enables compiler support for UndefinedBehaviorSanitizer (UBSan). GCC & Clang only.
 	 * 
-	 * ### Examples
-	 * ```lua
-	 * sanitize { "Address", "Fuzzer" }
-	 * ```
 	 */
-	sanitize(value_list: SanitizeType[]): this;
+	sanitize(...value_list: SanitizeType[]): this;
 
 	/**
 	 * 
 	 * 
 	 * 
 	 * Premake 5.0.0 alpha 12 or later.
-	 * @param key/value pairs The key/value pairs to apply to `buildSettings` blocks of the generated `pbxproj`.
+	 * @param key_value_pairs Key/value pairs to apply to buildSettings blocks of the generated pbxproj.
 	 * 
 	 * ### Examples
 	 * ```lua
@@ -1255,15 +1242,14 @@ export interface ConfigScopeGenerated {
 	 *     }
 	 * ```
 	 */
-	xcodeBuildSettings(key/value pairs: any): this;
+	xcodeBuildSettings(key_value_pairs: any): this;
 
 	/**
 	 * Specifies a list of NuGet packages that this project depends on. Only supported in Visual Studio C++ and C# projects.
 	 * 
 	 * 
 	 * Premake 5.0 or later.
-	 * @param references A list of NuGet package names and versions. Available options:
-	 * - `packageName:version`
+	 * @param references A list of NuGet package names and versions, where the version is separated from the name with a colon.
 	 * 
 	 * ### Examples
 	 * Link against some NuGet packages.
@@ -1273,14 +1259,15 @@ export interface ConfigScopeGenerated {
 	 *    nuget { "sdl2.v140:2.0.4", "sdl2.v140.redist:2.0.4" }
 	 * ```
 	 */
-	nuGet(references: string[]): this;
+	nuGet(...references: string[]): this;
 
 	/**
 	 * Emit each function item in a separate section. This help linker optimizations to remove unused data.
 	 * 
 	 * 
 	 * Premake 5.0.0 beta 4 or later for Visual Studio 2022 and later, only applies to Visual Studio Android projects.
-	 * @param value Available options:
+	 * @param value
+	 * Available options:
 	 * - `On`
 	 * - `Off`
 	 * 
@@ -1288,10 +1275,6 @@ export interface ConfigScopeGenerated {
 	linkSectionFunction(value: LinkSectionFunctionType): this;
 
 	/**
-	 * ---
-	 * title: embed
-	 * ---
-	 * 
 	 * Sets value of the *Embed* field in Xcode under *Frameworks, Libraries, and Embedded Content* to **Embed Without Signing**
 	 * 
 	 * This results in the framework being copied into the built app bundle during the *Embed Libraries* build phase.
@@ -1330,22 +1313,19 @@ export interface ConfigScopeGenerated {
 	 * defines { "CALLSPEC=__dllexport" }
 	 * ```
 	 */
-	defines(symbols: string[]): this;
+	defines(...symbols: string[]): this;
 
 	/**
 	 * Specifies whether the code generation uses ARM or Thumb instruction sets.
 	 * 
 	 * 
 	 * Premake 5.0.0 alpha 14 or later.
-	 * @param value Available options:
+	 * @param value Specifies whether the code generation uses ARM or Thumb instruction sets.
+	 * Available options:
 	 * - `thumb`: Uses the Thumb instruction set.
 	 * - `arm`: Uses the ARM instruction set.
 	 * - `disabled`: Disables usage of Thumb instruction set.
 	 * 
-	 * ### Examples
-	 * ```lua
-	 * thumbmode "disabled"
-	 * ```
 	 */
 	thumbMode(value: ThumbModeType): this;
 
@@ -1355,17 +1335,14 @@ export interface ConfigScopeGenerated {
 	 * 
 	 * 
 	 * Premake 5.0.0 alpha 14 or later.
-	 * @param value Available options:
+	 * @param value
+	 * Available options:
 	 * - `none`: Minimal C++ runtime library.
 	 * - `gabi++`: C++ runtime library.
 	 * - `stlport`: STLport runtime library.
 	 * - `gnu`: GNU STL library.
 	 * - `libc++`: LLVM libc++ library.
 	 * 
-	 * ### Examples
-	 * ```lua
-	 * stl "libc++"
-	 * ```
 	 */
 	stl(value: StlType): this;
 
@@ -1377,7 +1354,7 @@ export interface ConfigScopeGenerated {
 	 * @param warnings A list of warnings to enable.
 	 * 
 	 */
-	enableWarnings(warnings: string[]): this;
+	enableWarnings(...warnings: string[]): this;
 
 	/**
 	 * Specifies the library search paths for the linker.
@@ -1400,22 +1377,19 @@ export interface ConfigScopeGenerated {
 	 * libdirs { "../libs/**" }
 	 * ```
 	 */
-	libDirs(paths: any): this;
+	libDirs(...paths: string[]): this;
 
 	/**
 	 * 
 	 * 
 	 * 
 	 * Premake 5.0.0 alpha 12 or later.
-	 * @param value Available options:
-	 * - `Default`: Does not set a value for <RuntimeLibrary>.
-	 * - `On`: Sets <RuntimeLibrary> to "MultiThreaded".
-	 * - `Off`: Sets <RuntimeLibrary> to "MultiThreadedDLL".
+	 * @param value
+	 * Available options:
+	 * - `Default`: Does not set a value for `<RuntimeLibrary>`.
+	 * - `On`: Sets `<RuntimeLibrary>` to "MultiThreaded".
+	 * - `Off`: Sets `<RuntimeLibrary>` to "MultiThreadedDLL".
 	 * 
-	 * ### Examples
-	 * ```lua
-	 * staticruntime "on"
-	 * ```
 	 */
 	staticRuntime(value: StaticRuntimeType): this;
 
@@ -1424,7 +1398,7 @@ export interface ConfigScopeGenerated {
 	 * 
 	 * 
 	 * Premake 5.0.0 beta 3 or later, only applies to Visual Studio Linux projects.
-	 * @param path Specifies the directory on the remote machine that WSL sees the project in.
+	 * @param path Specifies the directory on the remote machine that WSL sees the project in
 	 * 
 	 * ### Examples
 	 * ```lua
@@ -1438,7 +1412,8 @@ export interface ConfigScopeGenerated {
 	 * 
 	 * 
 	 * Premake 5.0-beta4 or later on Visual Studio.
-	 * @param value Available options:
+	 * @param value Specifies the desired PIC mode.
+	 * Available options:
 	 * - `Default`: Perform the default linkage against the MFC libraries for your project type.
 	 * - `Off`: Do not link against MFC libraries.
 	 * - `On`: Link against the MFC libraries corresponding with the runtime type you are using (static or dynamic).
@@ -1453,16 +1428,13 @@ export interface ConfigScopeGenerated {
 	 * 
 	 * 
 	 * Premake 5.0.0 alpha 14 or later.
-	 * @param value Available options:
-	 * - `Default`: needs documentation
-	 * - `Hidden`: needs documentation
+	 * @param value
+	 * Available options:
+	 * - `Default`
+	 * - `Hidden`
 	 * 
-	 * ### Examples
-	 * ```lua
-	 * inlinesvisibility (value)
-	 * ```
 	 */
-	inlineSVisibility(value: InlineSVisibilityType): this;
+	inlinesvisibility(value: InlinesvisibilityType): this;
 
 	/**
 	 * Specifies a version for a custom installation of LLVM for Visual Studio.
@@ -1471,10 +1443,6 @@ export interface ConfigScopeGenerated {
 	 * Premake 5.0.0 beta 3 or later for Visual Studio 2019 and later.
 	 * @param version Specifies the version of the LLVM installation.
 	 * 
-	 * ### Examples
-	 * ```lua
-	 * llvmversion "16"
-	 * ```
 	 */
 	llvmVersion(version: string): this;
 
@@ -1483,12 +1451,8 @@ export interface ConfigScopeGenerated {
 	 * 
 	 * 
 	 * Premake 5.0.0 alpha 14 or later.
-	 * @param value needs documentation.
+	 * @param value Needs documentation.
 	 * 
-	 * ### Examples
-	 * ```lua
-	 * shaderassembleroutput (value)
-	 * ```
 	 */
 	shaderAssemblerOutput(value: string): this;
 
@@ -1504,7 +1468,7 @@ export interface ConfigScopeGenerated {
 	 * llvmdir "/path/to/install"
 	 * ```
 	 */
-	llvmDir(path: any): this;
+	llvmDir(path: string): this;
 
 	/**
 	 * Directory on the remote machine where the project will be deployed to.
@@ -1513,10 +1477,6 @@ export interface ConfigScopeGenerated {
 	 * Premake 5.0.0 beta 3 or later, only applies to Visual Studio Linux projects.
 	 * @param path Specifies the directory on the remote machine where the project is deployed.
 	 * 
-	 * ### Examples
-	 * ```lua
-	 * remoteprojectdir "$(RemoteProjectDir)"
-	 * ```
 	 */
 	remoteDeployDir(path: string): this;
 
@@ -1525,7 +1485,7 @@ export interface ConfigScopeGenerated {
 	 * 
 	 * 
 	 * Premake 5.0.0 beta 3 or later, only applies to Visual Studio Linux projects.
-	 * @param path Specifies the directory on the remote machine where the source files of a single project will be copied to before compiling, relative to the root path
+	 * @param path Specifies the directory on the remote machine where the source files of a single project will be copied to before compiling, relative to the root path.
 	 * 
 	 * ### Examples
 	 * ```lua
@@ -1533,5 +1493,1861 @@ export interface ConfigScopeGenerated {
 	 * ```
 	 */
 	remoteProjectRelativeDir(path: string): this;
+
+	/**
+	 * Specifies the target endian for endian-agnostic architectures.
+	 * 
+	 * 
+	 * Premake 5.0 or later.
+	 * @param value Specifies the desired endian.
+	 * Available options:
+	 * - `Default`: Use the toolset's default endian.
+	 * - `Little`: Specify little-endian.
+	 * - `Big`: Specify big-endian.
+	 * 
+	 */
+	endian(value: EndianType): this;
+
+	/**
+	 * Specifies the version of the toolchain to use.
+	 * 
+	 * 
+	 * Premake 5.0.0 alpha 14 or later, only applies to Android projects.
+	 * Premake 5.0.0 beta 3 or later, only applies to Visual Studio Linux projects.
+	 * @param value Specifies the version of the toolchain to use.
+	 * 
+	 */
+	toolChainVersion(value: ToolChainVersionType): this;
+
+	/**
+	 * Add any property to your visual studio project
+	 * This allows you to set properties that premake does not support without extending it
+	 * 
+	 * Values set at one time are sorted alphabetically
+	 * If you want to output groups of values in any order, set multiple times.
+	 * Nested values are also supported.
+	 * 
+	 * ```lua
+	 * 	vsprops {
+	 * 		Name1 = "value1",
+	 * 		Name2 = {
+	 * 			Name3 = "value3"
+	 * 		}
+	 * 	}
+	 * ```
+	 * 
+	 * 
+	 * Premake 5.0-beta3 or later.
+	 * @param vsprops Allows you to set properties that premake does not support without extending it.
+	 * 
+	 * ### Examples
+	 * ```lua
+	 * 	language "C#"
+	 * 	vsprops {
+	 * 		-- https://devblogs.microsoft.com/visualstudio/vs-toolbox-accelerate-your-builds-of-sdk-style-net-projects/
+	 * 		AccelerateBuildsInVisualStudio = "true",
+	 * 		-- https://learn.microsoft.com/en-us/visualstudio/ide/how-to-change-the-build-output-directory?view=vs-2022
+	 * 		AppendTargetFrameworkToOutputPath = "false",
+	 * 		-- https://learn.microsoft.com/en-us/dotnet/csharp/tutorials/nullable-reference-types
+	 * 		Nullable = "enable",
+	 * 	}
+	 * ```
+	 * ```lua
+	 * 	language "C++"
+	 * 	nuget {
+	 * 		"Microsoft.Direct3D.D3D12:1.608.2"
+	 * 	}
+	 * 	vsprops {
+	 * 		-- https://devblogs.microsoft.com/directx/gettingstarted-dx12agility/#2-set-agility-sdk-parameters
+	 * 		Microsoft_Direct3D_D3D12_D3D12SDKPath = "custom_path",
+	 * 	}
+	 * ```
+	 */
+	vsProps(vsprops: any): this;
+
+	/**
+	 * - This page was auto-generated. Feel free to help us improve the documentation by creating a pull request.
+	 * 
+	 * 
+	 * Premake 5.0.0 alpha 14 or later.
+	 * @param value
+	 * Available options:
+	 * - `MOVBE`: needs documentation
+	 * - `POPCNT`: needs documentation
+	 * - `PCLMUL`: needs documentation
+	 * - `LZCNT`: needs documentation
+	 * - `BMI`: needs documentation
+	 * - `BMI2`: needs documentation
+	 * - `F16C`: needs documentation
+	 * - `AES`: needs documentation
+	 * - `FMA`: needs documentation
+	 * - `FMA4`: needs documentation
+	 * - `RDRND`: needs documentation
+	 * 
+	 */
+	isaExtensions(...value: IsaExtensionsType[]): this;
+
+	/**
+	 * Passes arguments directly to the resource compiler command line without translation.
+	 * 
+	 * 
+	 * Premake 4.0 or later.
+	 * @param options A list of resource compiler flags and options, specific to a particular compiler.
+	 * 
+	 * ### Examples
+	 * Use `pkg-config` style configuration when building on Linux with GCC. Build options are always compiler specific and should be targeted to a particular toolset.
+	 * 
+	 * ```lua
+	 * filter { "system:linux", "action:gmake" }
+	 *   resoptions { "`wx-config --cxxflags`", "-ansi", "-pedantic" }
+	 * ```
+	 */
+	resOptions(...options: string[]): this;
+
+	/**
+	 * Runs code analysis during the build process for Visual Studio projects.
+	 * 
+	 * The `runcodeanalysis` option enforces code analysis during the build process in Visual Studio projects. This may significantly increase build time for projects.
+	 * 
+	 * 
+	 * Premake 5.0.0 beta 3 or later for Visual Studio 2019 and later.
+	 * @param value Specifies whether code analysis should be run during the build process.
+	 * Available options:
+	 * - `On`
+	 * - `Off`
+	 * 
+	 * ### Examples
+	 * Run clang-tidy code analysis during the build process.
+	 * 
+	 * ```lua
+	 * clangtidy("On")
+	 * runcodeanalysis("On")
+	 * ```
+	 */
+	runCodeAnalysis(value: boolean): this;
+
+	/**
+	 * Enables clang-tidy code analysis for Visual Studio.
+	 * 
+	 * The `clangtidy` option enables running clang-tidy code analysis in Visual Studio projects.
+	 * 
+	 * 
+	 * Premake 5.0.0 beta 3 or later for Visual Studio 2019 and later.
+	 * @param value
+	 * Available options:
+	 * - `On`
+	 * - `Off`
+	 * 
+	 */
+	clangTidy(value: boolean): this;
+
+	/**
+	 * Specifies the desired format of the debug information written to the output binaries.
+	 * 
+	 * 
+	 * Premake 5.0 or later.
+	 * @param format Specifies the desired debug format.
+	 * Available options:
+	 * - `Default`: Specifies default debug format should be used by toolset.
+	 * - `c7`: Specifies that MSVC should store debuginfo in the objects rather than a separate .pdb file.
+	 * - `Dwarf`
+	 * - `SplitDwarf`
+	 * 
+	 */
+	debugFormat(format: DebugFormatType): this;
+
+	/**
+	 * Passes arguments directly to the compiler command line without translation.
+	 * If a project includes multiple calls to `buildoptions` the lists are concatenated, in the order in which they appear in the script.
+	 * 
+	 * 
+	 * Premake 4.0 or later.
+	 * @param options A list of compiler flags and options, specific to a particular compiler.
+	 * 
+	 * ### Examples
+	 * Use `pkg-config` style configuration when building on Linux with GCC. Build options are always compiler specific and should be targeted to a particular toolset.
+	 * 
+	 * ```lua
+	 * filter { "system:linux", "action:gmake" }
+	 *   buildoptions { "`wx-config --cxxflags`", "-ansi", "-pedantic" }
+	 * ```
+	 */
+	buildOptions(...options: string[]): this;
+
+	/**
+	 * 
+	 * 
+	 * 
+	 * Premake 5.0.0 alpha 12 or later.
+	 * @param value
+	 * Available options:
+	 * - `Default`: the default C dialect for the toolset
+	 * - `C89`: ISO C89
+	 * - `C90`: ISO C90
+	 * - `C99`: ISO C99
+	 * - `C11`: ISO C11
+	 * - `C17`: ISO C17
+	 * - `C23`: ISO C23
+	 * - `gnu89`: GNU dialect of ISO C89
+	 * - `gnu90`: GNU dialect of ISO C90
+	 * - `gnu99`: GNU dialect of ISO C99
+	 * - `gnu11`: GNU dialect of ISO C11
+	 * - `gnu17`: GNU dialect of ISO C17
+	 * - `gnu23`: GNU dialect of ISO C23
+	 * 
+	 */
+	cDialect(value: CDialectType): this;
+
+	/**
+	 * ---
+	 * slug: premake-tags  # docusaurus reserves /docs/tags
+	 * ---
+	 * 
+	 * tags
+	 * See the [pull request](https://github.com/premake/premake-core/pull/789) for more information; help authoring documentation is appreciated!
+	 * 
+	 * 
+	 * Premake 5.0.0 alpha 12 or later.
+	 * @param value Needs documentation.
+	 * 
+	 */
+	tags(...value: string[]): this;
+
+	/**
+	 * Sets whether or not the compiler should enable C++20 modules.
+	 * 
+	 * 
+	 * Premake 5.0.0 beta 3 or later for Visual Studio 2019 and later.
+	 * @param value
+	 * Available options:
+	 * - `On`
+	 * - `Off`
+	 * 
+	 */
+	enableModules(value: EnableModulesType): this;
+
+	/**
+	 * Specifies a file name suffix for the import library base file name. Import libraries are generated for Windows DLL projects.
+	 * 
+	 * 
+	 * Premake 4.0 or later.
+	 * @param suffix The new filename suffix.
+	 * 
+	 * ### Examples
+	 * ```lua
+	 * -- Add "-d" to debug versions of files
+	 * filter { "configurations:Debug" }
+	 *    implibsuffix "-d"
+	 * ```
+	 */
+	impLibSuffix(suffix: string): this;
+
+	/**
+	 * Enables Unity Builds in Visual Studio, also known as Jumbo Builds
+	 * 
+	 * 
+	 * Premake 5.0 and later. Versions are currently only implemented for Visual Studio 2017+.
+	 * @param value
+	 * Available options:
+	 * - `On`: Enables Unity Builds.
+	 * - `Off`: Disables Unity Builds.
+	 * 
+	 * ### Examples
+	 * Enable Unity Builds.
+	 * 
+	 * ```lua
+	 * enableunitybuild "On"
+	 * ```
+	 */
+	enableUnityBuild(value: EnableUnityBuildType): this;
+
+	/**
+	 * Enables a token-based preprocessor conforming to C99, C++11, and later standards.
+	 * 
+	 * 
+	 * Premake 5.0 or later.
+	 * @param value
+	 * Available options:
+	 * - `Off`: Do not use the conforming processor.
+	 * - `On`: Enable the conforming processor.
+	 * 
+	 */
+	useStandardPreprocessor(value: UseStandardPreprocessorType): this;
+
+	/**
+	 * - This page was auto-generated. Feel free to help us improve the documentation by creating a pull request.
+	 * 
+	 * 
+	 * Premake 5.0.0 alpha 16 or later.
+	 * @param value Needs documentation.
+	 * 
+	 */
+	shaderIncludeDirs(...value: string[]): this;
+
+	/**
+	 * Specifies the style of floating point math which should be used.
+	 * If no value is set for a configuration, the toolset's default floating point settings will be used.
+	 * 
+	 * 
+	 * Premake 5.0 or later.
+	 * @param value Specifies the desired style of floating point math.
+	 * Available options:
+	 * - `Default`: Use the toolset's floating point settings.
+	 * - `Fast`: Enable floating point optimizations at the expense of accuracy.
+	 * - `Strict`: Improve floating point consistency at the expense of performance.
+	 * 
+	 */
+	floatingPoint(value: FloatingPointType): this;
+
+	/**
+	 * Enables the `Scan Sources for Module Dependencies` option for Visual Studio projects.
+	 * 
+	 * 
+	 * Premake 5.0-beta2 or later. Only available for Visual Studio 2019 16.9.x and later.
+	 * @param value Enables or disables the 'Scan Sources for Module Dependencies' option for Visual Studio projects.
+	 * Available options:
+	 * - `on`: Sets the option to Yes.
+	 * - `yes`: Sets the option to Yes.
+	 * - `true`: Sets the option to Yes.
+	 * - `off`: Sets the option to No.
+	 * - `no`: Sets the option to No.
+	 * - `false`: Sets the option to No.
+	 * 
+	 */
+	scanForModuleDependencies(value: boolean): this;
+
+	/**
+	 * Sets the kind of binary object being created by the project or configuration, such as a console or windowed application, or a shared or static library.
+	 * 
+	 * 
+	 * The **Makefile** kind is available in Premake 5.0 and later, and are supported for Visual Studio and Codelite.
+	 * The **None** kind is available in Premake 5.0 and later, and are supported for gmakelegacy, gmake, Codelite and Visual Studio.
+	 * The **Utility** kind is only available for Visual Studio, Codelite and gmake, as well as very limited support in gmakelegacy.
+	 * The **SharedItems** kind is only available for Visual Studio 2013 and later.
+	 * @param kind
+	 * Available options:
+	 * - `ConsoleApp`: A console or command-line application.
+	 * - `WindowedApp`: An application which runs in a desktop window. This distinction does not apply on Linux, but is important on Windows and Mac OS X.
+	 * - `SharedLib`: A shared library or DLL.
+	 * - `StaticLib`: A static library.
+	 * - `Makefile`: A special configuration type which calls out to one or more external commands. The actual type of binary created is unspecified. See [Makefile Projects](Makefile-Projects.md) for more information.
+	 * - `Utility`: A configuration which contains only custom build rules.
+	 * - `None`: A configuration which is not included in the build. Useful for projects containing only web pages, header files, or support documentation.
+	 * - `Packaging`: A configuration type to create .androidproj files, which build the apk in an Android application under Visual Studio. _Note, this was previously `AndroidProj`._
+	 * - `SharedItems`: A special configuration type which doesn't contain any build settings of its own, instead using the build settings of any projects that link it.
+	 * 
+	 * ### Examples
+	 * Set the project to build a command-line executable.
+	 * 
+	 * ```lua
+	 * kind "ConsoleApp"
+	 * ```
+	 * 
+	 * Set the project to build a shared library (DLL).
+	 * 
+	 * ```lua
+	 * kind "SharedLib"
+	 * ```
+	 * 
+	 * Build either a static or a shared library, depending on the selected build configuration.
+	 * 
+	 * ```lua
+	 * workspace "MyWorkspace"
+	 *    configurations { "DebugLib", "DebugDLL", "ReleaseLib", "ReleaseDLL" }
+	 * 
+	 * project "MyProject"
+	 * 
+	 *    filter "*Lib"
+	 *       kind "StaticLib"
+	 * 
+	 *    filter "*DLL"
+	 *       kind "SharedLib"
+	 * ```
+	 */
+	kind(kind: KindType): this;
+
+	/**
+	 * Specifies the file search paths for `using` statements.
+	 * 
+	 * 
+	 * Premake 5.0 or later.
+	 * @param paths Specifies a list of file search directories. Paths should be specified relative to the currently running script file.
+	 * 
+	 * ### Examples
+	 * Define two using file search paths.
+	 * 
+	 * ```lua
+	 * usingdirs { "../lib1", "../lib2" }
+	 * ```
+	 * 
+	 * You can also use wildcards to match multiple directories. The * will match against a single directory, ** will recurse into subdirectories as well.
+	 * 
+	 * ```lua
+	 * usingdirs { "../libs/**" }
+	 * ```
+	 */
+	usingDirs(...paths: string[]): this;
+
+	/**
+	 * Turn on/off full paths usage in diagnostics
+	 * By default, the generated project files will use the compilers default settings, which is in most cases "On" for debug and "Off" for release.
+	 * In Visual Studio, this overrides the /FC flag which is forced on when using debug builds.
+	 * 
+	 * 
+	 * Premake 5.0.0 beta 1 or later.
+	 * @param value Specifies whether to use relative or absolute paths in diagnostics.
+	 * Available options:
+	 * - `Off`: Use relative paths in diagnostics.
+	 * - `On`: Use absolute (full) paths in diagnostics.
+	 * 
+	 * ### Examples
+	 * ```lua
+	 * project "MyProject"
+	 *     usefullpaths "On" -- Uses full paths in diagnostics
+	 * ```
+	 */
+	useFullPaths(value: boolean): this;
+
+	/**
+	 * 
+	 * 
+	 * 
+	 * Premake 5.0.0 alpha 12 or later.
+	 * @param value
+	 * Available options:
+	 * - `on`
+	 * - `off`
+	 * 
+	 */
+	floatingPointExceptions(value: boolean): this;
+
+	/**
+	 * Specifies the file outputs of a custom build command or rule.
+	 * 
+	 * 
+	 * Premake 5.0 or later.
+	 * @param output The file that is created or updated by the custom build command or rule.
+	 * 
+	 */
+	buildOutputs(...output: string[]): this;
+
+	/**
+	 * Specifies preprocessor symbols for the resource compiler.
+	 * 
+	 * 
+	 * Premake 4.0 or later.
+	 * @param symbols Specifies a list of symbols to be defined.
+	 * 
+	 * ### Examples
+	 * Define two new symbols in the current project.
+	 * 
+	 * ```lua
+	 * resdefines { "DEBUG", "TRACE" }
+	 * ```
+	 * 
+	 * Symbols may also assign values.
+	 * 
+	 * ```lua
+	 * resdefines { "CALLSPEC=__dllexport" }
+	 * ```
+	 */
+	resDefines(...symbols: string[]): this;
+
+	/**
+	 * Controls whether the frame pointer is omitted during compilation.
+	 * 
+	 * 
+	 * Premake 5.0.0 alpha 14 or later.
+	 * @param value Controls whether the frame pointer is omitted during compilation.
+	 * Available options:
+	 * - `Default`: Use the compiler's default behavior.
+	 * - `On`: Omit the frame pointer.
+	 * - `Off`: Keep the frame pointer.
+	 * 
+	 * ### Examples
+	 * Keep frame pointer in debug builds for better stack traces:
+	 * ```lua
+	 * filter "configurations:Debug"
+	 *     omitframepointer "Off"
+	 * ```
+	 * 
+	 * Omit frame pointer in release builds:
+	 * ```lua
+	 * filter "configurations:Release"
+	 *     omitframepointer "On"
+	 * ```
+	 * 
+	 * Use compiler defaults across all configurations:
+	 * ```lua
+	 * omitframepointer "Default"
+	 * ```
+	 */
+	omitFramePointer(value: OmitFramePointerType): this;
+
+	/**
+	 * Specifies a file name suffix for the compiled binary target.
+	 * 
+	 * 
+	 * Premake 4.0 or later.
+	 * @param suffix The new filename suffix.
+	 * 
+	 * ### Examples
+	 * ```lua
+	 * -- Add "-d" to debug versions of files
+	 * filter { "configurations:Debug" }
+	 *    targetsuffix "-d"
+	 * ```
+	 */
+	targetSuffix(suffix: string): this;
+
+	/**
+	 * Specifies which usage blocks a project should consume.
+	 * The `uses` API is used to consume `usage` blocks from within a project. The `usage` blocks are case sensitive.
+	 * 
+	 * 
+	 * @param value
+	 * 
+	 * ### Examples
+	 * Demonstration of using `uses`. When specifying a `uses` matching a project name containing a `PUBLIC` or `INTERFACE` usage block, the `uses` statement will match against that. If a `project` with a `PUBLIC` or `INTERFACE` usage block
+	 * cannot be found, then it will fall back to searching all `usage` blocks to match the provided name, as described above.
+	 * 
+	 * ```lua
+	 * project "MyProject"
+	 *     usage "PUBLIC"
+	 *         defines { "PUBLIC_DEF" }
+	 *     usage "Custom"
+	 *         defines { "CUSTOM_DEF" }
+	 * 
+	 * project "MyExe"
+	 *     uses { "MyProject" }
+	 * 
+	 * project "MyDLL"
+	 *     uses { "Custom" }
+	 * ```
+	 */
+	uses(...value: string[]): this;
+
+	/**
+	 * - This page was auto-generated. Feel free to help us improve the documentation by creating a pull request.
+	 * 
+	 * 
+	 * Premake 5.0.0 alpha 14 or later.
+	 * @param value needs documentation.
+	 * 
+	 */
+	tailCalls(value: boolean): this;
+
+	/**
+	 * Enables the WinRT extension, C++/CX, for the specified projects/files.
+	 * 
+	 * 
+	 * Premake 5.0.0 Beta 2 or later and only implemented for Visual Studio 2019+.
+	 * @param value Specifies whether the WinRT extension is enabled for the specified projects/files.
+	 * Available options:
+	 * - `Default`: Compiles the file using the default for the toolset. (Default is `Off`)
+	 * - `On`: Compiles the file with the WinRT extension enabled.
+	 * - `Off`: Compiles the file without the WinRT extension enabled.
+	 * 
+	 * ### Examples
+	 * ```lua
+	 * filter { "files:**_winrt.cpp" }
+	 *     consumewinrtextension "On"
+	 * ```
+	 */
+	consumeWinRtExtension(value: boolean): this;
+
+	/**
+	 * 
+	 * 
+	 * 
+	 * Premake 5.0.0 alpha 12 or later.
+	 * @param value
+	 * Available options:
+	 * - `on`: needs documentation.
+	 * - `off`: needs documentation.
+	 * 
+	 */
+	stringPooling(value: boolean): this;
+
+	/**
+	 * Specifies the shader model.
+	 * 
+	 * 
+	 * Premake 5.0.0 alpha 14 or later.
+	 * @param value Specifies the shader model.
+	 * Available options:
+	 * - `2.0`: Shader Model 2.0
+	 * - `3.0`: Shader Model 3.0
+	 * - `4.0_level_9_1`: Shader Model 4.0 Level 9_1
+	 * - `4.0_level_9_3`: Shader Model 4.0 Level 9_3
+	 * - `4.0`: Shader Model 4.0
+	 * - `4.1`: Shader Model 4.1
+	 * - `5.0`: Shader Model 5.0
+	 * - `5.1`: Shader Model 5.1
+	 * - `rootsig_1.0`: Root Signature Version 1.0
+	 * - `rootsig_1.1`: Root Signature Version 1.1
+	 * - `6.0`: Shader Model 6.0
+	 * - `6.1`: Shader Model 6.1
+	 * - `6.2`: Shader Model 6.2
+	 * - `6.3`: Shader Model 6.3
+	 * - `6.4`: Shader Model 6.4
+	 * - `6.5`: Shader Model 6.5
+	 * - `6.6`: Shader Model 6.6
+	 * 
+	 */
+	shaderModel(value: ShaderModelType): this;
+
+	/**
+	 * 
+	 * 
+	 * 
+	 * Premake 5.0.0 alpha 12 or later.
+	 * @param value Specifies the C++ dialect to be used.
+	 * Available options:
+	 * - `Default`: The default C++ dialect for the toolset.
+	 * - `C++latest`: The latest C++ dialect for the toolset or action where available, otherwise the latest C++ dialect supported by Premake.
+	 * - `C++98`: ISO C++98.
+	 * - `C++0x`: ISO C++11 Draft.
+	 * - `C++11`: ISO C++11.
+	 * - `C++1y`: ISO C++14 Draft.
+	 * - `C++14`: ISO C++14.
+	 * - `C++1z`: ISO C++17 Draft.
+	 * - `C++17`: ISO C++17.
+	 * - `C++2a`: ISO C++20 Draft.
+	 * - `C++20`: ISO C++20.
+	 * - `C++2b`: ISO C++23 Draft.
+	 * - `C++23`: ISO C++23.
+	 * - `gnu++98`: GNU dialect of ISO C++98.
+	 * - `gnu++0x`: GNU dialect of ISO C++11 Draft.
+	 * - `gnu++11`: GNU dialect of ISO C++11.
+	 * - `gnu++1y`: GNU dialect of ISO C++14 Draft.
+	 * - `gnu++14`: GNU dialect of ISO C++14.
+	 * - `gnu++1z`: GNU dialect of ISO C++17 Draft.
+	 * - `gnu++17`: GNU dialect of ISO C++17.
+	 * - `gnu++2a`: GNU dialect of ISO C++20 Draft.
+	 * - `gnu++20`: GNU dialect of ISO C++20.
+	 * - `gnu++2b`: GNU dialect of ISO C++23 Draft.
+	 * - `gnu++23`: GNU dialect of ISO C++23.
+	 * 
+	 */
+	cppDialect(value: CppDialectType): this;
+
+	/**
+	 * Specifies the file extension for the compiled binary target.
+	 * By default, the project will use the system's normal naming conventions: .exe for Windows executables, .so for Linux shared libraries, and so on. The `targetextension` function allows you to change this default.
+	 * 
+	 * 
+	 * Premake 4.0 or later.
+	 * @param ext The new file extension, including the leading dot.
+	 * 
+	 */
+	targetExtension(ext: string): this;
+
+	/**
+	 * Sets the `RemoveUnreferencedCodeData` property for a configuration or all configurations within a project or workspace, adding or removing the `/Zc:inline[-]` build option.
+	 * 
+	 * [/Zc:inline (Remove unreferenced COMDAT)](https://docs.microsoft.com/en-us/cpp/build/reference/zc-inline-remove-unreferenced-comdat?view=msvc-160)
+	 * 
+	 * If this property is unset, it defaults to `true` in Visual Studio.
+	 * 
+	 * 
+	 * Premake 5.0 alpha 16 or later.
+	 * @param value
+	 * Available options:
+	 * - `on`: Enables `RemoveUnreferencedCodeData`.
+	 * - `off`: Disables `RemoveUnreferencedCodeData`.
+	 * 
+	 */
+	removeUnreferencedCodeData(value: boolean): this;
+
+	/**
+	 * Specifies the include file search paths for the resource compiler.
+	 * 
+	 * 
+	 * Premake 4.0 or later.
+	 * @param paths Specifies a list of include file search directories. Paths should be specified relative to the currently running script file.
+	 * 
+	 * ### Examples
+	 * Define two include file search paths.
+	 * 
+	 * ```lua
+	 * resincludedirs { "../lua/include", "../zlib" }
+	 * ```
+	 * 
+	 * You can also use wildcards to match multiple directories. The * will match against a single directory, ** will recurse into subdirectories as well.
+	 * 
+	 * ```lua
+	 * resincludedirs { "../includes/**" }
+	 * ```
+	 */
+	resIncludeDirs(...paths: string[]): this;
+
+	/**
+	 * Specifies the C/C++ source code file which controls the compilation of the header.
+	 * See [Precompiled Headers](Precompiled-Headers.md) for more information.
+	 * 
+	 * 
+	 * Premake 4.0 and up.
+	 * @param sourcefile_cpp The name of the source code file which triggers the compilation of the header. This file must contain the header file's `#include` statement as the first line of code; this is usually the only statement in the file.
+	 * 
+	 */
+	pchSource(sourcefile_cpp: string): this;
+
+	/**
+	 * Specifies the target locale for the resources in a particular configuration.
+	 * This value is currently only used for the Microsoft Visual Studio resource compiler in C/C++ projects.
+	 * 
+	 * 
+	 * Premake 5.0 or later.
+	 * @param code Specifies the desired locale code.
+	 * 
+	 */
+	locale(code: string): this;
+
+	/**
+	 * Enables or disables native wchar (wide character) support by the compiler.
+	 * If no value is set for a configuration, the toolset's default wchar support will be used.
+	 * 
+	 * 
+	 * Premake 5.0.
+	 * @param value Specifies the desired state.
+	 * Available options:
+	 * - `Default`: Use the toolset's default settings.
+	 * - `On`: Enable native wide character handling.
+	 * - `Off`: Disable native wide character handling.
+	 * 
+	 */
+	nativeWChar(value: NativeWCharType): this;
+
+	/**
+	 * Enable generation of position independent code.
+	 * Position Independent Code is required when building dynamic libraries, or static lib's that will be linked to dynamic libraries. PIC will be enabled by default when building dynamic libraries. It will be disabled by default otherwise.
+	 * 
+	 * 
+	 * Premake 5.0.
+	 * @param value
+	 * Available options:
+	 * - `Off`: Do not generate position independent code.
+	 * - `On`: Generate position independent code.
+	 * 
+	 */
+	pic(value: PicType): this;
+
+	/**
+	 * - This page was auto-generated. Feel free to help us improve the documentation by creating a pull request.
+	 * 
+	 * 
+	 * Premake 5.0.0 alpha 14 or later.
+	 * @param value needs documentation.
+	 * 
+	 */
+	shaderEntry(value: string): this;
+
+	/**
+	 * Sets the file name of the deployment image produced by the build.
+	 * This value is currently only used by the Xbox 360.
+	 * 
+	 * 
+	 * Premake 5.0 or later.
+	 * @param path The full path for the image file, relative to the currently executing script file.
+	 * 
+	 */
+	imagePath(path: string): this;
+
+	/**
+	 * Specifies environment variables for the debug session.
+	 * 
+	 * 
+	 * Premake 5.0 or later.
+	 * @param envs A list of environment variable definitions for the debug session.
+	 * 
+	 */
+	debugEnvs(...envs: string[]): this;
+
+	/**
+	 * Applies one or more "forced using" files to the project; these includes behave as it they had been injected into the first line of each source file in the project.
+	 * 
+	 * 
+	 * Premake 5.0 or later.
+	 * @param files Specifies a list of files to be force included. Paths should be specified relative to the currently running script file.
+	 * 
+	 */
+	forceUsings(...files: string[]): this;
+
+	/**
+	 * Sets whether or not the compiler should build STL modules.
+	 * 
+	 * 
+	 * Premake 5.0.0 beta 3 or later for Visual Studio 2022 and later.
+	 * @param value
+	 * Available options:
+	 * - `On`
+	 * - `Off`
+	 * 
+	 */
+	buildStlModules(value: BuildStlModulesType): this;
+
+	/**
+	 * Specifies the import library file name prefix. Import libraries are generated for Windows DLL projects.
+	 * By default, the system naming convention will be used: no prefix on Windows, a prefix of `lib` (as in `libMyProject.a`) on other systems. The `implibprefix` function allows you to change this default.
+	 * 
+	 * 
+	 * Premake 4.0 or later.
+	 * @param prefix The new file name prefix.
+	 * 
+	 * ### Examples
+	 * ```lua
+	 * implibprefix "plugin"
+	 * ```
+	 * 
+	 * The prefix may also be set to an empty string for no prefix.
+	 * 
+	 * ```lua
+	 * implibprefix ""
+	 * ```
+	 */
+	impLibPrefix(prefix: string): this;
+
+	/**
+	 * Specifies a message to display to the user before starting execution of any specified [pre-build commands](prebuildcommands.md).
+	 * 
+	 * 
+	 * Premake 4.4 or later.
+	 * @param message The message to be displayed to the user before starting execution of any specified pre-build commands.
+	 * 
+	 * ### Examples
+	 * ```lua
+	 * project "MyProject"
+	 *    prebuildcommands { "{COPYFILE} %[dependencies/*.lib] %[bin]" }
+	 *    prebuildmessage "Copying dependencies..."
+	 * ```
+	 */
+	preBuildMessage(message: string): this;
+
+	/**
+	 * - This page was auto-generated. Feel free to help us improve the documentation by creating a pull request.
+	 * 
+	 * 
+	 * Premake 5.0.0 alpha 16 or later.
+	 * @param value Needs documentation.
+	 * 
+	 */
+	enableDefaultCompileItems(value: boolean): this;
+
+	/**
+	 * 
+	 * 
+	 * 
+	 * Premake 5.0.0 alpha 12 or later.
+	 * @param value
+	 * Available options:
+	 * - `Default`: needs documentation.
+	 * - `GDB`: needs documentation.
+	 * - `LLDB`: needs documentation.
+	 * - `VisualStudioLocal`: needs documentation.
+	 * - `VisualStudioRemote`: needs documentation.
+	 * - `VisualStudioWebBrowser`: needs documentation.
+	 * - `VisualStudioWebService`: needs documentation.
+	 * 
+	 */
+	debugger(value: DebuggerType): this;
+
+	/**
+	 * - This page was auto-generated. Feel free to help us improve the documentation by creating a pull request.
+	 * 
+	 * 
+	 * Premake 5.0.0 alpha 14 or later.
+	 * @param value needs documentation.
+	 * 
+	 */
+	shaderHeaderFileOutput(value: string): this;
+
+	/**
+	 * Specifies the source file file inputs of a custom build command or rule.
+	 * 
+	 * 
+	 * Premake 5.0 or later.
+	 * @param inputs The list of input source files.
+	 * 
+	 */
+	buildInputs(...inputs: string[]): this;
+
+	/**
+	 * Selects a .NET framework version.
+	 * This value currently is only applied to Visual Studio 2005 or later, and GNU makefiles using Mono. If no .NET framework version is specified the toolset default is used.
+	 * 
+	 * 
+	 * Premake 5.0 or later.
+	 * @param version Selects a .NET framework version.
+	 * Available options:
+	 * - `1.0`
+	 * - `1.1`
+	 * - `2.0`
+	 * - `3.0`
+	 * - `3.5`
+	 * - `4.0`
+	 * - `4.5`
+	 * - `4.6`
+	 * 
+	 * ### Examples
+	 * Use the .NET framework 3.0.
+	 * 
+	 * ```lua
+	 * dotnetframework "3.0"
+	 * ```
+	 */
+	dotNetFramework(version: string): this;
+
+	/**
+	 * Specifies extra paths to use when executing build commands
+	 * 
+	 * 
+	 * Premake 5.0.0 alpha 12 or later.
+	 * @param directories Paths containing executable to run when building command.
+	 * 
+	 * ### Examples
+	 * ```lua
+	 * bindirs { "bin/", "scripts/" }
+	 * ```
+	 */
+	binDirs(...directories: string[]): this;
+
+	/**
+	 * - This page was auto-generated. Feel free to help us improve the documentation by creating a pull request.
+	 * 
+	 * 
+	 * Premake 5.0.0 alpha 16 or later.
+	 * @param value Needs documentation.
+	 * 
+	 */
+	assemblyDebug(value: boolean): this;
+
+	/**
+	 * Set the character encoding.
+	 * 
+	 * 
+	 * Premake 5.0 or later.
+	 * @param value
+	 * Available options:
+	 * - `Default`: The default encoding for the toolset; usually `Unicode`.
+	 * - `MBCS`: Multi-byte Character Set; currently Visual Studio only.
+	 * - `Unicode`: Unicode character encoding.
+	 * - `ASCII`: No actual character set.
+	 * 
+	 */
+	characterSet(value: CharacterSetType): this;
+
+	/**
+	 * - This page was auto-generated. Feel free to help us improve the documentation by creating a pull request.
+	 * 
+	 * 
+	 * Premake 5.0.0 alpha 14 or later.
+	 * @param value needs documentation.
+	 * 
+	 */
+	xcodeCodeSigningIdentity(value: string): this;
+
+	/**
+	 * Specifies the default libraries to be ignored for a project.
+	 * 
+	 * 
+	 * Premake 5.0 or later.
+	 * @param libraries A list of library names. If a valid extension isn't present, `.lib` will be automatically appended, similar to [links](links.md). Currently, the valid extensions are `.lib` and `.obj`.
+	 * 
+	 * ### Examples
+	 * Specify `MSVCRT.lib` as a default library to ignore.
+	 * 
+	 * ```lua
+	 * project "MyProject"
+	 *   ignoredefaultlibraries { "MSVCRT" }
+	 * ```
+	 */
+	ignoreDefaultLibraries(libraries: any): this;
+
+	/**
+	 * Specify one or more non-linking project build order dependencies.
+	 * 
+	 * 
+	 * 5.0 or later.
+	 * @param project_names One or more sibling project names.
+	 * 
+	 */
+	dependsOn(...project_names: string[]): this;
+
+	/**
+	 * 
+	 * 
+	 * 
+	 * Premake 5.0.0 alpha 12 or later.
+	 * @param value
+	 * Available options:
+	 * - `Mixed`: Enables simultaneous debugging of native and .NET Framework code.
+	 * - `NativeOnly`: Restricts debugging to native code only.
+	 * - `ManagedOnly`: Restricts debugging to managed code only.
+	 * - `NativeWithManagedCore`: Enables simultaneous debugging of native and .NET Core code.
+	 * 
+	 */
+	debuggerType(value: DebuggerTypeType): this;
+
+	/**
+	 * Specifies the linker.
+	 * 
+	 * 
+	 * Premake 5.0 beta 3 or later.
+	 * @param value Specifies the linker.
+	 * Available options:
+	 * - `Default`: Uses the toolset platform default linker.
+	 * - `LLD`: Uses LLVM's LLD linker (supported on `gcc` and `clang` toolsets).
+	 * 
+	 * ### Examples
+	 * Sets `LLD` as the linker.
+	 * 
+	 * ```lua
+	 * filter { "toolset:clang" }
+	 *    linker { "LLD" }
+	 * ```
+	 */
+	linker(value: LinkerType): this;
+
+	/**
+	 * 
+	 * 
+	 * 
+	 * Visual Studio 2019 and later.
+	 * Premake 5.0-beta2 or later.
+	 * @param value
+	 * Available options:
+	 * - `On`: All C++ modules in the given project(s) will be public.
+	 * - `Off`: Not all C++ modules in the given project(s) will be public.
+	 * 
+	 */
+	allModulesPublic(value: boolean): this;
+
+	/**
+	 * Specifies the base file name for the compiled binary target.
+	 * By default, the project name will be used as the file name of the compiled binary target. A Windows executable project named "MyProject" will produce a binary named MyProject.exe. The `targetname` function allows you to change this default.
+	 * 
+	 * 
+	 * Premake 4.0 or later.
+	 * @param name The new base file name.
+	 * 
+	 */
+	targetName(name: string): this;
+
+	/**
+	 * Force sign of `char`
+	 * Note that `char` is still a distinct type from `signed char` and `unsigned char`.
+	 * 
+	 * 
+	 * Premake 5.0.0 alpha 14 or later.
+	 * @param value
+	 * Available options:
+	 * - `Off`: Make `char` signed. (default on msc)
+	 * - `On`: Make `char` unsigned.
+	 * 
+	 */
+	unsignedChar(value: boolean): this;
+
+	/**
+	 * Turns on or off the linkgroups for option for linked libraries.
+	 * 
+	 * Notes:
+	 * 
+	 * Projects using GCC or Clang will use order dependent linking by default with the default linker. While it is generally believed to be slower, this option enables order independent linking within a group of libraries by putting them inside of a link-group using the `-Wl,--start-group` and `-Wl,--end-group` linker command line arguments.
+	 * 
+	 * 
+	 * Premake 5.0-alpha10 or later. GCC and Clang toolsets only. Codelite, gmakelegacy, and gmake exporters only.
+	 * @param value
+	 * Available options:
+	 * - `On`: Turn on link groups.
+	 * - `Off`: Turn off link groups.
+	 * 
+	 * ### Examples
+	 * ```lua
+	 * project "A"
+	 *     kind "StaticLib"
+	 * 
+	 * project "B"
+	 *     kind "StaticLib"
+	 *     links { "A" }
+	 * 
+	 * project "C"
+	 *     kind "ConsoleApp"
+	 *     links { "A", "B" }
+	 *     linkgroups "On"
+	 * ```
+	 */
+	linkGroups(value: LinkGroupsType): this;
+
+	/**
+	 * Specifies how a file or set of files should be treated during the compilation process. It is usually paired with a filter to select a file set. If no build action is specified for a file a default action will be used, based on the file's extension.
+	 * 
+	 * 
+	 * Build actions are currently supported for C/C++ and C# projects.
+	 * 
+	 * `Compile`, `Copy`, `Embed`, and `None` are available in Premake 4.4 or later. All actions are available in Premake 5.0 or later.
+	 * @param action Specifies how a file or set of files should be treated during the compilation process. It is usually paired with a filter to select a file set. If no build action is specified for a file a default action will be used, based on the file's extension.
+	 * Available options:
+	 * - `ClInclude`: Treat the file as an include file.
+	 * - `ClCompile`: Treat the file as source code; compile and link it.
+	 * - `FxCompile`: Treat the file as HLSL shader source code; compile and link it.
+	 * - `None`: Do nothing with this file.
+	 * - `ResourceCompile`: Copy/embed the file with the project resources.
+	 * - `CustomBuild`: Treat the file as custom build code; compile and optionally link it.
+	 * - `Midl`: Treat the file as MIDL source code; compile and link it.
+	 * - `Masm`: Treat the file as MASM source code; compile and link it.
+	 * - `Image`: Treat the file as an Image.
+	 * - `Natvis`: Treat the file as Natvis source; use it for custom data layouts while debugging.
+	 * - `AppxManifest`: Treat the file as AppX Manifest; required for UWP applications.
+	 * - `Copy`: Copy the file to the target directory.
+	 * 
+	 * ### Examples
+	 * Embed all PNG images files into the target binary.
+	 * 
+	 * ```lua
+	 * filter "files:**.png"
+	 *    buildaction "Embed"
+	 * ```
+	 * 
+	 * [1]: http://msdn.microsoft.com/en-us/library/ms228287(v=vs.90).aspx
+	 * [2]: http://msdn.microsoft.com/en-us/library/a6h7e207(v=vs.71).aspx
+	 */
+	buildAction(action: string): this;
+
+	/**
+	 * Specifies the import library base file name. Import libraries are generated for Windows DLL projects.
+	 * By default, the target name will be used as the import library file name. The `implibname` function allows you to change this default.
+	 * 
+	 * 
+	 * Premake 4.0 or later.
+	 * @param name The new base file name for the import library.
+	 * 
+	 */
+	impLibName(name: string): this;
+
+	/**
+	 * Enables Microsoft's Common Language Runtime for a project or configuration.
+	 * See [/clr (Common Language Runtime Compilation)](http://msdn.microsoft.com/en-us/library/k8d11d4s.aspx) in the Visual Studio documentation for more information.
+	 * 
+	 * 
+	 * Premake 5.0.
+	 * @param value Specifies the level of Common Language Runtime (CLR) support.
+	 * Available options:
+	 * - `Off`: No CLR support.
+	 * - `On`: Enable CLR support.
+	 * - `Pure`: Enable pure mode MSIL. Equivalent to 'On' for .NET projects.
+	 * - `Safe`: Enable verifiable MSIL. Equivalent to 'On' for .NET projects.
+	 * - `Unsafe`: Enable unsafe operations. Equivalent to 'On' for Managed C++ projects.
+	 * - `NetCore`
+	 * 
+	 * ### Examples
+	 * Set up a managed C++ project.
+	 * 
+	 * ```lua
+	 * project "MyProject"
+	 *   kind "ConsoleApp"
+	 *   language "C++"
+	 *   clr "On"
+	 * ```
+	 * 
+	 * Enable unsafe code in a C# project.
+	 * 
+	 * ```lua
+	 * project "MyProject"
+	 *   kind "ConsoleApp"
+	 *   language "C#"
+	 *   clr "Unsafe"
+	 * ```
+	 */
+	clr(value: ClrType): this;
+
+	/**
+	 * Sets the destination directory for the compiled binary target.
+	 * By default, the generated project files will place their compiled output in the same directory as the script. The `targetdir` function allows you to change this location.
+	 * 
+	 * 
+	 * Premake 4.0 or later.
+	 * @param path The file system path to the directory where the compiled target file should be stored, specified relative to the currently executing script file.
+	 * 
+	 * ### Examples
+	 * This project separates its compiled output by configuration type.
+	 * 
+	 * ```lua
+	 * project "MyProject"
+	 * 
+	 *   filter { "configurations:Debug" }
+	 *     targetdir "bin/debug"
+	 * 
+	 *   filter { "configurations:Release" }
+	 *     targetdir "bin/release"
+	 * ```
+	 */
+	targetDir(path: string): this;
+
+	/**
+	 * Sets value of the *Embed* field in Xcode under *Frameworks, Libraries, and Embedded Content* to **Embed & Sign**
+	 * 
+	 * This results in the framework being copied into the built app bundle during the *Embed Libraries* build phase and signed.
+	 * 
+	 * 
+	 * Premake 5.0.0 beta 1 or later.
+	 * @param value The name of the content to be embedded and signed.
+	 * 
+	 * ### Examples
+	 * ```lua
+	 * embedAndSign {
+	 * 	"SDL2.framework",
+	 * 	"Another.framework"
+	 * }
+	 * ```
+	 */
+	embedAndSign(value: any): this;
+
+	/**
+	 * - This page was auto-generated. Feel free to help us improve the documentation by creating a pull request.
+	 * 
+	 * 
+	 * Premake 5.0.0 alpha 11 or later.
+	 * @param value Needs documentation.
+	 * 
+	 */
+	frameworkDirs(...value: string[]): this;
+
+	/**
+	 * Specifies the text to output to the when a custom build command or rule is executed.
+	 * 
+	 * 
+	 * Premake 5.0 or later.
+	 * @param message The text to write to standard output.
+	 * 
+	 */
+	buildMessage(message: string): this;
+
+	/**
+	 * Specifies the command to launch a project's target when debugging.
+	 * In Visual Studio, this file can be overridden by a per-user configuration file (such as `ProjectName.vcproj.MYDOMAIN-MYUSERNAME.user`). Removing this file (which is done by Premake's clean action) will restore the default settings.
+	 * 
+	 * 
+	 * Premake 5.0 or later.
+	 * @param command The command to run to start the target.
+	 * 
+	 */
+	debugCommand(command: string): this;
+
+	/**
+	 * Specifies the base directory on the remote machine to deploy the source code to before compiling.
+	 * 
+	 * 
+	 * Premake 5.0.0 beta 3 or later, only applies to Visual Studio Linux projects.
+	 * @param path Specifies the directory on the remote machine where the source files will be copied to before compiling.
+	 * 
+	 * ### Examples
+	 * ```lua
+	 * remoterootdir "~/projects/%{prj.name}"
+	 * ```
+	 */
+	remoteRootDir(path: string): this;
+
+	/**
+	 * Controls the level of warnings that are shown by the compiler for headers that are considered external.
+	 * If no value is set for a configuration, the toolset's default warning level will be used.
+	 * 
+	 * 
+	 * Premake 5.0 or later.
+	 * Visual Studio 2019 version or later.
+	 * @param value
+	 * Available options:
+	 * - `Off`: Do not show any warning messages.
+	 * - `Default`: Use the toolset's default warning level.
+	 * - `Extra`: Enable the toolset's maximum warning level.
+	 * - `High`: Enable the toolset's maximum warning level.
+	 * - `Everything`: Enable the toolset's maximum warning level.
+	 * 
+	 */
+	externalWarnings(value: ExternalWarningsType): this;
+
+	/**
+	 * Specfies the file name for the output APK.
+	 * By default, the project name will be used as the file name for the APK.
+	 * 
+	 * 
+	 * Premake 5.0.0 alpha 14 or later.
+	 * @param value The new file name for the output APK.
+	 * 
+	 */
+	androidAppLibName(value: string): this;
+
+	/**
+	 * Sets the default visibility for exported symbols in a shared object library.
+	 * By default, the generated project files will use the compilers default settings symbol visibility when building shared object libraries.
+	 * 
+	 * 
+	 * Premake 5.0 or later.
+	 * @param value
+	 * Available options:
+	 * - `Default`
+	 * - `Hidden`
+	 * - `Internal`
+	 * - `Protected`
+	 * 
+	 * ### Examples
+	 * This project hides exported symbols for release builds.
+	 * 
+	 * ```lua
+	 * project "MyProject"
+	 *     filter "configurations:Release"
+	 *         visibility "Hidden"
+	 * ```
+	 */
+	visibility(value: VisibilityType): this;
+
+	/**
+	 * 
+	 * 
+	 * 
+	 * Premake 5.0.0 alpha 12 or later.
+	 * @param value
+	 * Available options:
+	 * - `on`
+	 * - `off`
+	 * 
+	 */
+	functionLevelLinking(value: boolean): this;
+
+	/**
+	 * For Visual Studio project files, this controls the generation of the `%(AdditionalDependencies)` entry in the list of libraries that a project links.
+	 * 
+	 * 
+	 * Visual Studio 2015 and later.
+	 * Premake 5.0-beta2 or later.
+	 * @param value Controls the generation of the `%(AdditionalDependencies)` entry in the list of libraries that a project links.
+	 * Available options:
+	 * - `On`: The project(s) will inherit library dependencies based on the parent project (if any) and project default settings. This is the default behavior.
+	 * - `Off`: The project(s) will not inherit any library dependencies. Only explicitly specified dependencies will be linked.
+	 * 
+	 */
+	inheritDependencies(value: boolean): this;
+
+	/**
+	 * Applies one or more "forced include" files to the project; these includes behave as it they had been injected into the first line of each source file in the project.
+	 * 
+	 * 
+	 * Premake 5.0 or later.
+	 * @param files Specifies a list of files to be force included. Paths should be specified relative to the currently running script file.
+	 * 
+	 */
+	forceIncludes(files: any): this;
+
+	/**
+	 * Controls the level of warnings that are shown by the compiler.
+	 * If no value is set for a configuration, the toolset's default warning level will be used.
+	 * 
+	 * 
+	 * Premake 5.0.
+	 * @param value Specifies the desired level of warning.
+	 * Available options:
+	 * - `Off`: Do not show any warning messages.
+	 * - `Default`: Use the toolset's default warning level.
+	 * - `Extra`: Enable the toolset's maximum warning level.
+	 * - `High`
+	 * - `Everything`
+	 * 
+	 */
+	warnings(value: WarningsType): this;
+
+	/**
+	 * Sets a prefix to be prepended to commands used by the GCC toolchain.
+	 * GCC toolsets, and cross-compilers in particular, typically have some common prefix prepended to all tools in the GCC suite. This prefix will be prepended to all such tools.
+	 * 
+	 * Prefixes are usually composed of multiple segments separated by '-', and the prefix should contain the final dash.
+	 * For instance, a toolchain of the style `powerpc-eabi-gcc` should have gccprefix `powerpc-eabi-`.
+	 * 
+	 * 
+	 * Premake 5.0 or later.
+	 * @param gccprefix A string which is to be prepended to the GCC tools.
+	 * 
+	 * ### Examples
+	 * Set a GCC prefix to be prepended to the compiler tools.
+	 * 
+	 * ```lua
+	 * gccprefix "powerpc-eabi-"
+	 * ```
+	 */
+	gccPrefix(gccprefix: string): this;
+
+	/**
+	 * Turns the edit-and-continue features of a toolset or platform on and off.
+	 * If no value is set for a configuration, the toolset's default setting (usually "On") will be used.
+	 * 
+	 * 
+	 * Premake 5.0 or later.
+	 * @param value A boolean value representing whether edit-and-continue features are enabled.
+	 * Available options:
+	 * - `On`
+	 * - `Off`
+	 * - `Default`: Acts the same as specifying no value, using the toolset's default setting.
+	 * 
+	 * ### Examples
+	 * ```lua
+	 * -- Turn off edit and continue
+	 * editandcontinue "Off"
+	 * ```
+	 */
+	editAndContinue(value: EditAndContinueType): this;
+
+	/**
+	 * Specifies shell commands to run before each build.
+	 * 
+	 * 
+	 * Premake 4.4 or later.
+	 * @param commands One or more shell commands to run before each build.
+	 * 
+	 * ### Examples
+	 * ```lua
+	 * prebuildcommands { "{COPYFILE} %[default.config] %[bin/project.config]" }
+	 * ```
+	 */
+	preBuildCommands(...commands: string[]): this;
+
+	/**
+	 * The **optimize** function specifies the level and type of optimization used while building the target configuration.
+	 * If no value is set for a configuration, the toolset's default optimization (usually none) will be performed.
+	 * 
+	 * 
+	 * Premake 5.0.
+	 * @param value
+	 * Available options:
+	 * - `Off`: No optimization will be performed.
+	 * - `On`: Perform a balanced set of optimizations.
+	 * - `Debug`: Optimization with some debugger step-through support.
+	 * - `Size`: Optimize for the smallest file size.
+	 * - `Speed`: Optimize for the best performance.
+	 * - `Full`: Full optimization.
+	 * 
+	 */
+	optimize(value: OptimizeType): this;
+
+	/**
+	 * Sets the DPI awareness settings.
+	 * 
+	 * 
+	 * Premake 5.0 or later.
+	 * @param value
+	 * Available options:
+	 * - `Default`: Use the toolset's default setting for DPI awareness.
+	 * - `None`: Turn off DPI awareness.
+	 * - `High`: Turn on DPI awareness.
+	 * - `HighPerMonitor`: Turn on DPI awareness per monitor.
+	 * 
+	 * ### Examples
+	 * ```lua
+	 * -- Turn on DPI awareness
+	 * dpiawareness "High"
+	 * ```
+	 */
+	dpiAwareness(value: DpiAwarenessType): this;
+
+	/**
+	 * Specifies the file name prefix for the compiled binary target.
+	 * By default, the system naming convention will be used: a "lib" prefix for POSIX libraries (as in `libMyProject.so`), and no prefix elsewhere. The `targetprefix` function allows you to change this default.
+	 * 
+	 * 
+	 * Premake 4.0 or later.
+	 * @param prefix The new file name prefix.
+	 * 
+	 * ### Examples
+	 * ```lua
+	 * targetprefix "plugin"
+	 * ```
+	 * 
+	 * The prefix may also be set to an empty string for no prefix.
+	 * 
+	 * ```lua
+	 * targetprefix ""
+	 * ```
+	 */
+	targetPrefix(prefix: string): this;
+
+	/**
+	 * Disables specific compiler warnings.
+	 * 
+	 * 
+	 * Premake 5.0 or later.
+	 * 
+	 * Xcode project generation does not yet support `disablewarnings`. As a workaround, you can use `xcodebuildsettings` like this:
+	 * 
+	 * ```lua
+	 * xcodebuildsettings {
+	 *     WARNING_CFLAGS = "-Wall -Wextra " ..
+	 *         "-Wno-missing-field-initializers " ..
+	 *         "-Wno-unknown-pragmas " ..
+	 *         "-Wno-unused-parameter " ..
+	 *         "-Wno-unused-local-typedef " ..
+	 *         "-Wno-missing-braces " ..
+	 *         "-Wno-microsoft-anon-tag "
+	 * }
+	 * ```
+	 * @param warnings A list of warnings to disable.
+	 * 
+	 * ### Examples
+	 * Disable the GCC warning about using old-style C casts (`-Wno-old-style-cast` command line argument):
+	 * 
+	 * ```lua
+	 * filter "options:cc=gcc"
+	 *   disablewarnings "old-style-cast"
+	 * ```
+	 */
+	disableWarnings(...warnings: string[]): this;
+
+	/**
+	 * Enable or disable [run-time type information](https://en.wikipedia.org/wiki/Run-time_type_information).
+	 * 
+	 * 
+	 * Premake 5.0 or later.
+	 * @param value Enable or disable run-time type information.
+	 * Available options:
+	 * - `Default`: Use the toolset's default setting for run-time type information.
+	 * - `On`: Turn on RTTI.
+	 * - `Off`: Turn off RTTI.
+	 * 
+	 */
+	rtti(value: RttiType): this;
+
+	/**
+	 * Specifies specific linker warnings that should be interpreted as errors.
+	 * 
+	 * 
+	 * Premake 5.0 or later. Special value `All` available since Premake 5.0-beta5 or later.
+	 * @param warnings Specifies specific linker warnings that should be interpreted as errors.
+	 * Available options:
+	 * - `All`: Treat all linker warnings as errors.
+	 * 
+	 * ### Examples
+	 * ```lua
+	 * filter { "toolset:msc" }
+	 * 	fatalwarnings { "4044" } -- unrecognized option 'option'; ignored
+	 * 
+	 * filter {}
+	 * ```
+	 */
+	linkerFatalWarnings(...warnings: string[]): this;
+
+	/**
+	 * Specifies shell commands to run after the source files have been compiled, but before the link step (if unsupported by the action, it will be treated the same as [prebuildcommands](prebuildcommands.md)).
+	 * 
+	 * 
+	 * Premake 4.4 or later.
+	 * @param commands One or more shell commands.
+	 * 
+	 * ### Examples
+	 * ```lua
+	 * prelinkcommands { "{COPYFILE} %[default.config] %[bin/project.config]" }
+	 * ```
+	 */
+	preLinkCommands(...commands: string[]): this;
+
+	/**
+	 * Specifies a list of libraries and projects to link against.
+	 * 
+	 * 
+	 * Premake 4.0 or later.
+	 * @param references A list of library and project names to link against.
+	 * 
+	 * ### Examples
+	 * Link against some system libraries.
+	 * 
+	 * ```lua
+	 * filter { "system:windows" }
+	 *    links { "user32", "gdi32" }
+	 * 
+	 * filter { "system:linux" }
+	 *    links { "m", "png" }
+	 * 
+	 * filter { "system:macosx" }
+	 *    -- OS X frameworks need the extension to be handled properly
+	 *    links { "Cocoa.framework", "png" }
+	 * ```
+	 * 
+	 *   In a workspace with two projects, link the library into the executable. Note that the project name is used to specify the link; Premake will automatically figure out the correct library file name and directory and create a project dependency.
+	 * 
+	 * ```lua
+	 * workspace "MyWorkspace"
+	 *    configurations { "Debug", "Release" }
+	 *    language "C++"
+	 * 
+	 *    project "MyExecutable"
+	 *       kind "ConsoleApp"
+	 *       files "**.cpp"
+	 *       links { "MyLibrary" }
+	 * 
+	 *    project "MyLibrary"
+	 *       kind "SharedLib"
+	 *       files "**.cpp"
+	 * ```
+	 * 
+	 * You may specify the linking mechanism explicitly for each library.  To set the link type of a library explicitly, add a `:static` or `:shared` suffix to the library.  Note that this functionality is only available for the `gcc` and `clang` toolsets.
+	 * 
+	 * ```lua
+	 * workspace "MyWorkspace"
+	 *    configurations { "Debug", "Release" }
+	 *    language "C++"
+	 * 
+	 *    project "MyExecutable"
+	 *       kind "ConsoleApp"
+	 *       files "**.cpp"
+	 *       links { "LibraryA:static", "LibraryB:shared" }
+	 * ```
+	 * 
+	 * You may also create links between non-library projects. In this case, Premake will generate a build dependency (the linked project will build first), but not an actual link. In this example, MyProject uses a build dependency to ensure that MyTool gets built first. It then uses MyTool as part of its build process.
+	 * 
+	 * ```lua
+	 * workspace "MyWorkspace"
+	 *    configurations { "Debug", "Release" }
+	 *    language "C++"
+	 * 
+	 *    project "MyProject"
+	 *       kind "ConsoleApp"
+	 *       files "**.cpp"
+	 *       links { "MyTool" }
+	 *       prebuildcommands { "MyTool --dosomething" }
+	 * 
+	 *    project "MyTool"
+	 *       kind "ConsoleApp"
+	 *       files "**.cpp"
+	 * ```
+	 */
+	links(references: any): this;
+
+	/**
+	 * Specifies shell commands to run after build is finished.
+	 * 
+	 * 
+	 * Premake 4.4 or later.
+	 * @param commands One or more shell commands to run after the build is finished.
+	 * 
+	 * ### Examples
+	 * ```lua
+	 * postbuildcommands { "{COPYFILE} %[default.config] %[bin/project.config]" }
+	 * ```
+	 */
+	postBuildCommands(...commands: string[]): this;
+
+	/**
+	 * Specifies the type of shader.
+	 * 
+	 * 
+	 * Premake 5.0.0 alpha 14 or later.
+	 * @param value Specifies the type of shader.
+	 * Available options:
+	 * - `Effect`
+	 * - `Vertex`
+	 * - `Pixel`
+	 * - `Geometry`
+	 * - `Hull`
+	 * - `Domain`
+	 * - `Compute`
+	 * - `Library`
+	 * - `Mesh`
+	 * - `Amplification`
+	 * - `Texture`
+	 * - `RootSignature`
+	 * 
+	 */
+	shaderType(value: ShaderTypeType): this;
+
+	/**
+	 * Specifies the target operation system min and max versions.
+	 * 
+	 * 
+	 * Premake 5.0 or later.
+	 * @param value A colon-delimited string specifying the min and max version in the format `min:max`.
+	 * 
+	 * ### Examples
+	 * ```lua
+	 * filter "system:windows"
+	 *    systemversion "10.0.10240.0" -- To specify the version of the SDK you want
+	 * ```
+	 * 
+	 * ```lua
+	 * filter "system:windows"
+	 *    systemversion "latest" -- To use the latest version of the SDK available
+	 * ```
+	 * 
+	 * ```lua
+	 * filter "system:windows"
+	 *    systemversion "10.0.10240.0:latest" -- To specify a range of minumum and maximum versions
+	 * ```
+	 * 
+	 * ```lua
+	 * filter "system:macosx"
+	 *    systemversion "13.0" -- To target a minimum macOS deployment version of 13.0
+	 * ```
+	 */
+	systemVersion(value: string): this;
+
+	/**
+	 * Specifies the system library search paths.
+	 * For Visual Studio, these paths are placed in the "VC++ Directories" properties panel. For all other tools they are treated as a normal library search path.
+	 * 
+	 * 
+	 * Premake 5.0 or later.
+	 * @param paths Specifies a list of library search directories. Paths should be specified relative to the currently running script file.
+	 * 
+	 * ### Examples
+	 * Define two system library search paths.
+	 * 
+	 * ```lua
+	 * syslibdirs { "../lua/libs", "../zlib" }
+	 * ```
+	 * 
+	 * You can also use wildcards to match multiple directories. The * will match against a single directory, ** will recurse into subdirectories as well.
+	 * 
+	 * ```lua
+	 * syslibdirs { "../libs/**" }
+	 * ```
+	 */
+	sysLibDirs(...paths: string[]): this;
+
+	/**
+	 * Sets the directory where object and other intermediate files should be placed when building a project.
+	 * By default, intermediate files will be stored in a directory named "obj" in the same directory as the project. The `objdir` function allows you to change this location.
+	 * 
+	 * To avoid conflicts between build configurations, Premake will ensure that each intermediate directory is unique by appending one or more of the build configuration name, platform name, or project name. You may use the "!" prefix to prevent this behavior, and allow overlapping intermediate directories. See the examples below for more information.
+	 * 
+	 * 
+	 * Premake 4.0 or later. The "!" prefix was introduced in Premake 5.0.
+	 * @param path The directory where the object and intermediate files should be stored, specified relative to the currently executing script file.
+	 * 
+	 * ### Examples
+	 * Use a directory named "obj" (the default) for intermediate files. Actual directories will be `obj/Debug` and `obj/Release`.
+	 * 
+	 * ```lua
+	 * workspace "MyWorkspace"
+	 *    configurations { "Debug", "Release" }
+	 * 
+	 * project "MyProject"
+	 *    objdir "obj"
+	 * ```
+	 * 
+	 * Use a directory named "obj" (the default) for intermediate files. Actual directories will be `obj/Debug/x32`, `obj/Debug/x64`, `obj/Release/x32`, and `obj/Release/x64`.
+	 * 
+	 * ```lua
+	 * workspace "MyWorkspace"
+	 *    configurations { "Debug", "Release" }
+	 *    platforms { "x32", "x64" }
+	 * 
+	 * project "MyProject"
+	 *    objdir "obj"
+	 * ```
+	 * 
+	 * Use tokens to reformat the path. Since the end result is unique, Premake will not append any extra directories. Actual directories will be `obj/x32_Debug`, `obj/x64_Debug`, `obj/x32_Release`, and `obj/x64_Release`.
+	 * 
+	 * ```lua
+	 * workspace "MyWorkspace"
+	 *    configurations { "Debug", "Release" }
+	 *    platforms { "x32", "x64" }
+	 * 
+	 * project "MyProject"
+	 *    objdir "obj/%{cfg.platform}_%{cfg.buildcfg}"
+	 * ```
+	 * 
+	 * Use the "!" prefix to force a specific directory using Visual Studio's provided environment variables instead of Premake tokens.
+	 * 
+	 * ```lua
+	 * workspace "MyWorkspace"
+	 *    configurations { "Debug", "Release" }
+	 *    platforms { "x32", "x64" }
+	 * 
+	 * project "MyProject"
+	 *    objdir "!obj/$(Platform)_$(Configuration)"
+	 * ```
+	 */
+	objDir(path: string): this;
+
+	/**
+	 * Specifies a list of libraries or assembly references which should be copied to the target directory as part of the build. Refer to the Visual Studio C# project feature of the same name.
+	 * If a project includes multiple calls to `copylocal` the lists are concatenated, in the order in which they appear in the script.
+	 * 
+	 * Note that, by default, all referenced non-system assemblies in a C# project are copied. This function only needs to called when a subset of the referenced assemblies should be copied. To disable copying of *all* references, use the `NoLocalCopy` build flag instead (see Examples, below).
+	 * 
+	 * 
+	 * Premake 5.0 and later. This feature is currently only supported for Visual Studio C# projects.
+	 * @param libraries A list of the libraries or assemblies to be copied as part of the build.
+	 * 
+	 * ### Examples
+	 * Copy only the **Renderer** and **Physics** assemblies to the target directory; do not copy **nunit.framework**. Note that the links may refer to project or assembly references.
+	 * 
+	 * ```lua
+	 * links { "Renderer", "Physics", "nunit.framework" }
+	 * copylocal { "Renderer", "Physics" }
+	 * ```
+	 * 
+	 * The link should be specified in exactly the same way in both `links()` and `copylocal()`.
+	 * 
+	 * ```lua
+	 * links { "Renderer", "../ThirdParty/nunit.framework" }
+	 * copylocal { "../ThirdParty/nunit.framework" }
+	 * ```
+	 * 
+	 * If you want to prevent any assemblies from being copied, use the **NoLocalCopy** flag instead.
+	 * 
+	 * ```lua
+	 * flags { "NoCopyLocal" }
+	 * ```
+	 */
+	copyLocal(libraries: any): this;
+
+	/**
+	 * Specifies one or more file extensions to find and remove when cleaning the project.
+	 * 
+	 * 
+	 * Premake 5.0 or later. This function is currently implemented only for Visual Studio 201x.
+	 * @param file_extensions A list of dot-prefixed file extensions to be cleaned.
+	 * 
+	 * ### Examples
+	 * Remove .zip files from the output directory when cleaning.
+	 * 
+	 * ```lua
+	 * cleanextensions { ".zip" }
+	 * ```
+	 */
+	cleanExtensions(...file_extensions: string[]): this;
+
+	/**
+	 * Adds arbitrary GNU make markup to a generated Makefile.
+	 * Only used for makefile generating actions.
+	 * 
+	 * 
+	 * Premake 5.0 or later.
+	 * @param values Specifies one or more lines to be written to the Makefile.
+	 * 
+	 * ### Examples
+	 * ```lua
+	 * makesettings [[
+	 *   ifeq ($(strip $(DEVKITPPC)),)
+	 *     $(error "DEVKITPPC environment variable is not set")'
+	 *   endif
+	 *   include $(DEVKITPPC)/wii_rules'
+	 * ]]
+	 * ```
+	 */
+	makeSettings(...values: string[]): this;
+
+	/**
+	 * Removes preprocessor or compiler symbols from a project.
+	 * If a project includes multiple calls to `undefines` the lists are concatenated, in the order in which they appear in the script.
+	 * 
+	 * 
+	 * Premake 5.0 or later
+	 * @param symbols Specifies a list of symbols to be undefined.
+	 * 
+	 * ### Examples
+	 * Undefine two symbols in the current project.
+	 * 
+	 * ```lua
+	 * undefines { "DEBUG", "TRACE" }
+	 * ```
+	 */
+	undefines(...symbols: string[]): this;
 
 }

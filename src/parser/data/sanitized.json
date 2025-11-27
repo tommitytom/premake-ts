@@ -1,0 +1,5593 @@
+[
+  {
+    "allowed": [],
+    "kind": "string",
+    "name": "toolSet",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "description": "Selects the compiler, linker, etc. which are used to build a project or configuration.\nIf no toolset is specified for a configuration, the system or IDE default will be used.",
+    "parameter": {
+      "name": "identifier",
+      "description": "A string identifier for the toolset.",
+      "options": [
+        {
+          "name": "clang",
+          "description": "[Clang](http://clang.llvm.org)"
+        },
+        {
+          "name": "dotnet",
+          "description": "The system's default C# compiler"
+        },
+        {
+          "name": "gcc",
+          "description": "[GNU Compiler Collection](https://gcc.gnu.org)"
+        },
+        {
+          "name": "msc",
+          "description": "Microsoft C/C++ compiler"
+        }
+      ],
+      "additional": "If a specific toolset version is desired, it may be specified as part of the identifier, separated by a dash."
+    },
+    "availability": "Premake 5.0 and later. Versions are currently only implemented for Visual Studio 2010+.",
+    "examples": "Specify version 110 of the Windows platform toolset.\n\n```lua\ntoolset \"msc-v110\" -- or...\ntoolset \"v100\"    -- for those more familiar with Visual Studio's way\n```\n\nUse [Clang/C2](http://llvm.org/builds/) with Visual Studio\n```lua\ntoolset \"msc-llvm-vs2014\" -- pre VS 2019\ntoolset \"clang\" -- VS 2019 and newer\n```\n\nUse the toolset for Windows XP\n```lua\ntoolset \"v140_xp\"\n```"
+  },
+  {
+    "allowed": [
+      "On",
+      "Off"
+    ],
+    "kind": "string",
+    "name": "externalAngleBrackets",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "description": "Treats all headers included by `#include <header>`, where the header file is enclosed in angle brackets (`< >`), as external headers.",
+    "parameter": {
+      "name": "value",
+      "options": [
+        {
+          "name": "On",
+          "description": "Treat headers included with angle brackets as external."
+        },
+        {
+          "name": "Off",
+          "description": "Default. Headers are treated normally."
+        }
+      ]
+    },
+    "availability": "Premake 5.0 or later.\nVisual Studio 2019 version or later.",
+    "examples": ""
+  },
+  {
+    "allowed": [],
+    "kind": "list:string",
+    "name": "shaderOptions",
+    "pathVars": true,
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "tokens": true,
+    "description": "- This page was auto-generated. Feel free to help us improve the documentation by creating a pull request.",
+    "parameter": {
+      "name": "value",
+      "description": "Needs documentation."
+    },
+    "availability": "Premake 5.0.0 alpha 14 or later.",
+    "examples": "```lua\nshaderoptions (value)\n```"
+  },
+  {
+    "allowed": [
+      "Default",
+      "Disabled",
+      "Explicit",
+      "Auto"
+    ],
+    "kind": "string",
+    "name": "inlining",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "description": "Tells the compiler when it should inline functions.",
+    "parameter": {
+      "name": "value",
+      "options": [
+        {
+          "name": "Default",
+          "description": "Allow the compiler to use its default inlining behavior."
+        },
+        {
+          "name": "Disabled",
+          "description": "Turn off inlining entirely."
+        },
+        {
+          "name": "Explicit",
+          "description": "Only inline functions explicitly marked with the `inline` keyword."
+        },
+        {
+          "name": "Auto",
+          "description": "Allow the compiler to inline functions automatically."
+        }
+      ]
+    },
+    "availability": "Premake 5.0 or later.",
+    "examples": ""
+  },
+  {
+    "allowed": [
+      "Off",
+      "Level1",
+      "Level2",
+      "Level3"
+    ],
+    "kind": "string",
+    "name": "strictAliasing",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "description": "Sets the level of allowed pointer aliasing.\nIf no value is set for a configuration, the toolset's settings will be used.",
+    "parameter": {
+      "name": "value",
+      "description": "Specifies the desired level of optimization.",
+      "options": [
+        {
+          "name": "Off",
+          "description": "No strict aliasing tests will be performed."
+        },
+        {
+          "name": "Level1"
+        },
+        {
+          "name": "Level2"
+        },
+        {
+          "name": "Level3"
+        }
+      ]
+    },
+    "availability": "Premake 5.0.",
+    "examples": "```lua\nstrictaliasing \"Level1\"\n```"
+  },
+  {
+    "allowed": [],
+    "kind": "path",
+    "name": "buildLog",
+    "pathVars": true,
+    "paths": true,
+    "scope": [
+      "config"
+    ],
+    "scopes": [
+      "config"
+    ],
+    "tokens": true,
+    "description": "Specifies the output location of a toolset's build logs.\nIf a build log path has not been specified, the toolset's default path will be used.",
+    "parameter": {
+      "name": "path",
+      "description": "The output file system location for the build log file."
+    },
+    "availability": "Premake 5.0 or later. Currently only implemented for Visual Studio 2010+.",
+    "examples": ""
+  },
+  {
+    "allowed": [],
+    "kind": "boolean",
+    "name": "linkBuildOutputs",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "description": "Turns on/off the automatic linking of `.obj` files that are output by custom build commands. The default behaviour is to link `.obj` files when they are output by custom build commands.",
+    "parameter": {
+      "name": "value",
+      "description": "A boolean value that can be either 'On' or 'Off'."
+    },
+    "availability": "Premake 5.0 or later.",
+    "examples": "Use [custom build commands](Custom-Build-Commands.md) to copy Wavefront .obj model files around without the linker trying to link them:\n\n```lua\nfilter \"models/**.obj\"\n\t-- Copy these files into the target directory while preserving the\n\t-- folder structure.\n\tbuildcommands {\n\t\tos.translateCommands '{mkdir} \"%{ path.join(cfg.buildtarget.directory, path.getdirectory(file.relpath)) }\"',\n\t\tos.translateCommands '{copy} \"%{ file.relpath }\" \"%{ path.join(cfg.buildtarget.directory, path.getdirectory(file.relpath)) }\"'\n\t}\n\n\tbuildoutputs \"%{ path.join(cfg.buildtarget.directory, file.relpath) }\"\n\n\t-- The default behaviour is to link .obj if a custom build command\n\t-- outputs them, but we don't want that since these are Wavefront .obj\n\t-- model files and not object files.\n\tlinkbuildoutputs \"Off\"\n```"
+  },
+  {
+    "allowed": [],
+    "kind": "string",
+    "name": "pchHeader",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "tokens": true,
+    "description": "Specifies the #include form of the precompiled header file name.\nSee [Precompiled Headers](Precompiled-Headers.md) for more information.",
+    "parameter": {
+      "name": "name",
+      "description": "The name of the precompiled header, as it is specified in the #include statements of the project source code.",
+      "additional": "If your source code includes the header like this:\n\n```\nc#include \"myproject.h\"\n```\n\nspecify the header in your script like this, even if the file itself is located on a different path relative to the project (and presumably found at compile time via the include file search paths):\n\n```\nlua\npchheader \"myproject.h\"\n```"
+    },
+    "availability": "Premake 4.0 and up.",
+    "examples": ""
+  },
+  {
+    "allowed": [],
+    "kind": "string",
+    "name": "impLibExtension",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "tokens": true,
+    "description": "Specifies the import library file extension. Import libraries are generated for Windows DLL projects.\nBy default, the toolset static library file extension will be used (`.lib` with Windows tools, `.a` with GNU tools). The `implibextension` function allows you to change this default.",
+    "parameter": {
+      "name": "ext",
+      "description": "The new file extension, including the leading dot."
+    },
+    "availability": "Premake 4.0 or later.",
+    "examples": "```lua\nimplibextension \".mpi\"\n```"
+  },
+  {
+    "allowed": [],
+    "kind": "list:file",
+    "name": "files",
+    "paths": true,
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "tokens": true,
+    "description": "Adds files to a project.",
+    "parameter": {
+      "name": "file_list",
+      "description": "Specifies one or more file patterns. File paths should be specified relative to the currently executing script file. File patterns may contain the `*` wildcard to match against files in the current directory, or the `**` wildcard to perform a recursive match.",
+      "additional": "If a wildcard matches more files than you would like, you may filter the results using the [removefiles()](Removing-Values.md) function."
+    },
+    "availability": "",
+    "examples": "Add two files from to the current project, from the same directory that contains the script.\n\n```lua\nfiles { \"hello.cpp\", \"goodbye.cpp\" }\n```\n\nAdd all C++ files from the **src/** directory to the project.\n\n```lua\nfiles { \"src/*.cpp\" }\n```\n\nAdd all C++ files from the **src/** directory and any subdirectories.\n\n```lua\nfiles { \"src/**.cpp\" }\n```\n\nAdd files for specific systems; might not work with all exporters.\n\n```lua\nfilter \"system:Windows\"\n  files { \"src/windows/*.h\", \"src/windows/*.cpp\" }\n\nfilter \"system:MacOSX\"\n  files { \"src/mac/*.h\", \"src/mac/*.cpp\" }\n```"
+  },
+  {
+    "allowed": [
+      "Default",
+      "On",
+      "Off"
+    ],
+    "kind": "string",
+    "name": "linkTimeOptimization",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "description": "The **linktimeoptimization** function specifies whether or not the toolset should perform link time optimization.",
+    "parameter": {
+      "name": "value",
+      "description": "Specifies whether or not to use link time optimization.",
+      "options": [
+        {
+          "name": "Off",
+          "description": "No LTO to be performed."
+        },
+        {
+          "name": "On",
+          "description": "LTO optimization enabled."
+        },
+        {
+          "name": "Default",
+          "description": "Default LTO optimizations for the toolset or exporter."
+        }
+      ]
+    },
+    "availability": "Premake 5.0-beta4 and later",
+    "examples": ""
+  },
+  {
+    "allowed": [],
+    "kind": "boolean",
+    "name": "largeAddressAware",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "description": "",
+    "parameter": {
+      "name": "value",
+      "options": [
+        {
+          "name": "on"
+        },
+        {
+          "name": "off"
+        }
+      ]
+    },
+    "availability": "Premake 5.0.0 alpha 12 or later.",
+    "examples": "```lua\nlargeaddressaware \"value\"\n```"
+  },
+  {
+    "aliases": {
+      "amd64": "x86_64",
+      "i386": "x86",
+      "x32": "x86",
+      "x64": "x86_64"
+    },
+    "allowed": [
+      "universal",
+      "x86",
+      "x86_64",
+      "ARM",
+      "ARM64",
+      "RISCV64",
+      "loongarch64",
+      "ppc",
+      "ppc64",
+      "wasm32",
+      "wasm64",
+      "e2k",
+      "armv5",
+      "armv7",
+      "aarch64",
+      "mips",
+      "mips64"
+    ],
+    "kind": "string",
+    "name": "architecture",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "description": "Specifies the system architecture to be targeted by the configuration.",
+    "parameter": {
+      "name": "value",
+      "description": "Specifies the system architecture to be targeted by the configuration.",
+      "options": [
+        {
+          "name": "universal",
+          "description": "The universal binaries supported by iOS and macOS"
+        },
+        {
+          "name": "x86"
+        },
+        {
+          "name": "x86_64"
+        },
+        {
+          "name": "ARM"
+        },
+        {
+          "name": "ARM64"
+        },
+        {
+          "name": "RISCV64"
+        },
+        {
+          "name": "loongarch64"
+        },
+        {
+          "name": "ppc"
+        },
+        {
+          "name": "ppc64"
+        },
+        {
+          "name": "wasm32"
+        },
+        {
+          "name": "wasm64"
+        },
+        {
+          "name": "e2k"
+        },
+        {
+          "name": "mips64el"
+        },
+        {
+          "name": "armv5",
+          "description": "Only supported in VSAndroid projects"
+        },
+        {
+          "name": "armv7",
+          "description": "Only supported in VSAndroid projects"
+        },
+        {
+          "name": "aarch64",
+          "description": "Only supported in VSAndroid projects"
+        },
+        {
+          "name": "mips",
+          "description": "Only supported in VSAndroid projects"
+        },
+        {
+          "name": "mips64",
+          "description": "Only supported in VSAndroid projects"
+        },
+        {
+          "name": "i386",
+          "description": "Alias for `x86`"
+        },
+        {
+          "name": "amd64",
+          "description": "Alias for `x86_64`"
+        },
+        {
+          "name": "x32",
+          "description": "Alias for `x86`; There is intent to deprecate this"
+        },
+        {
+          "name": "x64",
+          "description": "Alias for `x86_64`; There is intent to deprecate this"
+        }
+      ]
+    },
+    "availability": "Premake 5.0 or later.",
+    "examples": "Set up 32- and 64-bit Windows builds.\n\n```lua\nworkspace \"MyWorkspace\"\n   configurations { \"Debug32\", \"Release32\", \"Debug64\", \"Release64\" }\n\n   filter \"configurations:*32\"\n      architecture \"x86\"\n\n   filter \"configurations:*64\"\n      architecture \"x86_64\"\n```"
+  },
+  {
+    "allowed": [
+      "aix",
+      "bsd",
+      "emscripten",
+      "haiku",
+      "ios",
+      "linux",
+      "macosx",
+      "solaris",
+      "tvos",
+      "uwp",
+      "wii",
+      "windows",
+      "android"
+    ],
+    "kind": "string",
+    "name": "system",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "description": "Specifies the target operating system.\nIf no system is specified, Premake will identify and target the current operating system. This can be overridden with the `--os` command line argument, providing one of the system identifiers below.",
+    "parameter": {
+      "name": "value",
+      "description": "Specifies the target operating system.",
+      "options": [
+        {
+          "name": "aix"
+        },
+        {
+          "name": "android"
+        },
+        {
+          "name": "bsd"
+        },
+        {
+          "name": "emscripten",
+          "description": "Supported only for the gmake and gmakelegacy actions."
+        },
+        {
+          "name": "haiku"
+        },
+        {
+          "name": "ios"
+        },
+        {
+          "name": "linux"
+        },
+        {
+          "name": "macosx"
+        },
+        {
+          "name": "solaris"
+        },
+        {
+          "name": "tvos"
+        },
+        {
+          "name": "uwp"
+        },
+        {
+          "name": "wii"
+        },
+        {
+          "name": "windows"
+        },
+        {
+          "name": "xbox360"
+        }
+      ]
+    },
+    "availability": "Premake 5.0 or later.",
+    "examples": "```lua\nworkspace \"MyWorkspace\"\n   configurations { \"Debug\", \"Release\" }\n   system { \"Windows\", \"Unix\", \"Mac\" }\n\n   filter \"system:Windows\"\n      system \"windows\"\n\n   filter \"system:Unix\"\n      system \"linux\"\n\n   filter \"system:Mac\"\n      system \"macosx\"\n```"
+  },
+  {
+    "allowed": [],
+    "kind": "integer",
+    "name": "androidApiLevel",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "description": "Specifies the target Android API level.",
+    "parameter": {
+      "name": "value",
+      "description": "A number specifying the target Android API level."
+    },
+    "availability": "Premake 5.0.0 alpha 14 or later.",
+    "examples": "```lua\nandroidapilevel (21)\n```"
+  },
+  {
+    "allowed": [],
+    "kind": "string",
+    "name": "postBuildMessage",
+    "pathVars": true,
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "tokens": true,
+    "description": "Specifies a message to display to the user before starting execution of any specified [post-build commands](postbuildcommands.md).",
+    "parameter": {
+      "name": "message",
+      "description": "The message to be displayed."
+    },
+    "availability": "Premake 5.0 or later.",
+    "examples": "```lua\nproject \"MyProject\"\n   postbuildcommands { \"{COPYFILE} %[dependencies/*.lib] %[bin]\" }\n   postbuildmessage \"Copying dependencies...\"\n```"
+  },
+  {
+    "allowed": [],
+    "kind": "string",
+    "name": "shaderObjectFileOutput",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "tokens": true,
+    "description": "Specifies the output object of compiled HLSL files.",
+    "parameter": {
+      "name": "path",
+      "description": "The output path of HLSL files that have been compiled into Compiled Shader Objects."
+    },
+    "availability": "Premake 5.0.0 alpha 14 or later.",
+    "examples": "This Visual Studio project will compile HLSL files to the shaders folder with a .cso extension.\n\n```lua\nshaderobjectfileoutput \"shaders/%%(Filename).cso\"\n```"
+  },
+  {
+    "allowed": [],
+    "kind": "list:string",
+    "name": "shaderDefines",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "tokens": true,
+    "description": "- This page was auto-generated. Feel free to help us improve the documentation by creating a pull request.",
+    "parameter": {
+      "name": "value",
+      "description": "Needs documentation."
+    },
+    "availability": "Premake 5.0.0 alpha 14 or later.",
+    "examples": "```lua\nshaderdefines (value)\n```"
+  },
+  {
+    "allowed": [],
+    "kind": "list:string",
+    "name": "imageOptions",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "tokens": true,
+    "description": "Passes arguments directly to the image tool command line without translation.\nIf a project includes multiple calls to `imageoptions` the lists are concatenated, in the order in which they appear in the script.\n\nImage options are currently only supported for Xbox 360 targets.",
+    "parameter": {
+      "name": "options",
+      "description": "A list of image tools flags and options."
+    },
+    "availability": "Premake 5.0 or later.",
+    "examples": ""
+  },
+  {
+    "allowed": [
+      "Debug",
+      "Release"
+    ],
+    "kind": "string",
+    "name": "runTime",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "description": "Choose the type of runtime library to use.\nIf the runtime type is not set, Premake will try to determine the configuration type based on the setting of symbol generation and optimization flags and use the appropriate runtime automatically.",
+    "parameter": {
+      "name": "type",
+      "description": "Specifies the type of runtime library to use.",
+      "options": [
+        {
+          "name": "Debug"
+        },
+        {
+          "name": "Release"
+        }
+      ]
+    },
+    "availability": "Premake 5.0 or later.",
+    "examples": "Force selection of a release runtime.\n\n```lua\nfilter { \"configurations:Debug\" }\n   symbols \"On\"\n   runtime \"Release\"\n```"
+  },
+  {
+    "allowed": [],
+    "kind": "string",
+    "name": "shaderVariableName",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "tokens": true,
+    "description": "- This page was auto-generated. Feel free to help us improve the documentation by creating a pull request.",
+    "parameter": {
+      "name": "value",
+      "description": "needs documentation."
+    },
+    "availability": "Premake 5.0.0 alpha 14 or later.",
+    "examples": "```lua\nshadervariablename (value)\n```"
+  },
+  {
+    "allowed": [],
+    "kind": "list:string",
+    "name": "undefines",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "tokens": true,
+    "description": "Removes preprocessor or compiler symbols from a project.\nIf a project includes multiple calls to `undefines` the lists are concatenated, in the order in which they appear in the script.",
+    "parameter": {
+      "name": "symbols",
+      "description": "Specifies a list of symbols to be undefined."
+    },
+    "availability": "Premake 5.0 or later",
+    "examples": "Undefine two symbols in the current project.\n\n```lua\nundefines { \"DEBUG\", \"TRACE\" }\n```"
+  },
+  {
+    "allowed": [],
+    "kind": "boolean",
+    "name": "intrinsics",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "description": "Replaces some function calls with intrinsic or otherwise special forms of the function that help your application run faster.\n\n[Visual Studio 2017's Description of Intrinsics](https://docs.microsoft.com/en-us/cpp/build/reference/oi-generate-intrinsic-functions?view=vs-2017)",
+    "parameter": {
+      "name": "value",
+      "options": [
+        {
+          "name": "on",
+          "description": "Enables intrinsic functions which generate faster, but possibly longer code."
+        },
+        {
+          "name": "off",
+          "description": "Disables intrinsic functions."
+        }
+      ]
+    },
+    "availability": "Premake 5.0.0 alpha 12 or later.",
+    "examples": "```lua\nintrinsics \"On\"\n```"
+  },
+  {
+    "allowed": [
+      "Default",
+      "On",
+      "Off",
+      "FastLink",
+      "Full"
+    ],
+    "kind": "string",
+    "name": "symbols",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "description": "Turn on/off debug symbol table generation.\nBy default, the generated project files will use the compilers default settings for debug symbol generation. This might be on, or off, or entirely dependent on the configuration.",
+    "parameter": {
+      "name": "switch",
+      "description": "An identifier for symbol information.",
+      "options": [
+        {
+          "name": "Default",
+          "description": "Always available."
+        },
+        {
+          "name": "Off",
+          "description": "Always available."
+        },
+        {
+          "name": "On",
+          "description": "Always available."
+        },
+        {
+          "name": "FastLink",
+          "description": "Available in Visual Studio 2015 or newer."
+        },
+        {
+          "name": "Full",
+          "description": "Available in Visual Studio 2017 or newer."
+        }
+      ]
+    },
+    "availability": "Premake 5.0 or later.",
+    "examples": "This project generates debug symbol information for better debugging.\n\n```lua\nproject \"MyProject\"\n    symbols \"On\"\n```"
+  },
+  {
+    "allowed": [],
+    "kind": "file",
+    "name": "icon",
+    "paths": true,
+    "scope": "project",
+    "scopes": [
+      "project"
+    ],
+    "tokens": true,
+    "description": "Specifies the application icon resource.\nCurrently, this is only used by Visual Studio C# projects.",
+    "parameter": {
+      "name": "name",
+      "description": "The resource name of the icon."
+    },
+    "availability": "Premake 5.0 or later.",
+    "examples": "```lua\nproject \"MyProject\"\n   icon \"MyProject.ico\"\n```"
+  },
+  {
+    "allowed": [],
+    "kind": "path",
+    "name": "debugDir",
+    "pathVars": true,
+    "paths": true,
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "tokens": true,
+    "description": "Sets the working directory for the integrated debugger.\nNote that this settings is not implemented for Xcode, which requires a per-user configuration file in order to make it work.\n\nIn Visual Studio, this file can be overridden by a per-user configuration file (such as `ProjectName.vcproj.MYDOMAIN-MYUSERNAME.user`). Removing this file (which is done by Premake's clean action) will restore the default settings.",
+    "parameter": {
+      "name": "path",
+      "description": "The path to the working directory, relative to the currently executing script file."
+    },
+    "availability": "Premake 4.4 or later.",
+    "examples": "```lua\nfilter { \"configurations:Debug\" }\n   debugdir \"bin/debug\"\n```"
+  },
+  {
+    "allowed": [
+      "internal",
+      "public"
+    ],
+    "kind": "string",
+    "name": "resourceGenerator",
+    "scope": "project",
+    "scopes": [
+      "project"
+    ],
+    "description": "",
+    "parameter": {
+      "name": "value",
+      "options": [
+        {
+          "name": "internal"
+        },
+        {
+          "name": "public"
+        }
+      ]
+    },
+    "availability": "Premake 5.0.0 alpha 12 or later.",
+    "examples": "```lua\nresourcegenerator \"value\"\n```"
+  },
+  {
+    "allowed": [],
+    "kind": "boolean",
+    "name": "conformancemode",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "description": "- This page was auto-generated. Feel free to help us improve the documentation by creating a pull request.",
+    "parameter": {
+      "name": "value",
+      "description": "needs documentation."
+    },
+    "availability": "Premake 5.0.0 beta 1 or later.",
+    "examples": "```lua\nconformancemode (value)\n```"
+  },
+  {
+    "allowed": [],
+    "kind": "string",
+    "name": "entryPoint",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "description": "Specify the program entry point, e.g. `main()`.",
+    "parameter": {
+      "name": "value",
+      "description": "The name of the program's entry point function."
+    },
+    "availability": "Premake 5.0 or later.",
+    "examples": "Use the Microsoft Windows console application entry point instead of the usual `WinMain()`.\n\n```lua\nentrypoint \"mainCRTStartup\"\n```"
+  },
+  {
+    "allowed": [],
+    "kind": "string",
+    "name": "fileName",
+    "scope": [
+      "project",
+      "rule"
+    ],
+    "scopes": [
+      "project",
+      "rule"
+    ],
+    "tokens": true,
+    "description": "Sets the name of a generated workspace, project, or rules file. Use it in conjunction with [location](location.md) to completely control the generated file destination.\nBy default, generated workspace, project, and rule files use their name as the name of the generated file. The `filename` function allows you to change this.",
+    "parameter": {
+      "name": "name",
+      "description": "The desired file name for the generated workspace or project file."
+    },
+    "availability": "",
+    "examples": "Change the workspace name to \"Master\".\n\n```lua\nworkspace \"MyWorkspace\"\n  filename \"Master\"\n```\n\nIf you plan to build with multiple tools from the same source tree you might want to split up the project files by toolset. The _ACTION global variable contains the current toolset identifier, as specified on the command line.\n\n```lua\nworkspace \"MyWorkspace\"\n   filename \"MyWorkspace_%{_ACTION or ''}\"\n```"
+  },
+  {
+    "allowed": [],
+    "kind": "list:directory",
+    "name": "includeDirsAfter",
+    "paths": true,
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "tokens": true,
+    "description": "Specifies the include directories to parse last per the toolset ordering and marks the directory as an external include directory.  If the exporter or toolset\ndoes not support include directory ordering, these directories are added to the external include directory path.",
+    "parameter": {
+      "name": "paths",
+      "description": "Specifies a list of include file search directories. Paths should be specified relative to the currently running script file. Search order is evaluated from left to right."
+    },
+    "availability": "Premake 5.0 or later.\n\nGCC and Clang are the only toolsets supporting the ordering functionality in the gmakelegacy, gmake, and Codelite exporters.  All exporters and toolsets\nsupport appending the directories to the external include directories.",
+    "examples": "Define two include file search paths.\n\n```lua\nincludedirsafter { \"../lua/include\", \"../zlib\" }\n```\n\nYou can also use wildcards to match multiple directories. The * will match against a single directory, ** will recurse into subdirectories as well.\n\n```lua\nincludedirsafter { \"../includes/**\" }\n```"
+  },
+  {
+    "allowed": [],
+    "kind": "list:string",
+    "name": "configurations",
+    "scope": "project",
+    "scopes": [
+      "project"
+    ],
+    "description": "Specifies the set of build configurations, such as \"Debug\" and \"Release\", for a workspace or project.\nA configuration encapsulates a collection of build settings, allowing the developer to easily switch between them. \"Debug\" and \"Release\" are the most common configuration names.\n\nFor more information, see [Configurations and Platforms](Configurations-and-Platforms.md).",
+    "parameter": {
+      "name": "names",
+      "description": "A list of configuration names. Spaces are allowed, but may make using certain Premake features, such as a command-line configuration selection, more difficult."
+    },
+    "availability": "Premake 4.0 or later. Per-project configuration lists were introduced in Premake 5.0.",
+    "examples": "Specify debug and release configurations for a workspace.\n\n```lua\nworkspace \"MyWorkspace\"\n  configurations { \"Debug\", \"Release\" }\n```\n\nAdd additional configurations for a dynamic link library version.\n\n```lua\nconfigurations { \"Debug\", \"Release\", \"DebugDLL\", \"ReleaseDLL\" }\n```"
+  },
+  {
+    "allowed": [],
+    "kind": "string",
+    "name": "customToolNamespace",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "description": "Only used by Visual Studio .NET targets.\n\nMaps to `<CustomToolNamespace>` MSBuild element.",
+    "parameter": {
+      "name": "value",
+      "description": "Needs documentation."
+    },
+    "availability": "Premake 5.0.0 alpha 12 or later.",
+    "examples": "```lua\ncustomtoolnamespace \"value\"\n```"
+  },
+  {
+    "allowed": [
+      "Default",
+      "AVX",
+      "AVX2",
+      "IA32",
+      "SSE",
+      "SSE2",
+      "SSE3",
+      "SSSE3",
+      "SSE4.1",
+      "SSE4.2",
+      "ALTIVEC",
+      "NEON",
+      "MXU"
+    ],
+    "kind": "string",
+    "name": "vectorExtensions",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "description": "Specifies the level of vector processing extensions to enable while compiling the target configuration.\nIf no value is set for a configuration, the toolset's default vector extension settings will be used.",
+    "parameter": {
+      "name": "level",
+      "description": "Specifies the desired level of vector processing instructions.",
+      "options": [
+        {
+          "name": "Default",
+          "description": "Use the toolset's default vector extension settings."
+        },
+        {
+          "name": "AVX",
+          "description": "Use Advanced Vector Extensions."
+        },
+        {
+          "name": "AVX2",
+          "description": "Use Advanced Vector Extensions 2."
+        },
+        {
+          "name": "IA32",
+          "description": "Use Intel Architecture 32-bit"
+        },
+        {
+          "name": "SSE",
+          "description": "Use the basic SSE instruction set."
+        },
+        {
+          "name": "SSE2",
+          "description": "Use the SSE2 instruction set."
+        },
+        {
+          "name": "SSE3",
+          "description": "Use the SSE3 instruction set."
+        },
+        {
+          "name": "SSSE3",
+          "description": "Use the SSSE3 instruction set."
+        },
+        {
+          "name": "SSE4.1",
+          "description": "Use the SSE4.1 instruction set."
+        },
+        {
+          "name": "SSE4.2",
+          "description": "Use the SSE4.2 instruction set."
+        },
+        {
+          "name": "ALTIVEC",
+          "description": "Use Altivec (ISA 2.02) instruction set."
+        },
+        {
+          "name": "NEON",
+          "description": "Use the NEON instruction set (Android only)"
+        },
+        {
+          "name": "MXU",
+          "description": "Use the XBurst SIMD instructions (Android only)"
+        }
+      ]
+    },
+    "availability": "Premake 5.0.",
+    "examples": "```lua\n-- Enable SSE2 vector processing\nvectorextensions \"SSE2\"\n```"
+  },
+  {
+    "allowed": [
+      "OSXBundle",
+      "OSXFramework",
+      "XCTest"
+    ],
+    "kind": "string",
+    "name": "sharedLibType",
+    "scope": "project",
+    "scopes": [
+      "project"
+    ],
+    "description": "",
+    "parameter": {
+      "name": "value",
+      "options": [
+        {
+          "name": "OSXBundle",
+          "description": "needs documentation."
+        },
+        {
+          "name": "OSXFramework",
+          "description": "needs documentation."
+        },
+        {
+          "name": "XCTest",
+          "description": "needs documentation."
+        }
+      ]
+    },
+    "availability": "Premake 5.0.0 alpha 12 or later.",
+    "examples": "```lua\nsharedlibtype \"value\"\n```"
+  },
+  {
+    "allowed": [],
+    "kind": "list:directory",
+    "name": "externalIncludeDirs",
+    "paths": true,
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "tokens": true,
+    "description": "Specifies the include file search paths for the compiler, treating headers included from these paths as external.\nFor Visual Studio, these paths are placed in the \"VC++ Directories\" properties panel. For GCC and Clang, they are preceded with the `-isystem` flag, rather than `-I`. For toolsets which do not support the concept of external include directories, they are treated as a normal include directory.\n\nInclude files located via an external include directory are treated specially, see [externalwarnings](externalwarnings.md).",
+    "parameter": {
+      "name": "paths",
+      "description": "Specifies a list of include file search directories. Paths should be specified relative to the currently running script file."
+    },
+    "availability": "Premake 5.0 or later.",
+    "examples": "Define two external include file search paths.\n\n```lua\nexternalincludedirs { \"../lua/include\", \"../zlib\" }\n```\n\nYou can also use wildcards to match multiple directories. The * will match against a single directory, ** will recurse into subdirectories as well.\n\n```lua\nexternalincludedirs { \"../includes/**\" }\n```"
+  },
+  {
+    "allowed": [
+      "1",
+      "2",
+      "4",
+      "8",
+      "16"
+    ],
+    "kind": "integer",
+    "name": "structMemberAlign",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "description": "- Specifies 1, 2, 4, 8, 16-byte boundary for struct member alignment.",
+    "parameter": {
+      "name": "value",
+      "description": "Specifies the boundary for struct member alignment.",
+      "options": [
+        {
+          "name": "1"
+        },
+        {
+          "name": "2"
+        },
+        {
+          "name": "4"
+        },
+        {
+          "name": "8"
+        },
+        {
+          "name": "16"
+        }
+      ]
+    },
+    "availability": "Premake 5.0.0 alpha 14 or later for visual studio (non-clang).\nPremake 5.0.0 beta 7 for others",
+    "examples": "```lua\nstructmemberalign (1)\n```"
+  },
+  {
+    "allowed": [
+      "C",
+      "C++",
+      "C#",
+      "F#"
+    ],
+    "kind": "string",
+    "name": "language",
+    "scope": "project",
+    "scopes": [
+      "project"
+    ],
+    "description": "Sets the programming language used by a project.",
+    "parameter": {
+      "name": "lang",
+      "description": "The language identifier used by the project.",
+      "options": [
+        {
+          "name": "C",
+          "description": "Built-in; always available."
+        },
+        {
+          "name": "C++",
+          "description": "Built-in; always available."
+        },
+        {
+          "name": "C#",
+          "description": "Built-in; always available."
+        },
+        {
+          "name": "F#",
+          "description": "Built-in; always available."
+        }
+      ]
+    },
+    "availability": "`C`, `C++`, and `C#` are available in Premake 4.0 or later. Others are 5.0 or later.",
+    "examples": "Set the project language to C++.\n\n```lua\nlanguage \"C++\"\n```\n\nSet the project language to C#\n\n```lua\nlanguage \"C#\"\n```"
+  },
+  {
+    "allowed": [],
+    "kind": "string",
+    "name": "startProject",
+    "scope": "workspace",
+    "scopes": [
+      "workspace"
+    ],
+    "tokens": true,
+    "description": "Specify the startup project for a workspace.\nStartup projects are currently only supported by Visual Studio.",
+    "parameter": {
+      "name": "name",
+      "description": "The name of the startup project, which should match the name provided in the call to project() when the project is defined."
+    },
+    "availability": "5.0 or later.",
+    "examples": "```lua\nworkspace \"MyWorkspace\"\n    configurations { \"Debug\", \"Release\" }\n    startproject \"MyProject2\"\n\nproject \"MyProject1\"\n    -- define project 1 here\n\nproject \"MyProject2\"\n    -- define project 2 here\n```"
+  },
+  {
+    "allowed": [
+      "Software",
+      "Hardware"
+    ],
+    "kind": "string",
+    "name": "fpu",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "description": "Specifies whether to generate code for a hardware FPU.",
+    "parameter": {
+      "name": "value",
+      "options": [
+        {
+          "name": "Software",
+          "description": "Generate software floating-point emulation code."
+        },
+        {
+          "name": "Hardware",
+          "description": "Generate code for a hardware FPU."
+        }
+      ]
+    },
+    "availability": "Premake 5.0 or later.",
+    "examples": ""
+  },
+  {
+    "allowDuplicates": true,
+    "allowed": [],
+    "kind": "list:string",
+    "name": "debugArgs",
+    "pathVars": true,
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "tokens": true,
+    "description": "Specifies a list of arguments to pass to the application when run under the debugger.\nNote that this setting is not implemented for Xcode 3, which requires a per-user configuration file in order to make it work.\n\nIn Visual Studio, this file can be overridden by a per-user configuration file (such as `ProjectName.vcproj.MYDOMAIN-MYUSERNAME.user`). Removing this file (which is done by Premake's clean action) will restore the default settings.",
+    "parameter": {
+      "name": "args",
+      "description": "A Lua list of arguments to provide to the executable while debugging."
+    },
+    "availability": "Premake 4.4 or later.",
+    "examples": "```lua\nfilter { \"configurations:Debug\" }\n   debugargs { \"--append\", \"somefile.txt\" }\n```"
+  },
+  {
+    "allowed": [],
+    "kind": "list:keyed:array:string",
+    "name": "configMap",
+    "scope": "project",
+    "scopes": [
+      "project"
+    ],
+    "description": "Map workspace level configuration and platforms to a different project configuration or platform.\nYou may map multiple configurations in a single configuration map.",
+    "parameter": {
+      "name": "value",
+      "description": "",
+      "options": []
+    },
+    "availability": "5.0 or later.",
+    "examples": "The workspace contains four build configurations, while the project contains only the standard Debug and Release. Map the extra workspace configurations to Debug and Release.\n\n\n```lua\nworkspace \"MyWorkspace\"\n   configurations { \"Debug\", \"Development\", \"Profile\", \"Release\" }\n\nproject \"MyProject\"\n   configmap {\n      [\"Development\"] = \"Debug\",\n      [\"Profile\"] = \"Release\",\n   }\n```\n\nIt can be useful to specify a map globally for a workspace, but only apply it if the target configuration is actually present in the project. In this example, host executables can be built for either Windows or Mac, while some projects build for an embedded controller. Any project that uses the special \"Embedded\" platform will receive the configuration map.\n\n\n```lua\nworkspace \"MyWorkspace\"\n   configurations { \"Debug\", \"Release\" }\n   platforms { \"Windows\", \"Mac\" }\n\n   filter { \"platforms:Embedded\" }\n      configmap {\n         [\"Windows\"] = \"Embedded\",\n         [\"Mac\"] = \"Embedded\"\n      }\n\n-- this project gets the configuration map, because it defines an \"Embedded\" platform\nproject \"MyEmbeddedProject\"\n   platforms { \"Embedded\" }\n\n-- this one does not\nproject \"MyHostProject\"\n```"
+  },
+  {
+    "allowed": [],
+    "kind": "list:path",
+    "name": "runPathDirs",
+    "paths": true,
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "tokens": true,
+    "description": "Specifies the runtime search paths used by the runtime shared library dynamic loader. OSX and Linux-specific.",
+    "parameter": {
+      "name": "paths",
+      "description": "Specifies a list of runtime search path directories used by shared library dynamic loader.",
+      "additional": "Paths should be specified relative to the currently running script file."
+    },
+    "availability": "Premake 5.0 or later.",
+    "examples": ""
+  },
+  {
+    "allowed": [],
+    "kind": "list:string",
+    "name": "fatalWarnings",
+    "reserved": {
+      "1": "All",
+      "all": "All"
+    },
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "description": "Specifies specific compiler warnings that should be interpreted as errors.",
+    "parameter": {
+      "name": "warnings",
+      "description": "Specifies specific compiler warnings that should be interpreted as errors.",
+      "options": [
+        {
+          "name": "All",
+          "description": "Treat all compiler warnings as errors."
+        }
+      ],
+      "additional": "For Visual Studio, the MSC warning number should be used to specify the warning. On other compilers, the warning should be identified by name."
+    },
+    "availability": "Premake 5.0 or later. Special value `All` available since Premake 5.0-beta5 or later.",
+    "examples": "```lua\nfilter { \"toolset:msc\" }\n\tfatalwarnings { \"4035\" } -- 'function': no return value\n\nfilter { \"toolset:clang\" }\n\tfatalwarnings { \"-Wreturn-type\" }\n\nfilter {}\n```"
+  },
+  {
+    "allowed": [],
+    "kind": "string",
+    "name": "targetBundleExtension",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "description": "Specifies the bundle extension for the MacOSX bundle.\nBy default, the project will use the MacOSX's normal naming conventions: .bundle for OSX Bundles, .framework for OSX Framework, and so on. The `targetbundleextension` function allows you to change this default.",
+    "parameter": {
+      "name": "ext",
+      "description": "The new bundle extension, including the leading dot."
+    },
+    "availability": "Premake 5.0 beta 7 or later.",
+    "examples": "```lua\ntargetbundleextension \".zmf\"\n```"
+  },
+  {
+    "allowed": [
+      "Off",
+      "Dynamic",
+      "Static"
+    ],
+    "kind": "string",
+    "name": "atl",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "description": "Enables Microsoft's Active Template Library in a project.",
+    "parameter": {
+      "name": "value",
+      "options": [
+        {
+          "name": "Off",
+          "description": "Do not use ATL (default)."
+        },
+        {
+          "name": "Dynamic",
+          "description": "Link the ATL libraries dynamically."
+        },
+        {
+          "name": "Static",
+          "description": "Link the ATL libraries statically."
+        }
+      ],
+      "additional": ""
+    },
+    "availability": "Premake 5.0 or later.",
+    "examples": ""
+  },
+  {
+    "allowed": [
+      "Default",
+      "x86",
+      "x86_64"
+    ],
+    "kind": "string",
+    "name": "preferredToolArchitecture",
+    "scope": "workspace",
+    "scopes": [
+      "workspace"
+    ],
+    "description": "",
+    "parameter": {
+      "name": "value",
+      "options": [
+        {
+          "name": "Default",
+          "description": "needs documentation."
+        },
+        {
+          "name": "x86",
+          "description": "needs documentation."
+        },
+        {
+          "name": "x86_64",
+          "description": "needs documentation."
+        }
+      ]
+    },
+    "availability": "Premake 5.0.0 alpha 12 or later.",
+    "examples": "```lua\npreferredtoolarchitecture \"value\"\n```"
+  },
+  {
+    "allowed": [],
+    "kind": "boolean",
+    "name": "compileBuildOutputs",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "description": "Specify if generated file from [`buildcommands`](buildcommands.md) should be compiled or not.",
+    "parameter": {
+      "name": "value",
+      "options": [
+        {
+          "name": "on",
+          "description": "Generated file should be compiled."
+        },
+        {
+          "name": "off",
+          "description": "Generated file should not be compiled."
+        }
+      ]
+    },
+    "availability": "Premake 5.0.0 alpha 12 or later.",
+    "examples": "```lua\nfilter \"files:**.cpp.in\"\n  buildmessage \"generate %{file.basename} from %{file.relpath}\"\n  buildoutputs { \"%{cfg.objdir}/%{file.basename}\") }\n  buildcommands { \"MyScript %[%{!file.abspath}] %[%{!cfg.objdir}/%{file.basename}]\" }\n  compilebuildoutputs \"on\"\nfilter \"files:**.h.in\"\n  buildmessage \"generate %{file.basename} from %{file.relpath}\"\n  buildoutputs { \"%{cfg.objdir}/%{file.basename}\") }\n  buildcommands { \"MyScript %[%{!file.abspath}] %[%{!cfg.objdir}/%{file.basename}]\" }\n  compilebuildoutputs \"off\"\nfilter {}\n```"
+  },
+  {
+    "allowed": [],
+    "kind": "path",
+    "name": "baseDir",
+    "paths": true,
+    "scope": "project",
+    "scopes": [
+      "project"
+    ],
+    "description": "Sets the base directory for a configuration, from with other paths contained by the configuration will be made relative at export time.\nYou do not normally need to set this value, as it is filled in automatically with the current working directory at the time the configuration block is created by the script.",
+    "parameter": {
+      "name": "value",
+      "description": "An absolute path from which other paths contained by the configuration should be made relative."
+    },
+    "availability": "Premake 4.4 or later.",
+    "examples": ""
+  },
+  {
+    "allowed": [],
+    "kind": "path",
+    "name": "symbolsPath",
+    "paths": true,
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "tokens": true,
+    "description": "Specify the target location of the debug symbols.\nFor the Visual Studio action, this allows you to specify the location and name of the .pdb output.\nNot specifying this option will result in the compilers default behavior.",
+    "parameter": {
+      "name": "filename",
+      "description": "The target location of the symbols."
+    },
+    "availability": "Premake 5.0 or later.",
+    "examples": "This project while specific to Visual Studio shows how to output the .pdb file right next to the lib/exe/dll using the name of the lib/exe/dll itself.\n\n```lua\nproject \"MyProject\"\n    symbolspath '$(OutDir)$(TargetName).pdb'\n```"
+  },
+  {
+    "allowed": [
+      "Default",
+      "C",
+      "C++",
+      "Objective-C",
+      "Objective-C++",
+      "Module",
+      "ModulePartition",
+      "HeaderUnit"
+    ],
+    "kind": "string",
+    "name": "compileAs",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "description": "",
+    "parameter": {
+      "name": "value",
+      "description": "Specifies the compilation mode.",
+      "options": [
+        {
+          "name": "Default",
+          "description": "Compile based on file extensions that have been built into premake."
+        },
+        {
+          "name": "C",
+          "description": "Compile as a C source file."
+        },
+        {
+          "name": "C++",
+          "description": "Compile as a C++ source file."
+        },
+        {
+          "name": "Objective-C",
+          "description": "Compile as an Objective-C source file."
+        },
+        {
+          "name": "Objective-C++",
+          "description": "Compile as an Objective-C++ source file."
+        },
+        {
+          "name": "Module",
+          "description": "Compile as a C++20 module interface unit."
+        },
+        {
+          "name": "ModulePartition",
+          "description": "Compile as a C++20 module interface partition."
+        },
+        {
+          "name": "HeaderUnit",
+          "description": "Compile as a C++20 header unit."
+        }
+      ]
+    },
+    "availability": "Premake 5.0.0 alpha 13 or later. The options **Module**, **ModulePartition** and **HeaderUnit** are only available in Premake 5.0-beta1 or later and only implemented for Visual Studio 2019+.",
+    "examples": "```lua\nfilter { \"files:**.c\" }\n    compileas \"C++\"\n```"
+  },
+  {
+    "allowed": [
+      "Cdecl",
+      "FastCall",
+      "StdCall",
+      "VectorCall"
+    ],
+    "kind": "string",
+    "name": "callingconvention",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "description": "Sets the [function calling convention](https://en.wikipedia.org/wiki/X86_calling_conventions).",
+    "parameter": {
+      "name": "value",
+      "options": [
+        {
+          "name": "Cdecl"
+        },
+        {
+          "name": "FastCall"
+        },
+        {
+          "name": "StdCall"
+        },
+        {
+          "name": "VectorCall"
+        }
+      ]
+    },
+    "availability": "Premake 5.0 or later.",
+    "examples": ""
+  },
+  {
+    "allowed": [],
+    "kind": "string",
+    "name": "preLinkMessage",
+    "pathVars": true,
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "tokens": true,
+    "description": "Specifies a message to display to the user before starting execution of any specified [pre-link commands](prelinkcommands.md).",
+    "parameter": {
+      "name": "message",
+      "description": "The message to be displayed before starting execution of any specified pre-link commands."
+    },
+    "availability": "Premake 4.4 or later.",
+    "examples": "```lua\nproject \"MyProject\"\n   prelinkcommands { \"{COPYFILE} %[dependencies/*.lib] %[bin]\" }\n   prelinkmessage \"Copying dependencies...\"\n```"
+  },
+  {
+    "allowed": [
+      "soft",
+      "softfp",
+      "hard"
+    ],
+    "kind": "string",
+    "name": "floatAbi",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "description": "Specifies the floating point ABI to use.",
+    "parameter": {
+      "name": "value",
+      "options": [
+        {
+          "name": "soft",
+          "description": "Compiler will generate library calls for floating-point operations."
+        },
+        {
+          "name": "softfp",
+          "description": "Compiler will generate code using hardware floating-point instructions, but still uses the soft-float calling conventions."
+        },
+        {
+          "name": "hard",
+          "description": "Compiler will generate floating-point instructions using FPU-specific calling conventions."
+        }
+      ]
+    },
+    "availability": "Premake 5.0.0 alpha 14 or later.",
+    "examples": "```lua\nfloatabi \"soft\"\n```"
+  },
+  {
+    "allowed": [],
+    "kind": "path",
+    "name": "impLibDir",
+    "paths": true,
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "tokens": true,
+    "description": "Specifies the import library output directory. Import libraries are generated for Windows DLL projects.\nBy default, the generated project files will place the import library in the same directory as the compiled binary. The `implibdir` function allows you to change this location.",
+    "parameter": {
+      "name": "path",
+      "description": "The output directory for the library, relative to the currently executing script file."
+    },
+    "availability": "Premake 4.0 or later.",
+    "examples": "```lua\nimplibdir \"../Libraries\"\n```"
+  },
+  {
+    "allowed": [
+      "iPhone/iPod touch",
+      "iPad",
+      "Universal"
+    ],
+    "kind": "string",
+    "name": "iosFamily",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "description": "- This page was auto-generated. Feel free to help us improve the documentation by creating a pull request.",
+    "parameter": {
+      "name": "value",
+      "options": [
+        {
+          "name": "iPhone/iPod touch",
+          "description": "needs documentation"
+        },
+        {
+          "name": "iPad",
+          "description": "needs documentation"
+        },
+        {
+          "name": "Universal",
+          "description": "needs documentation"
+        }
+      ]
+    },
+    "availability": "Premake 5.0.0 alpha 14 or later.",
+    "examples": "```lua\niosfamily (value)\n```"
+  },
+  {
+    "allowed": [],
+    "kind": "boolean",
+    "name": "fastUpToDate",
+    "scope": "project",
+    "scopes": [
+      "project"
+    ],
+    "description": "- This page was auto-generated. Feel free to help us improve the documentation by creating a pull request.",
+    "parameter": {
+      "name": "value",
+      "description": "Needs documentation."
+    },
+    "availability": "Premake 5.0.0 beta 1 or later.",
+    "examples": "```lua\nfastuptodate (value)\n```"
+  },
+  {
+    "allowed": [
+      "4.0",
+      "4.2",
+      "5.0"
+    ],
+    "kind": "string",
+    "name": "swiftVersion",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "description": "- This page was auto-generated. Feel free to help us improve the documentation by creating a pull request.",
+    "parameter": {
+      "name": "value",
+      "options": [
+        {
+          "name": "4.0"
+        },
+        {
+          "name": "4.2"
+        },
+        {
+          "name": "5.0"
+        }
+      ]
+    },
+    "availability": "Premake 5.0.0 beta 1 or later.",
+    "examples": "```lua\nswiftversion (value)\n```"
+  },
+  {
+    "allowed": [
+      "NoListing",
+      "AssemblyCode",
+      "AssemblyCodeAndHex"
+    ],
+    "kind": "string",
+    "name": "shaderAssembler",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "description": "- This page was auto-generated. Feel free to help us improve the documentation by creating a pull request.",
+    "parameter": {
+      "name": "value",
+      "options": [
+        {
+          "name": "NoListing"
+        },
+        {
+          "name": "AssemblyCode"
+        },
+        {
+          "name": "AssemblyCodeAndHex"
+        }
+      ]
+    },
+    "availability": "Premake 5.0.0 alpha 14 or later.",
+    "examples": "```lua\nshaderassembler (value)\n```"
+  },
+  {
+    "allowed": [],
+    "kind": "list:string",
+    "name": "debugStartupCommands",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "tokens": true,
+    "description": "Specifies commands to be executed immediately as the debugger starts, before connecting to the target process.",
+    "parameter": {
+      "name": "commands",
+      "description": "A list of commands to execute immediately as the debugger starts, before connecting to the target process."
+    },
+    "availability": "Premake 5.0 or later.",
+    "examples": ""
+  },
+  {
+    "allowed": [],
+    "kind": "string",
+    "name": "documentationFile",
+    "scope": "project",
+    "scopes": [
+      "project"
+    ],
+    "description": "Enables C# xmlDocumentationFile\n\nThe `xmlDocumentationFile` option is used to include [XML comments](https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/xmldoc/) in a DLL that has been included in a .NET framework or another C# project. These XML comments can then be referenced by other projects when placed alongside the corresponding SharedLib.\n\nThis feature sets the [documentationfile](https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/compiler-options/output#documentationfile) option in a C# project's .csproj file for each respective [configuration](https://premake.github.io/docs/configurations/)",
+    "parameter": {
+      "name": "targetdir",
+      "description": "The directory where the documentation file should be placed after building the project using visual studio."
+    },
+    "availability": "Premake 5.0 beta3 or later.\n\nVisual studio is the only toolset currently supported.",
+    "examples": "When you set documentationFile to true, the following filepath will be generated:\n```%{targetdir}/%{prj.name}.xml```\n```lua\ndocumentationfile(true)\n```\nIf you specify a custom target directory like this:\n```lua\ndocumentationfile(\"%{prj.location}/bin/test\")\n```\nthe following filepath will be generated:\n```bin\\test\\%{prj.name}.xml```"
+  },
+  {
+    "allowed": [],
+    "kind": "list:string",
+    "name": "linkOptions",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "tokens": true,
+    "description": "Passes arguments directly to the linker command line without translation.",
+    "parameter": {
+      "name": "options",
+      "description": "A list of linker flags and options, specific to a particular linker."
+    },
+    "availability": "Premake 4.0 or later.",
+    "examples": "Use `pkg-config` style configuration when building on Linux with GCC. Build options are always linker specific and should be targeted to a particular toolset.\n\n```lua\nfilter { \"system:linux\", \"action:gmake\" }\n  linkoptions { \"`wx-config --libs`\" }\n```"
+  },
+  {
+    "allowed": [],
+    "kind": "list:path",
+    "name": "debugSearchPaths",
+    "paths": true,
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "tokens": true,
+    "description": "Specifies a list of paths to search for source code while debugging.",
+    "parameter": {
+      "name": "paths",
+      "description": "A list of paths that the debugger will use to search for source files."
+    },
+    "availability": "Premake 5.0 or later.",
+    "examples": ""
+  },
+  {
+    "allowed": [],
+    "kind": "list:string",
+    "name": "debugConnectCommands",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "tokens": true,
+    "description": "Specifies commands to be executed upon connection of the debugger to a remote process.",
+    "parameter": {
+      "name": "commands",
+      "description": "A list of commands to execute upon connection of the debugger to a remote process."
+    },
+    "availability": "Premake 5.0 or later.",
+    "examples": ""
+  },
+  {
+    "allowed": [],
+    "kind": "integer",
+    "name": "debugPort",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "description": "Specifies the remote debug port.",
+    "parameter": {
+      "name": "portnumber",
+      "description": "An integer port number for the debugger to connect on."
+    },
+    "availability": "Premake 5.0 or later.",
+    "examples": ""
+  },
+  {
+    "allowed": [],
+    "kind": "list:directory",
+    "name": "includeDirs",
+    "paths": true,
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "tokens": true,
+    "description": "Specifies the include file search paths for the compiler.",
+    "parameter": {
+      "name": "paths",
+      "description": "Specifies a list of include file search directories. Paths should be specified relative to the currently running script file."
+    },
+    "availability": "Premake 4.0 or later.",
+    "examples": "Define two include file search paths.\n\n```lua\nincludedirs { \"../lua/include\", \"../zlib\" }\n```\n\nYou can also use wildcards to match multiple directories. The * will match against a single directory, ** will recurse into subdirectories as well.\n\n```lua\nincludedirs { \"../includes/**\" }\n```"
+  },
+  {
+    "allowed": [],
+    "kind": "boolean",
+    "name": "debugExtendedProtocol",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "description": "Specifies to use the 'extended-remote' protocol, which instructs GDB to maintain a persistent connection to gdbserver.",
+    "parameter": {
+      "name": "enabled",
+      "description": "Specifies whether to use the 'extended remote' protocol."
+    },
+    "availability": "Premake 5.0 or later.",
+    "examples": ""
+  },
+  {
+    "allowed": [],
+    "kind": "string",
+    "name": "debugRemoteHost",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "tokens": true,
+    "description": "Specifies the remote debugging target.",
+    "parameter": {
+      "name": "host",
+      "description": "Specifies a host to connect to when starting a remote debug session."
+    },
+    "availability": "Premake 5.0 or later.",
+    "examples": ""
+  },
+  {
+    "allowed": [],
+    "kind": "list:string",
+    "name": "rebuildCommands",
+    "pathVars": true,
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "tokens": true,
+    "description": "Specifies one or more shell commands to be executed to rebuild a [Makefile project](Makefile-Projects.md).",
+    "parameter": {
+      "name": "commands",
+      "description": "Specifies a list of one or more shell commands to be executed. The commands may use tokens."
+    },
+    "availability": "Premake 5.0 or later.",
+    "examples": "Use a [Makefile project](Makefile-Projects.md) to execute an external makefile.\n\n```lua\nworkspace \"MyWorkspace\"\n   configurations { \"Debug\", \"Release\" }\n\nproject \"MyProject\"\n   kind \"Makefile\"\n\n   buildcommands {\n      \"make %{cfg.buildcfg}\"\n   }\n\n   rebuildcommands {\n      \"make %{cfg.buildcfg} rebuild\"\n   }\n\n   cleancommands {\n      \"make clean %{cfg.buildcfg}\"\n   }\n\n```"
+  },
+  {
+    "allowed": [],
+    "kind": "list:string",
+    "name": "cleanCommands",
+    "pathVars": true,
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "tokens": true,
+    "description": "Specifies one or more shell commands to be executed to clean a [Makefile project](Makefile-Projects.md).",
+    "parameter": {
+      "name": "commands",
+      "description": "Specifies a list of one or more shell commands to be executed. The commands may use tokens."
+    },
+    "availability": "Premake 5.0 or later.",
+    "examples": "Use a [Makefile project](Makefile-Projects.md) to execute an external makefile.\n\n```lua\nworkspace \"MyWorkspace\"\n   configurations { \"Debug\", \"Release\" }\n\nproject \"MyProject\"\n   kind \"Makefile\"\n\n   buildcommands {\n      \"make %{cfg.buildcfg}\"\n   }\n\n   rebuildcommands {\n      \"make %{cfg.buildcfg} rebuild\"\n   }\n\n   cleancommands {\n      \"make clean %{cfg.buildcfg}\"\n   }\n\n```"
+  },
+  {
+    "allowed": [],
+    "kind": "string",
+    "name": "csVersion",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "description": "Specifies the C# language level.",
+    "parameter": {
+      "name": "value",
+      "description": "Specifies the C# language level."
+    },
+    "availability": "Premake 5.0 or later.",
+    "examples": ""
+  },
+  {
+    "allowed": [],
+    "kind": "boolean",
+    "name": "profile",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "description": "Enable or disable instrumented performance profiling support for binaries.",
+    "parameter": {
+      "name": "value",
+      "options": [
+        {
+          "name": "On",
+          "description": "Turn on instrumented performance profiling."
+        },
+        {
+          "name": "Off",
+          "description": "Turn off instrumented performance profiling."
+        }
+      ]
+    },
+    "availability": "Premake 5.0-beta6 or later.",
+    "examples": "```lua\nproject \"MyProject\"\n    kind \"ConsoleApp\"\n    profile \"On\"\n```"
+  },
+  {
+    "allowed": [
+      "On",
+      "Off"
+    ],
+    "kind": "string",
+    "name": "linkSectionData",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "description": "Emit each data item in a separate section. This help linker optimizations to remove unused data.",
+    "parameter": {
+      "name": "value",
+      "options": [
+        {
+          "name": "On"
+        },
+        {
+          "name": "Off"
+        }
+      ]
+    },
+    "availability": "Premake 5.0.0 beta 4 or later for Visual Studio 2022 and later, only applies to Visual Studio Android projects.",
+    "examples": ""
+  },
+  {
+    "_kind": "keyed:boolean",
+    "allowed": [],
+    "keyed": true,
+    "kind": "boolean",
+    "name": "xcodeSystemCapabilities",
+    "scope": "project",
+    "scopes": [
+      "project"
+    ],
+    "description": "- This page was auto-generated. Feel free to help us improve the documentation by creating a pull request.",
+    "parameter": {
+      "name": "value",
+      "description": "Needs documentation."
+    },
+    "availability": "Premake 5.0.0 alpha 14 or later.",
+    "examples": "```lua\nxcodesystemcapabilities (value)\n```"
+  },
+  {
+    "allowed": [
+      "Default",
+      "On",
+      "Off",
+      "SEH",
+      "CThrow",
+      "UnwindTables"
+    ],
+    "kind": "string",
+    "name": "exceptionHandling",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "description": "Enable or disable exception handling.",
+    "parameter": {
+      "name": "value",
+      "options": [
+        {
+          "name": "Default",
+          "description": "Use the toolset's default setting for exceptions."
+        },
+        {
+          "name": "On",
+          "description": "Turn on exceptions."
+        },
+        {
+          "name": "Off",
+          "description": "Turn off exceptions."
+        },
+        {
+          "name": "SEH",
+          "description": "Turn on exceptions and use structured exception handling when available."
+        },
+        {
+          "name": "CThrow"
+        },
+        {
+          "name": "UnwindTables"
+        }
+      ],
+      "additional": ""
+    },
+    "availability": "Premake 5.0 or later.",
+    "examples": ""
+  },
+  {
+    "allowed": [],
+    "kind": "list:string",
+    "name": "buildCommands",
+    "pathVars": true,
+    "scope": [
+      "config",
+      "rule"
+    ],
+    "scopes": [
+      "config",
+      "rule"
+    ],
+    "tokens": true,
+    "description": "Specifies one or more shell commands to be executed to build a project or file.",
+    "parameter": {
+      "name": "commands",
+      "description": "Specifies a list of one or more shell commands to be executed. The commands may use tokens."
+    },
+    "availability": "Premake 5.0 or later.",
+    "examples": "Use [per-file custom build commands](Custom-Build-Commands.md) to compile all Lua files in a project to C:\n\n```lua\nfilter 'files:**.lua'\n   -- A message to display while this build step is running (optional)\n   buildmessage 'Compiling %[%{file.relpath}]'\n\n   -- One or more commands to run (required)\n   buildcommands {\n      'luac -o \"%[%{!cfg.objdir}/%{file.basename}.out]\" \"%[%{file.relpath}]\"'\n   }\n\n   -- One or more outputs resulting from the build (required)\n   buildoutputs { '%{cfg.objdir}/%{file.basename}.c' }\n\n```\n\nUse a [Makefile project](Makefile-Projects.md) to execute an external makefile.\n\n```lua\nworkspace \"Workspace\"\n   configurations { \"Debug\", \"Release\" }\n\nproject \"MyProject\"\n   kind \"Makefile\"\n\n   buildcommands {\n      \"make %{cfg.buildcfg}\"\n   }\n\n   cleancommands {\n      \"make clean %{cfg.buildcfg}\"\n   }\n\n```"
+  },
+  {
+    "allowed": [],
+    "kind": "list:string",
+    "name": "buildDependencies",
+    "pathVars": true,
+    "scope": [
+      "rule"
+    ],
+    "scopes": [
+      "rule"
+    ],
+    "tokens": true,
+    "description": "Specifies any additional dependencies for the target of a custom build rule.",
+    "parameter": {
+      "name": "files",
+      "description": "Specifies a list of file paths for additional dependencies."
+    },
+    "availability": "Premake 5.0 or later.",
+    "examples": ""
+  },
+  {
+    "allowed": [],
+    "kind": "list",
+    "name": "xcodeBuildResources",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "description": "*Missing documentation*",
+    "parameter": {
+      "name": "value",
+      "description": "",
+      "options": []
+    },
+    "availability": "",
+    "examples": ""
+  },
+  {
+    "allowed": [
+      "Address",
+      "Fuzzer",
+      "Thread",
+      "UndefinedBehavior"
+    ],
+    "kind": "list:string",
+    "name": "sanitize",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "description": "Enables various `fsanitize` options for compilers.",
+    "parameter": {
+      "name": "value_list",
+      "description": "Specifies the desired `fsanitize` options to enable.",
+      "options": [
+        {
+          "name": "Address",
+          "description": "Enables compiler support for AddressSanitizer (ASan). Visual Studio support starts with 2019 16.9."
+        },
+        {
+          "name": "Fuzzer",
+          "description": "Enables support for LibFuzzer, a coverage-guided fuzzing library. Unsupported with GCC. Visual Studio support starts with 2019 16.9."
+        },
+        {
+          "name": "Thread",
+          "description": "Enables compiler support for ThreadSanitizer (TSan). GCC & Clang only."
+        },
+        {
+          "name": "UndefinedBehavior",
+          "description": "Enables compiler support for UndefinedBehaviorSanitizer (UBSan). GCC & Clang only."
+        }
+      ]
+    },
+    "availability": "Premake 5.0 or later.",
+    "examples": "```lua\nsanitize { \"Address\", \"Fuzzer\" }\n```"
+  },
+  {
+    "_kind": "keyed:table",
+    "allowed": [],
+    "keyed": true,
+    "kind": "array",
+    "name": "xcodeBuildSettings",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "description": "",
+    "parameter": {
+      "name": "key_value_pairs",
+      "description": "Key/value pairs to apply to buildSettings blocks of the generated pbxproj."
+    },
+    "availability": "Premake 5.0.0 alpha 12 or later.",
+    "examples": "```lua\nxcodebuildsettings { [\"MY_KEY\"] = \"MY_VALUE\" }\n```\nwill generate:\n\n```\n    buildSettings = {\n        ...\n        MY_KEY = MY_VALUE;\n        ...\n    }\n```"
+  },
+  {
+    "allowed": [],
+    "kind": "list:string",
+    "name": "nuGet",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "tokens": true,
+    "description": "Specifies a list of NuGet packages that this project depends on. Only supported in Visual Studio C++ and C# projects.",
+    "parameter": {
+      "name": "references",
+      "description": "A list of NuGet package names and versions, where the version is separated from the name with a colon.",
+      "additional": "Only supported in Visual Studio C++ and C# projects."
+    },
+    "availability": "Premake 5.0 or later.",
+    "examples": "Link against some NuGet packages.\n\n```lua\nproject \"foo\"\n   nuget { \"sdl2.v140:2.0.4\", \"sdl2.v140.redist:2.0.4\" }\n```"
+  },
+  {
+    "allowed": [
+      "On",
+      "Off"
+    ],
+    "kind": "string",
+    "name": "linkSectionFunction",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "description": "Emit each function item in a separate section. This help linker optimizations to remove unused data.",
+    "parameter": {
+      "name": "value",
+      "options": [
+        {
+          "name": "On"
+        },
+        {
+          "name": "Off"
+        }
+      ]
+    },
+    "availability": "Premake 5.0.0 beta 4 or later for Visual Studio 2022 and later, only applies to Visual Studio Android projects.",
+    "examples": ""
+  },
+  {
+    "allowed": [],
+    "kind": "list",
+    "name": "embed",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "description": "Sets value of the *Embed* field in Xcode under *Frameworks, Libraries, and Embedded Content* to **Embed Without Signing**\n\nThis results in the framework being copied into the built app bundle during the *Embed Libraries* build phase.",
+    "parameter": {
+      "name": "value",
+      "description": "The name of the content to be embedded."
+    },
+    "availability": "Premake 5.0.0 beta 1 or later.",
+    "examples": "```lua\nembed {\n\t\"SDL2.dylib\",\n\t\"bar.framework\"\n}\n```"
+  },
+  {
+    "allowed": [],
+    "kind": "list:string",
+    "name": "defines",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "tokens": true,
+    "description": "Adds preprocessor or compiler symbols to a project.",
+    "parameter": {
+      "name": "symbols",
+      "description": "Specifies a list of symbols to be defined."
+    },
+    "availability": "Premake 4.0 or later.",
+    "examples": "Define two new symbols in the current project.\n\n```lua\ndefines { \"DEBUG\", \"TRACE\" }\n```\n\nSymbols may also assign values.\n\n```lua\ndefines { \"CALLSPEC=__dllexport\" }\n```"
+  },
+  {
+    "allowed": [],
+    "kind": "list:table",
+    "name": "propertyDefinition",
+    "scope": "rule",
+    "scopes": [
+      "rule"
+    ],
+    "description": "Creates a new property for a [custom rule](Custom-Rules.md).\nCustom rules, and therefore property definitions, are currently only supported for Visual Studio 2010+.",
+    "parameter": {
+      "name": "property_definition",
+      "description": "The property definition is specified as a table with the following values. Note that no data validation is currently performed on property definition parameters at this time."
+    },
+    "availability": "Available in Premake 5.0 or later for Visual Studio 2010 or later.",
+    "examples": "A simple boolean property to control a switch.\n\n```lua\npropertydefinition {\n  name = \"DebuggingSymbols\",\n  kind = \"boolean\",\n  display = \"Debugging Symbols\",\n  description = \"Add debugging information to the generated output\",\n  value = false,\n  switch = \"-g\"\n}\n```\n\nTo use this property in the rule:\n\n```lua\n-- If set to true, evaluates to: `tool.exe -g`\nbuildcommand \"tool.exe [DebuggingSymbols]\"\n```\n\nEnum properties allow selection from a list of possible values.\n\n```lua\npropertydefinition {\n  name = \"OptimizationLevel\",\n  display = \"Optimization Level\",\n  values = {\n    [0] = \"None\",\n    [1] = \"Size\",\n    [2] = \"Speed\",\n  },\n  switch = {\n    [0] = \"-O0\",\n    [1] = \"-O1\",\n    [2] = \"-O3\",\n  },\n  value = 2,\n}\n```\n\nEnum properties are set using the value names.\n\n```lua\nfilter \"configurations:Release\"\n  myCustomRuleVars { OptimizationLevel = \"None\" }\n```"
+  },
+  {
+    "allowed": [
+      "thumb",
+      "arm",
+      "disabled"
+    ],
+    "kind": "string",
+    "name": "thumbMode",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "description": "Specifies whether the code generation uses ARM or Thumb instruction sets.",
+    "parameter": {
+      "name": "value",
+      "description": "Specifies whether the code generation uses ARM or Thumb instruction sets.",
+      "options": [
+        {
+          "name": "thumb",
+          "description": "Uses the Thumb instruction set."
+        },
+        {
+          "name": "arm",
+          "description": "Uses the ARM instruction set."
+        },
+        {
+          "name": "disabled",
+          "description": "Disables usage of Thumb instruction set."
+        }
+      ]
+    },
+    "availability": "Premake 5.0.0 alpha 14 or later.",
+    "examples": "```lua\nthumbmode \"disabled\"\n```"
+  },
+  {
+    "allowed": [],
+    "kind": "string",
+    "name": "display",
+    "scope": "rule",
+    "scopes": [
+      "rule"
+    ],
+    "description": "Text to display for rule or property definition",
+    "parameter": {
+      "name": "value",
+      "description": "Text shown for the rule or property definition."
+    },
+    "availability": "Premake 5.0.0 alpha 12 or later.",
+    "examples": "```lua\nrule \"myrule\"\n  display \"My custom rule\"\n  fileextension \".in\"\n\n  propertydefinition {\n    name = \"myoption\",\n    display = \"My option\",\n    description = \"Select the option to use\",\n    values = { [0] = \"option1\", [1] = \"option2\"},\n    value = 1\n  }\n\n  buildmessage 'custom rule: {copy} %{file.relpath} %{file.basename}'\n  buildoutputs { \"%{sln.location}/%{file.basename}\" }\n  buildcommands { \"MyScript {myoption} %[%{!file.abspath}] %[%{!sln.location}/%{file.basename}]\" }\n```"
+  },
+  {
+    "allowed": [
+      "none",
+      "gabi++",
+      "stlport",
+      "gnu",
+      "libc++"
+    ],
+    "kind": "string",
+    "name": "stl",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "description": "Specifies which C++ Standard Library to use.\nThe `staticruntime` API is used to determine if a static or shared version of the STL is used.",
+    "parameter": {
+      "name": "value",
+      "options": [
+        {
+          "name": "none",
+          "description": "Minimal C++ runtime library."
+        },
+        {
+          "name": "gabi++",
+          "description": "C++ runtime library."
+        },
+        {
+          "name": "stlport",
+          "description": "STLport runtime library."
+        },
+        {
+          "name": "gnu",
+          "description": "GNU STL library."
+        },
+        {
+          "name": "libc++",
+          "description": "LLVM libc++ library."
+        }
+      ]
+    },
+    "availability": "Premake 5.0.0 alpha 14 or later.",
+    "examples": "```lua\nstl \"libc++\"\n```"
+  },
+  {
+    "allowed": [],
+    "kind": "list:string",
+    "name": "enableWarnings",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "tokens": true,
+    "description": "Enables specific compiler warnings.",
+    "parameter": {
+      "name": "warnings",
+      "description": "A list of warnings to enable."
+    },
+    "availability": "Premake 5.0 or later.",
+    "examples": ""
+  },
+  {
+    "allowed": [],
+    "kind": "list:directory",
+    "name": "libDirs",
+    "paths": true,
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "tokens": true,
+    "description": "Specifies the library search paths for the linker.\nLibrary search directories are not well supported by the .NET tools. Visual Studio will change relative paths to absolute, making it difficult to share the generated project. MonoDevelop does not support search directories at all, using only the GAC. In general, it is better to include the full (relative) path to the assembly in [links](links.md) instead. C/C++ projects do not have this limitation.",
+    "parameter": {
+      "name": "paths",
+      "description": "Specifies a list of library search directories. Paths should be specified relative to the currently running script file."
+    },
+    "availability": "Premake 4.0 or later.",
+    "examples": "Define two library file search paths.\n\n```lua\nlibdirs { \"../lua/libs\", \"../zlib\" }\n```\n\nYou can also use wildcards to match multiple directories. The * will match against a single directory, ** will recurse into subdirectories as well.\n\n```lua\nlibdirs { \"../libs/**\" }\n```"
+  },
+  {
+    "allowed": [
+      "Default",
+      "On",
+      "Off"
+    ],
+    "kind": "string",
+    "name": "staticRuntime",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "description": "",
+    "parameter": {
+      "name": "value",
+      "options": [
+        {
+          "name": "Default",
+          "description": "Does not set a value for `<RuntimeLibrary>`."
+        },
+        {
+          "name": "On",
+          "description": "Sets `<RuntimeLibrary>` to \"MultiThreaded\"."
+        },
+        {
+          "name": "Off",
+          "description": "Sets `<RuntimeLibrary>` to \"MultiThreadedDLL\"."
+        }
+      ]
+    },
+    "availability": "Premake 5.0.0 alpha 12 or later.",
+    "examples": "```lua\nstaticruntime \"on\"\n```"
+  },
+  {
+    "allowed": [],
+    "kind": "string",
+    "name": "remoteProjectDir",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "description": "Project directory as seen by the Windows Subsystem for Linux shell.",
+    "parameter": {
+      "name": "path",
+      "description": "Specifies the directory on the remote machine that WSL sees the project in"
+    },
+    "availability": "Premake 5.0.0 beta 3 or later, only applies to Visual Studio Linux projects.",
+    "examples": "```lua\nremoteprojectdir \"$(RemoteRootDir)/$(ProjectName)\"\n```"
+  },
+  {
+    "allowed": [
+      "Default",
+      "Off",
+      "On",
+      "Static",
+      "Dynamic"
+    ],
+    "kind": "string",
+    "name": "mfc",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "description": "Sets the version of the MFC libraries to link against.",
+    "parameter": {
+      "name": "value",
+      "description": "Specifies the desired PIC mode.",
+      "options": [
+        {
+          "name": "Default",
+          "description": "Perform the default linkage against the MFC libraries for your project type."
+        },
+        {
+          "name": "Off",
+          "description": "Do not link against MFC libraries."
+        },
+        {
+          "name": "On",
+          "description": "Link against the MFC libraries corresponding with the runtime type you are using (static or dynamic)."
+        },
+        {
+          "name": "Static",
+          "description": "Force static linkage to the MFC libraries."
+        },
+        {
+          "name": "Dynamic",
+          "description": "Force dynamic linkage to the MFC libraries."
+        }
+      ]
+    },
+    "availability": "Premake 5.0-beta4 or later on Visual Studio.",
+    "examples": ""
+  },
+  {
+    "allowed": [
+      "Default",
+      "Hidden"
+    ],
+    "kind": "string",
+    "name": "inlinesvisibility",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "description": "- This page was auto-generated. Feel free to help us improve the documentation by creating a pull request.",
+    "parameter": {
+      "name": "value",
+      "options": [
+        {
+          "name": "Default"
+        },
+        {
+          "name": "Hidden"
+        }
+      ]
+    },
+    "availability": "Premake 5.0.0 alpha 14 or later.",
+    "examples": "```lua\ninlinesvisibility (value)\n```"
+  },
+  {
+    "allowed": [],
+    "kind": "string",
+    "name": "llvmVersion",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "tokens": "true",
+    "description": "Specifies a version for a custom installation of LLVM for Visual Studio.",
+    "parameter": {
+      "name": "version",
+      "description": "Specifies the version of the LLVM installation."
+    },
+    "availability": "Premake 5.0.0 beta 3 or later for Visual Studio 2019 and later.",
+    "examples": "```lua\nllvmversion \"16\"\n```"
+  },
+  {
+    "allowed": [],
+    "kind": "string",
+    "name": "shaderAssemblerOutput",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "tokens": true,
+    "description": "- This page was auto-generated. Feel free to help us improve the documentation by creating a pull request.",
+    "parameter": {
+      "name": "value",
+      "description": "Needs documentation."
+    },
+    "availability": "Premake 5.0.0 alpha 14 or later.",
+    "examples": "```lua\nshaderassembleroutput (value)\n```"
+  },
+  {
+    "allowed": [],
+    "kind": "path",
+    "name": "location",
+    "paths": true,
+    "scope": [
+      "project",
+      "rule"
+    ],
+    "scopes": [
+      "project",
+      "rule"
+    ],
+    "tokens": true,
+    "description": "Sets the destination directory for a generated workspace or project file.\nBy default, workspace and project files are generated into the same directory as the script that defines them. The `location` function allows you to change this location.\n\nNote that unlike other values, `location` does not automatically propagate to the contained projects. Projects will use their default location unless explicitly overridden.",
+    "parameter": {
+      "name": "path",
+      "description": "The directory where the generated files should be stored, specified relative to the currently executing script file."
+    },
+    "availability": "Premake 4.0 or later.",
+    "examples": "Set the destination directory for a workspace. Setting the location for a project works the same way.\n\n```lua\nworkspace \"MyWorkspace\"\n  location \"../build\"\n```\n\nIf you plan to build with multiple tools from the same source tree you might want to split up the project files by toolset. The [_ACTION](globals/premake_ACTION.md) global variable contains the current toolset identifier, as specified on the command line. Note that Lua syntax requires parenthesis around the function parameters in this case.\n\n```lua\nlocation (\"../build/\" .. _ACTION)\n```"
+  },
+  {
+    "allowed": [],
+    "kind": "directory",
+    "name": "llvmDir",
+    "paths": true,
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "tokens": "true",
+    "description": "Specifies a custom LLVM install location for Visual Studio.",
+    "parameter": {
+      "name": "path",
+      "description": "Specifies a directory containing the LLVM installation."
+    },
+    "availability": "Premake 5.0.0 beta 3 or later for Visual Studio 2019 and later.",
+    "examples": "```lua\nllvmdir \"/path/to/install\"\n```"
+  },
+  {
+    "allowed": [],
+    "kind": "string",
+    "name": "remoteDeployDir",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "description": "Directory on the remote machine where the project will be deployed to.",
+    "parameter": {
+      "name": "path",
+      "description": "Specifies the directory on the remote machine where the project is deployed."
+    },
+    "availability": "Premake 5.0.0 beta 3 or later, only applies to Visual Studio Linux projects.",
+    "examples": "```lua\nremoteprojectdir \"$(RemoteProjectDir)\"\n```"
+  },
+  {
+    "allowed": [],
+    "kind": "string",
+    "name": "remoteProjectRelativeDir",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "description": "Specifies the subdirectory on the remote machine to copy each project's source code to.",
+    "parameter": {
+      "name": "path",
+      "description": "Specifies the directory on the remote machine where the source files of a single project will be copied to before compiling, relative to the root path."
+    },
+    "availability": "Premake 5.0.0 beta 3 or later, only applies to Visual Studio Linux projects.",
+    "examples": "```lua\nremoteprojectrelativedir \"%{prj.name}\"\n```"
+  },
+  {
+    "allowed": [
+      "Default",
+      "Little",
+      "Big"
+    ],
+    "kind": "string",
+    "name": "endian",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "description": "Specifies the target endian for endian-agnostic architectures.",
+    "parameter": {
+      "name": "value",
+      "description": "Specifies the desired endian.",
+      "options": [
+        {
+          "name": "Default",
+          "description": "Use the toolset's default endian."
+        },
+        {
+          "name": "Little",
+          "description": "Specify little-endian."
+        },
+        {
+          "name": "Big",
+          "description": "Specify big-endian."
+        }
+      ]
+    },
+    "availability": "Premake 5.0 or later.",
+    "examples": ""
+  },
+  {
+    "allowed": [
+      "remote",
+      "wsl",
+      "wsl2",
+      "4.6",
+      "4.8",
+      "4.9",
+      "3.4",
+      "3.5",
+      "3.6",
+      "3.8",
+      "5.0"
+    ],
+    "kind": "string",
+    "name": "toolChainVersion",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "description": "Specifies the version of the toolchain to use.",
+    "parameter": {
+      "name": "value",
+      "description": "Specifies the version of the toolchain to use."
+    },
+    "availability": "Premake 5.0.0 alpha 14 or later, only applies to Android projects.\nPremake 5.0.0 beta 3 or later, only applies to Visual Studio Linux projects.",
+    "examples": "```lua\ntoolchainversion \"5.0\"\n```"
+  },
+  {
+    "allowed": [],
+    "kind": "list:string",
+    "name": "platforms",
+    "scope": "project",
+    "scopes": [
+      "project"
+    ],
+    "description": "Specifies a set of build platforms, which act as another configuration axis when building.\nThe platforms listed here are just names to be displayed in the IDE, with no intrinsic meaning. A platform named \"x86_64\" will not create a 64-bit build; the appropriate architecture still must be specified. For more information, see [Configurations and Platforms](Configurations-and-Platforms.md).",
+    "parameter": {
+      "name": "names",
+      "description": "A list of platform names. Spaces are allowed, but may make using certain Premake features, such as command-line configuration selection, more difficult."
+    },
+    "availability": "Premake 5.0 or later.",
+    "examples": "Specify debug and release configurations for a workspace, with static and shared library \"platforms\" in 32- and 64-bit variations.\n\n```lua\nworkspace \"MyWorkspace\"\n  configurations { \"Debug\", \"Release\" }\n  platforms { \"Static32\", \"Shared32\", \"Static64\", \"Shared64\" }\n\n  filter \"platforms:Static32\"\n    kind \"StaticLib\"\n    architecture \"x32\"\n\n  filter \"platforms:Static64\"\n    kind \"StaticLib\"\n    architecture \"x64\"\n\n  filter \"platforms:Shared32\"\n    kind \"SharedLib\"\n    architecture \"x32\"\n\n  filter \"platforms:Shared64\"\n    kind \"SharedLib\"\n    architecture \"x64\"\n```"
+  },
+  {
+    "allowed": [],
+    "kind": "list:table",
+    "name": "vsProps",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "tokens": true,
+    "description": "Add any property to your visual studio project\nThis allows you to set properties that premake does not support without extending it\n\nValues set at one time are sorted alphabetically\nIf you want to output groups of values in any order, set multiple times.\nNested values are also supported.\n\n```lua\n\tvsprops {\n\t\tName1 = \"value1\",\n\t\tName2 = {\n\t\t\tName3 = \"value3\"\n\t\t}\n\t}\n```",
+    "parameter": {
+      "name": "vsprops",
+      "description": "Allows you to set properties that premake does not support without extending it.",
+      "additional": "Values set at one time are sorted alphabetically. If you want to output groups of values in any order, set multiple times. Nested values are also supported."
+    },
+    "availability": "Premake 5.0-beta3 or later.",
+    "examples": "```lua\n\tlanguage \"C#\"\n\tvsprops {\n\t\t-- https://devblogs.microsoft.com/visualstudio/vs-toolbox-accelerate-your-builds-of-sdk-style-net-projects/\n\t\tAccelerateBuildsInVisualStudio = \"true\",\n\t\t-- https://learn.microsoft.com/en-us/visualstudio/ide/how-to-change-the-build-output-directory?view=vs-2022\n\t\tAppendTargetFrameworkToOutputPath = \"false\",\n\t\t-- https://learn.microsoft.com/en-us/dotnet/csharp/tutorials/nullable-reference-types\n\t\tNullable = \"enable\",\n\t}\n```\n```lua\n\tlanguage \"C++\"\n\tnuget {\n\t\t\"Microsoft.Direct3D.D3D12:1.608.2\"\n\t}\n\tvsprops {\n\t\t-- https://devblogs.microsoft.com/directx/gettingstarted-dx12agility/#2-set-agility-sdk-parameters\n\t\tMicrosoft_Direct3D_D3D12_D3D12SDKPath = \"custom_path\",\n\t}\n```"
+  },
+  {
+    "allowed": [
+      "MOVBE",
+      "POPCNT",
+      "PCLMUL",
+      "LZCNT",
+      "BMI",
+      "BMI2",
+      "F16C",
+      "AES",
+      "FMA",
+      "FMA4",
+      "RDRND"
+    ],
+    "kind": "list:string",
+    "name": "isaExtensions",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "description": "- This page was auto-generated. Feel free to help us improve the documentation by creating a pull request.",
+    "parameter": {
+      "name": "value",
+      "options": [
+        {
+          "name": "MOVBE",
+          "description": "needs documentation"
+        },
+        {
+          "name": "POPCNT",
+          "description": "needs documentation"
+        },
+        {
+          "name": "PCLMUL",
+          "description": "needs documentation"
+        },
+        {
+          "name": "LZCNT",
+          "description": "needs documentation"
+        },
+        {
+          "name": "BMI",
+          "description": "needs documentation"
+        },
+        {
+          "name": "BMI2",
+          "description": "needs documentation"
+        },
+        {
+          "name": "F16C",
+          "description": "needs documentation"
+        },
+        {
+          "name": "AES",
+          "description": "needs documentation"
+        },
+        {
+          "name": "FMA",
+          "description": "needs documentation"
+        },
+        {
+          "name": "FMA4",
+          "description": "needs documentation"
+        },
+        {
+          "name": "RDRND",
+          "description": "needs documentation"
+        }
+      ]
+    },
+    "availability": "Premake 5.0.0 alpha 14 or later.",
+    "examples": "```lua\nisaextensions (value)\n```"
+  },
+  {
+    "allowed": [],
+    "kind": "list:string",
+    "name": "resOptions",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "tokens": true,
+    "description": "Passes arguments directly to the resource compiler command line without translation.",
+    "parameter": {
+      "name": "options",
+      "description": "A list of resource compiler flags and options, specific to a particular compiler."
+    },
+    "availability": "Premake 4.0 or later.",
+    "examples": "Use `pkg-config` style configuration when building on Linux with GCC. Build options are always compiler specific and should be targeted to a particular toolset.\n\n```lua\nfilter { \"system:linux\", \"action:gmake\" }\n  resoptions { \"`wx-config --cxxflags`\", \"-ansi\", \"-pedantic\" }\n```"
+  },
+  {
+    "allowed": [],
+    "kind": "boolean",
+    "name": "runCodeAnalysis",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "description": "Runs code analysis during the build process for Visual Studio projects.\n\nThe `runcodeanalysis` option enforces code analysis during the build process in Visual Studio projects. This may significantly increase build time for projects.",
+    "parameter": {
+      "name": "value",
+      "description": "Specifies whether code analysis should be run during the build process.",
+      "options": [
+        {
+          "name": "On"
+        },
+        {
+          "name": "Off"
+        }
+      ]
+    },
+    "availability": "Premake 5.0.0 beta 3 or later for Visual Studio 2019 and later.",
+    "examples": "Run clang-tidy code analysis during the build process.\n\n```lua\nclangtidy(\"On\")\nruncodeanalysis(\"On\")\n```"
+  },
+  {
+    "allowed": [],
+    "kind": "boolean",
+    "name": "clangTidy",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "description": "Enables clang-tidy code analysis for Visual Studio.\n\nThe `clangtidy` option enables running clang-tidy code analysis in Visual Studio projects.",
+    "parameter": {
+      "name": "value",
+      "options": [
+        {
+          "name": "On"
+        },
+        {
+          "name": "Off"
+        }
+      ]
+    },
+    "availability": "Premake 5.0.0 beta 3 or later for Visual Studio 2019 and later.",
+    "examples": ""
+  },
+  {
+    "allowed": [
+      "Default",
+      "c7",
+      "Dwarf",
+      "SplitDwarf"
+    ],
+    "kind": "string",
+    "name": "debugFormat",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "description": "Specifies the desired format of the debug information written to the output binaries.",
+    "parameter": {
+      "name": "format",
+      "description": "Specifies the desired debug format.",
+      "options": [
+        {
+          "name": "Default",
+          "description": "Specifies default debug format should be used by toolset."
+        },
+        {
+          "name": "c7",
+          "description": "Specifies that MSVC should store debuginfo in the objects rather than a separate .pdb file."
+        },
+        {
+          "name": "Dwarf"
+        },
+        {
+          "name": "SplitDwarf"
+        }
+      ],
+      "additional": "**Note for Visual Studio Users:** Use [editandcontinue](editandcontinue.md) to control the `/Zi` and `/ZI` switches; see [this discussion](https://github.com/premake/premake-core/issues/1425) for more information."
+    },
+    "availability": "Premake 5.0 or later.",
+    "examples": ""
+  },
+  {
+    "allowed": [],
+    "kind": "string",
+    "name": "defaultPlatform",
+    "scope": "project",
+    "scopes": [
+      "project"
+    ],
+    "description": "Specifies the default build platform for a workspace.\nIf `platform_name` has not been defined using [`platforms`](platforms.md) the default platform will not change from the generic one i.e. the first one passed to [`platforms`](platforms.md).",
+    "parameter": {
+      "name": "platform_name",
+      "description": "Is the name of the platform you want to use as default."
+    },
+    "availability": "Premake 5.0.0 alpha 12 or later.",
+    "examples": "```lua\nworkspace \"MyWorkspace\"\n  configurations { \"Debug\", \"Release\" }\n  platforms { \"Static32\", \"Shared32\", \"Static64\", \"Shared64\" }\n  defaultplatform \"Shared64\" -- Default platform from \"Static32\" to \"Shared64\"\n\n  filter \"platforms:Static32\"\n    kind \"StaticLib\"\n    architecture \"x32\"\n\n  filter \"platforms:Static64\"\n    kind \"StaticLib\"\n    architecture \"x64\"\n\n  filter \"platforms:Shared32\"\n    kind \"SharedLib\"\n    architecture \"x32\"\n\n  filter \"platforms:Shared64\"\n    kind \"SharedLib\"\n    architecture \"x64\"\n\n```"
+  },
+  {
+    "allowed": [],
+    "kind": "list:string",
+    "name": "buildOptions",
+    "pathVars": true,
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "tokens": true,
+    "description": "Passes arguments directly to the compiler command line without translation.\nIf a project includes multiple calls to `buildoptions` the lists are concatenated, in the order in which they appear in the script.",
+    "parameter": {
+      "name": "options",
+      "description": "A list of compiler flags and options, specific to a particular compiler."
+    },
+    "availability": "Premake 4.0 or later.",
+    "examples": "Use `pkg-config` style configuration when building on Linux with GCC. Build options are always compiler specific and should be targeted to a particular toolset.\n\n```lua\nfilter { \"system:linux\", \"action:gmake\" }\n  buildoptions { \"`wx-config --cxxflags`\", \"-ansi\", \"-pedantic\" }\n```"
+  },
+  {
+    "allowed": [
+      "Default",
+      "C89",
+      "C90",
+      "C99",
+      "C11",
+      "C17",
+      "C23",
+      "gnu89",
+      "gnu90",
+      "gnu99",
+      "gnu11",
+      "gnu17",
+      "gnu23"
+    ],
+    "kind": "string",
+    "name": "cDialect",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "description": "",
+    "parameter": {
+      "name": "value",
+      "options": [
+        {
+          "name": "Default",
+          "description": "the default C dialect for the toolset"
+        },
+        {
+          "name": "C89",
+          "description": "ISO C89"
+        },
+        {
+          "name": "C90",
+          "description": "ISO C90"
+        },
+        {
+          "name": "C99",
+          "description": "ISO C99"
+        },
+        {
+          "name": "C11",
+          "description": "ISO C11"
+        },
+        {
+          "name": "C17",
+          "description": "ISO C17"
+        },
+        {
+          "name": "C23",
+          "description": "ISO C23"
+        },
+        {
+          "name": "gnu89",
+          "description": "GNU dialect of ISO C89"
+        },
+        {
+          "name": "gnu90",
+          "description": "GNU dialect of ISO C90"
+        },
+        {
+          "name": "gnu99",
+          "description": "GNU dialect of ISO C99"
+        },
+        {
+          "name": "gnu11",
+          "description": "GNU dialect of ISO C11"
+        },
+        {
+          "name": "gnu17",
+          "description": "GNU dialect of ISO C17"
+        },
+        {
+          "name": "gnu23",
+          "description": "GNU dialect of ISO C23"
+        }
+      ]
+    },
+    "availability": "Premake 5.0.0 alpha 12 or later.",
+    "examples": "```lua\ncdialect \"value\"\n```"
+  },
+  {
+    "allowed": [],
+    "kind": "list:string",
+    "name": "tags",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "description": "---\nslug: premake-tags  # docusaurus reserves /docs/tags\n---\n\ntags\nSee the [pull request](https://github.com/premake/premake-core/pull/789) for more information; help authoring documentation is appreciated!",
+    "parameter": {
+      "name": "value",
+      "description": "Needs documentation."
+    },
+    "availability": "Premake 5.0.0 alpha 12 or later.",
+    "examples": "```lua\ntags { \"string\" }\n```"
+  },
+  {
+    "allowed": [
+      "On",
+      "Off"
+    ],
+    "kind": "string",
+    "name": "enableModules",
+    "scope": [
+      "config"
+    ],
+    "scopes": [
+      "config"
+    ],
+    "description": "Sets whether or not the compiler should enable C++20 modules.",
+    "parameter": {
+      "name": "value",
+      "options": [
+        {
+          "name": "On"
+        },
+        {
+          "name": "Off"
+        }
+      ],
+      "additional": "Sets whether or not the compiler should enable C++20 modules."
+    },
+    "availability": "Premake 5.0.0 beta 3 or later for Visual Studio 2019 and later.",
+    "examples": ""
+  },
+  {
+    "allowed": [],
+    "kind": "string",
+    "name": "impLibSuffix",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "tokens": true,
+    "description": "Specifies a file name suffix for the import library base file name. Import libraries are generated for Windows DLL projects.",
+    "parameter": {
+      "name": "suffix",
+      "description": "The new filename suffix."
+    },
+    "availability": "Premake 4.0 or later.",
+    "examples": "```lua\n-- Add \"-d\" to debug versions of files\nfilter { \"configurations:Debug\" }\n   implibsuffix \"-d\"\n```"
+  },
+  {
+    "allowed": [
+      "On",
+      "Off"
+    ],
+    "kind": "string",
+    "name": "enableUnityBuild",
+    "scope": [
+      "config"
+    ],
+    "scopes": [
+      "config"
+    ],
+    "description": "Enables Unity Builds in Visual Studio, also known as Jumbo Builds",
+    "parameter": {
+      "name": "value",
+      "options": [
+        {
+          "name": "On",
+          "description": "Enables Unity Builds."
+        },
+        {
+          "name": "Off",
+          "description": "Disables Unity Builds."
+        }
+      ]
+    },
+    "availability": "Premake 5.0 and later. Versions are currently only implemented for Visual Studio 2017+.",
+    "examples": "Enable Unity Builds.\n\n```lua\nenableunitybuild \"On\"\n```"
+  },
+  {
+    "allowed": [
+      "On",
+      "Off"
+    ],
+    "kind": "string",
+    "name": "useStandardPreprocessor",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "description": "Enables a token-based preprocessor conforming to C99, C++11, and later standards.",
+    "parameter": {
+      "name": "value",
+      "options": [
+        {
+          "name": "Off",
+          "description": "Do not use the conforming processor."
+        },
+        {
+          "name": "On",
+          "description": "Enable the conforming processor."
+        }
+      ]
+    },
+    "availability": "Premake 5.0 or later.",
+    "examples": ""
+  },
+  {
+    "allowed": [],
+    "kind": "list:directory",
+    "name": "shaderIncludeDirs",
+    "pathVars": true,
+    "paths": true,
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "tokens": true,
+    "description": "- This page was auto-generated. Feel free to help us improve the documentation by creating a pull request.",
+    "parameter": {
+      "name": "value",
+      "description": "Needs documentation."
+    },
+    "availability": "Premake 5.0.0 alpha 16 or later.",
+    "examples": "```lua\nshaderincludedirs (value)\n```"
+  },
+  {
+    "allowed": [
+      "Default",
+      "Fast",
+      "Strict"
+    ],
+    "kind": "string",
+    "name": "floatingPoint",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "description": "Specifies the style of floating point math which should be used.\nIf no value is set for a configuration, the toolset's default floating point settings will be used.",
+    "parameter": {
+      "name": "value",
+      "description": "Specifies the desired style of floating point math.",
+      "options": [
+        {
+          "name": "Default",
+          "description": "Use the toolset's floating point settings."
+        },
+        {
+          "name": "Fast",
+          "description": "Enable floating point optimizations at the expense of accuracy."
+        },
+        {
+          "name": "Strict",
+          "description": "Improve floating point consistency at the expense of performance."
+        }
+      ]
+    },
+    "availability": "Premake 5.0 or later.",
+    "examples": "```lua\nfloatingpoint \"Fast\"\n```"
+  },
+  {
+    "allowed": [],
+    "kind": "boolean",
+    "name": "scanForModuleDependencies",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "description": "Enables the `Scan Sources for Module Dependencies` option for Visual Studio projects.",
+    "parameter": {
+      "name": "value",
+      "description": "Enables or disables the 'Scan Sources for Module Dependencies' option for Visual Studio projects.",
+      "options": [
+        {
+          "name": "on",
+          "description": "Sets the option to Yes."
+        },
+        {
+          "name": "yes",
+          "description": "Sets the option to Yes."
+        },
+        {
+          "name": "true",
+          "description": "Sets the option to Yes."
+        },
+        {
+          "name": "off",
+          "description": "Sets the option to No."
+        },
+        {
+          "name": "no",
+          "description": "Sets the option to No."
+        },
+        {
+          "name": "false",
+          "description": "Sets the option to No."
+        }
+      ]
+    },
+    "availability": "Premake 5.0-beta2 or later. Only available for Visual Studio 2019 16.9.x and later.",
+    "examples": "```lua\nscanformoduledependencies \"true\"\n```"
+  },
+  {
+    "allowed": [
+      "ConsoleApp",
+      "Makefile",
+      "None",
+      "SharedLib",
+      "StaticLib",
+      "WindowedApp",
+      "Utility",
+      "SharedItems",
+      "Packaging"
+    ],
+    "kind": "string",
+    "name": "kind",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "description": "Sets the kind of binary object being created by the project or configuration, such as a console or windowed application, or a shared or static library.",
+    "parameter": {
+      "name": "kind",
+      "options": [
+        {
+          "name": "ConsoleApp",
+          "description": "A console or command-line application."
+        },
+        {
+          "name": "WindowedApp",
+          "description": "An application which runs in a desktop window. This distinction does not apply on Linux, but is important on Windows and Mac OS X."
+        },
+        {
+          "name": "SharedLib",
+          "description": "A shared library or DLL."
+        },
+        {
+          "name": "StaticLib",
+          "description": "A static library."
+        },
+        {
+          "name": "Makefile",
+          "description": "A special configuration type which calls out to one or more external commands. The actual type of binary created is unspecified. See [Makefile Projects](Makefile-Projects.md) for more information."
+        },
+        {
+          "name": "Utility",
+          "description": "A configuration which contains only custom build rules."
+        },
+        {
+          "name": "None",
+          "description": "A configuration which is not included in the build. Useful for projects containing only web pages, header files, or support documentation."
+        },
+        {
+          "name": "Packaging",
+          "description": "A configuration type to create .androidproj files, which build the apk in an Android application under Visual Studio. _Note, this was previously `AndroidProj`._"
+        },
+        {
+          "name": "SharedItems",
+          "description": "A special configuration type which doesn't contain any build settings of its own, instead using the build settings of any projects that link it."
+        }
+      ]
+    },
+    "availability": "The **Makefile** kind is available in Premake 5.0 and later, and are supported for Visual Studio and Codelite.\nThe **None** kind is available in Premake 5.0 and later, and are supported for gmakelegacy, gmake, Codelite and Visual Studio.\nThe **Utility** kind is only available for Visual Studio, Codelite and gmake, as well as very limited support in gmakelegacy.\nThe **SharedItems** kind is only available for Visual Studio 2013 and later.",
+    "examples": "Set the project to build a command-line executable.\n\n```lua\nkind \"ConsoleApp\"\n```\n\nSet the project to build a shared library (DLL).\n\n```lua\nkind \"SharedLib\"\n```\n\nBuild either a static or a shared library, depending on the selected build configuration.\n\n```lua\nworkspace \"MyWorkspace\"\n   configurations { \"DebugLib\", \"DebugDLL\", \"ReleaseLib\", \"ReleaseDLL\" }\n\nproject \"MyProject\"\n\n   filter \"*Lib\"\n      kind \"StaticLib\"\n\n   filter \"*DLL\"\n      kind \"SharedLib\"\n```"
+  },
+  {
+    "allowed": [],
+    "kind": "list:directory",
+    "name": "usingDirs",
+    "paths": true,
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "tokens": true,
+    "description": "Specifies the file search paths for `using` statements.",
+    "parameter": {
+      "name": "paths",
+      "description": "Specifies a list of file search directories. Paths should be specified relative to the currently running script file."
+    },
+    "availability": "Premake 5.0 or later.",
+    "examples": "Define two using file search paths.\n\n```lua\nusingdirs { \"../lib1\", \"../lib2\" }\n```\n\nYou can also use wildcards to match multiple directories. The * will match against a single directory, ** will recurse into subdirectories as well.\n\n```lua\nusingdirs { \"../libs/**\" }\n```"
+  },
+  {
+    "allowed": [],
+    "kind": "boolean",
+    "name": "useFullPaths",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "description": "Turn on/off full paths usage in diagnostics\nBy default, the generated project files will use the compilers default settings, which is in most cases \"On\" for debug and \"Off\" for release.\nIn Visual Studio, this overrides the /FC flag which is forced on when using debug builds.",
+    "parameter": {
+      "name": "value",
+      "description": "Specifies whether to use relative or absolute paths in diagnostics.",
+      "options": [
+        {
+          "name": "Off",
+          "description": "Use relative paths in diagnostics."
+        },
+        {
+          "name": "On",
+          "description": "Use absolute (full) paths in diagnostics."
+        }
+      ]
+    },
+    "availability": "Premake 5.0.0 beta 1 or later.",
+    "examples": "```lua\nproject \"MyProject\"\n    usefullpaths \"On\" -- Uses full paths in diagnostics\n```"
+  },
+  {
+    "allowed": [],
+    "kind": "boolean",
+    "name": "floatingPointExceptions",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "description": "",
+    "parameter": {
+      "name": "value",
+      "options": [
+        {
+          "name": "on"
+        },
+        {
+          "name": "off"
+        }
+      ]
+    },
+    "availability": "Premake 5.0.0 alpha 12 or later.",
+    "examples": "```lua\nfloatingpointexceptions \"value\"\n```"
+  },
+  {
+    "allowed": [],
+    "kind": "list:string",
+    "name": "rules",
+    "scope": "project",
+    "scopes": [
+      "project"
+    ],
+    "description": "Imports one or more [custom rules](Custom-Rules.md) into a project.",
+    "parameter": {
+      "name": "rule_names",
+      "description": "Specifies a list of one or more names of custom rules, which must be defined elsewhere in the project scripts."
+    },
+    "availability": "Premake 5.0 or later.",
+    "examples": ""
+  },
+  {
+    "allowed": [],
+    "kind": "list:path",
+    "name": "buildOutputs",
+    "pathVars": false,
+    "paths": true,
+    "scope": [
+      "config",
+      "rule"
+    ],
+    "scopes": [
+      "config",
+      "rule"
+    ],
+    "tokens": true,
+    "description": "Specifies the file outputs of a custom build command or rule.",
+    "parameter": {
+      "name": "output",
+      "description": "The file that is created or updated by the custom build command or rule."
+    },
+    "availability": "Premake 5.0 or later.",
+    "examples": ""
+  },
+  {
+    "allowed": [],
+    "kind": "list:string",
+    "name": "resDefines",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "tokens": true,
+    "description": "Specifies preprocessor symbols for the resource compiler.",
+    "parameter": {
+      "name": "symbols",
+      "description": "Specifies a list of symbols to be defined."
+    },
+    "availability": "Premake 4.0 or later.",
+    "examples": "Define two new symbols in the current project.\n\n```lua\nresdefines { \"DEBUG\", \"TRACE\" }\n```\n\nSymbols may also assign values.\n\n```lua\nresdefines { \"CALLSPEC=__dllexport\" }\n```"
+  },
+  {
+    "allowed": [],
+    "kind": "string",
+    "name": "toolsVersion",
+    "scope": "project",
+    "scopes": [
+      "project"
+    ],
+    "tokens": true,
+    "description": "Selects the tools version which is used to build a project.\nIf no version is specified for a configuration, the build tool will define the a default version.",
+    "parameter": {
+      "name": "identifier",
+      "description": "A string identifier for the toolset version."
+    },
+    "availability": "Premake 5.0 and later. Versions are currently only implemented for Visual Studio 2017+.",
+    "examples": "Specify tool version 14.27.29110 of the toolset.\n\n```lua\ntoolsversion \"14.27.29110\"\n```"
+  },
+  {
+    "allowed": [
+      "Default",
+      "On",
+      "Off"
+    ],
+    "kind": "string",
+    "name": "omitFramePointer",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "description": "Controls whether the frame pointer is omitted during compilation.",
+    "parameter": {
+      "name": "value",
+      "description": "Controls whether the frame pointer is omitted during compilation.",
+      "options": [
+        {
+          "name": "Default",
+          "description": "Use the compiler's default behavior."
+        },
+        {
+          "name": "On",
+          "description": "Omit the frame pointer."
+        },
+        {
+          "name": "Off",
+          "description": "Keep the frame pointer."
+        }
+      ]
+    },
+    "availability": "Premake 5.0.0 alpha 14 or later.",
+    "examples": "Keep frame pointer in debug builds for better stack traces:\n```lua\nfilter \"configurations:Debug\"\n    omitframepointer \"Off\"\n```\n\nOmit frame pointer in release builds:\n```lua\nfilter \"configurations:Release\"\n    omitframepointer \"On\"\n```\n\nUse compiler defaults across all configurations:\n```lua\nomitframepointer \"Default\"\n```"
+  },
+  {
+    "allowed": [],
+    "kind": "string",
+    "name": "targetSuffix",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "tokens": true,
+    "description": "Specifies a file name suffix for the compiled binary target.",
+    "parameter": {
+      "name": "suffix",
+      "description": "The new filename suffix."
+    },
+    "availability": "Premake 4.0 or later.",
+    "examples": "```lua\n-- Add \"-d\" to debug versions of files\nfilter { \"configurations:Debug\" }\n   targetsuffix \"-d\"\n```"
+  },
+  {
+    "allowed": [],
+    "kind": "list:string",
+    "name": "uses",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "description": "Specifies which usage blocks a project should consume.\nThe `uses` API is used to consume `usage` blocks from within a project. The `usage` blocks are case sensitive.",
+    "parameter": {
+      "name": "value",
+      "description": "",
+      "options": []
+    },
+    "availability": "",
+    "examples": "Demonstration of using `uses`. When specifying a `uses` matching a project name containing a `PUBLIC` or `INTERFACE` usage block, the `uses` statement will match against that. If a `project` with a `PUBLIC` or `INTERFACE` usage block\ncannot be found, then it will fall back to searching all `usage` blocks to match the provided name, as described above.\n\n```lua\nproject \"MyProject\"\n    usage \"PUBLIC\"\n        defines { \"PUBLIC_DEF\" }\n    usage \"Custom\"\n        defines { \"CUSTOM_DEF\" }\n\nproject \"MyExe\"\n    uses { \"MyProject\" }\n\nproject \"MyDLL\"\n    uses { \"Custom\" }\n```"
+  },
+  {
+    "allowed": [],
+    "kind": "boolean",
+    "name": "tailCalls",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "description": "- This page was auto-generated. Feel free to help us improve the documentation by creating a pull request.",
+    "parameter": {
+      "name": "value",
+      "description": "needs documentation."
+    },
+    "availability": "Premake 5.0.0 alpha 14 or later.",
+    "examples": "```lua\ntailcalls (value)\n```"
+  },
+  {
+    "allowed": [
+      "Off",
+      "Always",
+      "OnNewFiles"
+    ],
+    "kind": "string",
+    "name": "gitIntegration",
+    "scope": "global",
+    "scopes": [
+      "global"
+    ],
+    "description": "Enable git integration to run premake on checkout.",
+    "parameter": {
+      "name": "action",
+      "description": "Enable git integration to run premake on checkout.",
+      "options": [
+        {
+          "name": "Off",
+          "description": "Disable git integration."
+        },
+        {
+          "name": "Always",
+          "description": "Run premake on checkout."
+        },
+        {
+          "name": "OnNewFiles",
+          "description": "Run premake only when files are added/removed or if premake script has changed."
+        }
+      ]
+    },
+    "availability": "Premake 5.0.0 beta 3 or later.",
+    "examples": "Regenerate autoversion.h with git tag when checkout to another branch.\n\n```lua\ngitintegration \"Always\"\n\nlocal locationDir = _OPTIONS[\"to\"]\n\nlocal function autoversion_h()\n\tlocal git_tag, errorCode = os.outputof(\"git describe --tag --always\")\n\tif errorCode == 0 then\n\t\tprint(\"git description: \", git_tag)\n\t\tlocal content = io.readfile(\"src/autoversion.h.in\")\n\t\tcontent = content:gsub(\"${GIT_DESC}\", git_tag)\n\n\t\tos.mkdir(locationDir)\n\t\tlocal f, err = os.writefile_ifnotequal(content, path.join(locationDir, \"autoversion.h\"))\n\n\t\tif (f == 0) then -- file not modified\n\t\telseif (f < 0) then\n\t\t\terror(err, 0)\n\t\t\treturn false\n\t\telseif (f > 0) then\n\t\t\tprint(\"Generated autoversion.h...\")\n\t\tend\n\n\t\treturn true\n\telse\n\t\tprint(\"`git describe --tag` failed with error code\", errorCode, git_tag)\n\t\treturn false\n\tend\nend\n\nlocal have_autoversion_h = autoversion_h()\n\nworkspace \"MyProject\"\n\tlocation(locationDir)\n\n\tif have_autoversion_h then\n\t\tincludedirs { locationDir } -- for generated file (autoversion.h)\n\tend\n  -- [..]\n```"
+  },
+  {
+    "allowed": [],
+    "kind": "boolean",
+    "name": "consumeWinRtExtension",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "description": "Enables the WinRT extension, C++/CX, for the specified projects/files.",
+    "parameter": {
+      "name": "value",
+      "description": "Specifies whether the WinRT extension is enabled for the specified projects/files.",
+      "options": [
+        {
+          "name": "Default",
+          "description": "Compiles the file using the default for the toolset. (Default is `Off`)"
+        },
+        {
+          "name": "On",
+          "description": "Compiles the file with the WinRT extension enabled."
+        },
+        {
+          "name": "Off",
+          "description": "Compiles the file without the WinRT extension enabled."
+        }
+      ]
+    },
+    "availability": "Premake 5.0.0 Beta 2 or later and only implemented for Visual Studio 2019+.",
+    "examples": "```lua\nfilter { \"files:**_winrt.cpp\" }\n    consumewinrtextension \"On\"\n```"
+  },
+  {
+    "allowed": [],
+    "kind": "boolean",
+    "name": "stringPooling",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "description": "",
+    "parameter": {
+      "name": "value",
+      "options": [
+        {
+          "name": "on",
+          "description": "needs documentation."
+        },
+        {
+          "name": "off",
+          "description": "needs documentation."
+        }
+      ]
+    },
+    "availability": "Premake 5.0.0 alpha 12 or later.",
+    "examples": "```lua\nstringpooling \"value\"\n```"
+  },
+  {
+    "allowed": [],
+    "kind": "string",
+    "name": "uuid",
+    "scope": "project",
+    "scopes": [
+      "project"
+    ],
+    "description": "Sets the [Universally Unique Identifier](http://en.wikipedia.org/wiki/UUID) (UUID) for a project.\nUUIDs are synonymous (for Premake's purposes) with [Globally Unique Identifiers](http://en.wikipedia.org/wiki/Globally_Unique_Identifier) (GUID).\n\nPremake automatically assigns a UUID to each project, which is used by the Visual Studio generators to identify the project within a workspace. This UUID is essentially random and will change each time the project file is generated. If you are storing the generated Visual Studio project files in a version control system, this will create a lot of unnecessary deltas. Using the `uuid` function, you can assign a fixed UUID to each project which never changes, removing the randomness from the generated projects.",
+    "parameter": {
+      "name": "project_uuid",
+      "description": "The UUID for the current project. It should take the form '01234567-ABCD-ABCD-ABCD-0123456789AB'. You can use the Visual Studio guidgen tool to create new UUIDs, or a website like www.famkruithof.net/uuid/uuidgen, or run Premake once to generate Visual Studio files and copy the assigned UUIDs."
+    },
+    "availability": "Premake 4.0 or later.",
+    "examples": "Set the UUID for a current project.\n\n```lua\nuuid \"BE2461B7-236F-4278-81D3-F0D476F9A4C0\"\n```"
+  },
+  {
+    "allowed": [],
+    "kind": "list:keyed:list:path",
+    "name": "vPaths",
+    "pathVars": true,
+    "paths": true,
+    "scope": "project",
+    "scopes": [
+      "project"
+    ],
+    "tokens": true,
+    "description": "Places files into groups or \"virtual paths\", rather than the default behavior of mirroring the filesystem in IDE-based projects. So you could, for instance, put all header files in a group called \"Headers\", no matter where they appeared in the source tree.\nNote that Lua tables do not maintain any ordering between key-value pairs, so there is no precedence between the supplied rules. That is, you can't write a rule that rewrites the results of an earlier rule, since there is no guarantee in which order the rules will run.",
+    "parameter": {
+      "name": "file_patterns",
+      "description": "A list of key/value pairs that map file patterns to the group in which they should appear.",
+      "additional": "See the examples below for a more complete explanation."
+    },
+    "availability": "Premake 4.4 or later.",
+    "examples": "Place all header files into a virtual path called \"Headers\". Any directory information is removed, so a path such as `src/lua/lua.h` will appear in the IDE as `Headers/lua.h`.\n\n```lua\nvpaths { [\"Headers\"] = \"**.h\" }\n```\n\nYou may also specify multiple file patterns using the table syntax.\n\n```lua\nvpaths {\n   [\"Headers\"] = { \"**.h\", \"**.hxx\", \"**.hpp\" }\n}\n```\n\nIt is also possible to include the file's path in the virtual group. Using the same example as above, this rule will appear in the IDE as `Headers/src/lua/lua.h`.\n\n```lua\nvpaths { [\"Headers/*\"] = \"**.h\" }\n```\n\nAny directory information explicitly provided in the pattern will be removed from the replacement. This rule will appear in the IDE as `Headers/lua/lua.h`.\n\n```lua\nvpaths { [\"Headers/*\"] = \"src/**.h\" }\n```\n\nYou can also use virtual paths to remove extra directories from the IDE. For instance, this rule will cause the previous example to appear as `lua/lua.h`, removing the `src` part of the path from *all* files.\n\n```lua\nvpaths { [\"*\"] = \"src\" }\n```\n\nAnd of course, you can specify more than one rule at a time.\n\n```lua\nvpaths {\n   [\"Headers\"] = \"**.h\",\n   [\"Sources/*\"] = {\"**.c\", \"**.cpp\"},\n   [\"Docs\"] = \"**.txt\"\n}\n```"
+  },
+  {
+    "allowed": [
+      "2.0",
+      "3.0",
+      "4.0_level_9_1",
+      "4.0_level_9_3",
+      "4.0",
+      "4.1",
+      "5.0",
+      "5.1",
+      "rootsig_1.0",
+      "rootsig_1.1",
+      "6.0",
+      "6.1",
+      "6.2",
+      "6.3",
+      "6.4",
+      "6.5",
+      "6.6"
+    ],
+    "kind": "string",
+    "name": "shaderModel",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "description": "Specifies the shader model.",
+    "parameter": {
+      "name": "value",
+      "description": "Specifies the shader model.",
+      "options": [
+        {
+          "name": "2.0",
+          "description": "Shader Model 2.0"
+        },
+        {
+          "name": "3.0",
+          "description": "Shader Model 3.0"
+        },
+        {
+          "name": "4.0_level_9_1",
+          "description": "Shader Model 4.0 Level 9_1"
+        },
+        {
+          "name": "4.0_level_9_3",
+          "description": "Shader Model 4.0 Level 9_3"
+        },
+        {
+          "name": "4.0",
+          "description": "Shader Model 4.0"
+        },
+        {
+          "name": "4.1",
+          "description": "Shader Model 4.1"
+        },
+        {
+          "name": "5.0",
+          "description": "Shader Model 5.0"
+        },
+        {
+          "name": "5.1",
+          "description": "Shader Model 5.1"
+        },
+        {
+          "name": "rootsig_1.0",
+          "description": "Root Signature Version 1.0"
+        },
+        {
+          "name": "rootsig_1.1",
+          "description": "Root Signature Version 1.1"
+        },
+        {
+          "name": "6.0",
+          "description": "Shader Model 6.0"
+        },
+        {
+          "name": "6.1",
+          "description": "Shader Model 6.1"
+        },
+        {
+          "name": "6.2",
+          "description": "Shader Model 6.2"
+        },
+        {
+          "name": "6.3",
+          "description": "Shader Model 6.3"
+        },
+        {
+          "name": "6.4",
+          "description": "Shader Model 6.4"
+        },
+        {
+          "name": "6.5",
+          "description": "Shader Model 6.5"
+        },
+        {
+          "name": "6.6",
+          "description": "Shader Model 6.6"
+        }
+      ]
+    },
+    "availability": "Premake 5.0.0 alpha 14 or later.",
+    "examples": "```lua\nshadermodel (\"5.0\")\n```"
+  },
+  {
+    "allowed": [
+      "Default",
+      "C++latest",
+      "C++98",
+      "C++0x",
+      "C++11",
+      "C++1y",
+      "C++14",
+      "C++1z",
+      "C++17",
+      "C++2a",
+      "C++20",
+      "C++2b",
+      "C++23",
+      "gnu++98",
+      "gnu++0x",
+      "gnu++11",
+      "gnu++1y",
+      "gnu++14",
+      "gnu++1z",
+      "gnu++17",
+      "gnu++2a",
+      "gnu++20",
+      "gnu++2b",
+      "gnu++23"
+    ],
+    "kind": "string",
+    "name": "cppDialect",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "description": "",
+    "parameter": {
+      "name": "value",
+      "description": "Specifies the C++ dialect to be used.",
+      "options": [
+        {
+          "name": "Default",
+          "description": "The default C++ dialect for the toolset."
+        },
+        {
+          "name": "C++latest",
+          "description": "The latest C++ dialect for the toolset or action where available, otherwise the latest C++ dialect supported by Premake."
+        },
+        {
+          "name": "C++98",
+          "description": "ISO C++98."
+        },
+        {
+          "name": "C++0x",
+          "description": "ISO C++11 Draft."
+        },
+        {
+          "name": "C++11",
+          "description": "ISO C++11."
+        },
+        {
+          "name": "C++1y",
+          "description": "ISO C++14 Draft."
+        },
+        {
+          "name": "C++14",
+          "description": "ISO C++14."
+        },
+        {
+          "name": "C++1z",
+          "description": "ISO C++17 Draft."
+        },
+        {
+          "name": "C++17",
+          "description": "ISO C++17."
+        },
+        {
+          "name": "C++2a",
+          "description": "ISO C++20 Draft."
+        },
+        {
+          "name": "C++20",
+          "description": "ISO C++20."
+        },
+        {
+          "name": "C++2b",
+          "description": "ISO C++23 Draft."
+        },
+        {
+          "name": "C++23",
+          "description": "ISO C++23."
+        },
+        {
+          "name": "gnu++98",
+          "description": "GNU dialect of ISO C++98."
+        },
+        {
+          "name": "gnu++0x",
+          "description": "GNU dialect of ISO C++11 Draft."
+        },
+        {
+          "name": "gnu++11",
+          "description": "GNU dialect of ISO C++11."
+        },
+        {
+          "name": "gnu++1y",
+          "description": "GNU dialect of ISO C++14 Draft."
+        },
+        {
+          "name": "gnu++14",
+          "description": "GNU dialect of ISO C++14."
+        },
+        {
+          "name": "gnu++1z",
+          "description": "GNU dialect of ISO C++17 Draft."
+        },
+        {
+          "name": "gnu++17",
+          "description": "GNU dialect of ISO C++17."
+        },
+        {
+          "name": "gnu++2a",
+          "description": "GNU dialect of ISO C++20 Draft."
+        },
+        {
+          "name": "gnu++20",
+          "description": "GNU dialect of ISO C++20."
+        },
+        {
+          "name": "gnu++2b",
+          "description": "GNU dialect of ISO C++23 Draft."
+        },
+        {
+          "name": "gnu++23",
+          "description": "GNU dialect of ISO C++23."
+        }
+      ]
+    },
+    "availability": "Premake 5.0.0 alpha 12 or later.",
+    "examples": "```lua\ncppdialect \"value\"\n```"
+  },
+  {
+    "allowed": [],
+    "kind": "string",
+    "name": "targetExtension",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "tokens": true,
+    "description": "Specifies the file extension for the compiled binary target.\nBy default, the project will use the system's normal naming conventions: .exe for Windows executables, .so for Linux shared libraries, and so on. The `targetextension` function allows you to change this default.",
+    "parameter": {
+      "name": "ext",
+      "description": "The new file extension, including the leading dot."
+    },
+    "availability": "Premake 4.0 or later.",
+    "examples": "```lua\ntargetextension \".zmf\"\n```"
+  },
+  {
+    "allowed": [],
+    "kind": "boolean",
+    "name": "removeUnreferencedCodeData",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "description": "Sets the `RemoveUnreferencedCodeData` property for a configuration or all configurations within a project or workspace, adding or removing the `/Zc:inline[-]` build option.\n\n[/Zc:inline (Remove unreferenced COMDAT)](https://docs.microsoft.com/en-us/cpp/build/reference/zc-inline-remove-unreferenced-comdat?view=msvc-160)\n\nIf this property is unset, it defaults to `true` in Visual Studio.",
+    "parameter": {
+      "name": "value",
+      "options": [
+        {
+          "name": "on",
+          "description": "Enables `RemoveUnreferencedCodeData`."
+        },
+        {
+          "name": "off",
+          "description": "Disables `RemoveUnreferencedCodeData`."
+        }
+      ]
+    },
+    "availability": "Premake 5.0 alpha 16 or later.",
+    "examples": "```lua\nRemoveUnreferencedCodeData \"Off\"\n```"
+  },
+  {
+    "allowed": [],
+    "kind": "list:directory",
+    "name": "resIncludeDirs",
+    "paths": true,
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "tokens": true,
+    "description": "Specifies the include file search paths for the resource compiler.",
+    "parameter": {
+      "name": "paths",
+      "description": "Specifies a list of include file search directories. Paths should be specified relative to the currently running script file."
+    },
+    "availability": "Premake 4.0 or later.",
+    "examples": "Define two include file search paths.\n\n```lua\nresincludedirs { \"../lua/include\", \"../zlib\" }\n```\n\nYou can also use wildcards to match multiple directories. The * will match against a single directory, ** will recurse into subdirectories as well.\n\n```lua\nresincludedirs { \"../includes/**\" }\n```"
+  },
+  {
+    "allowed": [],
+    "kind": "path",
+    "name": "pchSource",
+    "paths": true,
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "tokens": true,
+    "description": "Specifies the C/C++ source code file which controls the compilation of the header.\nSee [Precompiled Headers](Precompiled-Headers.md) for more information.",
+    "parameter": {
+      "name": "sourcefile_cpp",
+      "description": "The name of the source code file which triggers the compilation of the header. This file must contain the header file's `#include` statement as the first line of code; this is usually the only statement in the file.",
+      "additional": "(Can anyone find a good link to this in the MSDN docs? They just rearranged the site and I'm not finding anything useful right now.)"
+    },
+    "availability": "Premake 4.0 and up.",
+    "examples": ""
+  },
+  {
+    "allowed": [],
+    "kind": "string",
+    "name": "locale",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "tokens": false,
+    "description": "Specifies the target locale for the resources in a particular configuration.\nThis value is currently only used for the Microsoft Visual Studio resource compiler in C/C++ projects.",
+    "parameter": {
+      "name": "code",
+      "description": "Specifies the desired locale code."
+    },
+    "availability": "Premake 5.0 or later.",
+    "examples": "```lua\nlocale \"en-GB\"\n```"
+  },
+  {
+    "allowed": [
+      "Default",
+      "On",
+      "Off"
+    ],
+    "kind": "string",
+    "name": "nativeWChar",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "description": "Enables or disables native wchar (wide character) support by the compiler.\nIf no value is set for a configuration, the toolset's default wchar support will be used.",
+    "parameter": {
+      "name": "value",
+      "description": "Specifies the desired state.",
+      "options": [
+        {
+          "name": "Default",
+          "description": "Use the toolset's default settings."
+        },
+        {
+          "name": "On",
+          "description": "Enable native wide character handling."
+        },
+        {
+          "name": "Off",
+          "description": "Disable native wide character handling."
+        }
+      ]
+    },
+    "availability": "Premake 5.0.",
+    "examples": "```lua\nnativewchar \"Off\"\n```"
+  },
+  {
+    "allowed": [],
+    "kind": "string",
+    "name": "namespace",
+    "scope": "project",
+    "scopes": [
+      "project"
+    ],
+    "tokens": true,
+    "description": "Sets the root namespace of a project.\nBy default, the root namespace for a project which match the target (assembly) name. This function allows you to override that default.\n\nCurrently, this is only applicable to Visual Studio C# projects.",
+    "parameter": {
+      "name": "name",
+      "description": "The desired root namespace for the project."
+    },
+    "availability": "Premake 5.0 or later.",
+    "examples": "```lua\nproject \"MyProject\"\n   namespace \"MyCompany.MyProject\"\n```"
+  },
+  {
+    "allowed": [
+      "Off",
+      "On"
+    ],
+    "kind": "string",
+    "name": "pic",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "description": "Enable generation of position independent code.\nPosition Independent Code is required when building dynamic libraries, or static lib's that will be linked to dynamic libraries. PIC will be enabled by default when building dynamic libraries. It will be disabled by default otherwise.",
+    "parameter": {
+      "name": "value",
+      "options": [
+        {
+          "name": "Off",
+          "description": "Do not generate position independent code."
+        },
+        {
+          "name": "On",
+          "description": "Generate position independent code."
+        }
+      ]
+    },
+    "availability": "Premake 5.0.",
+    "examples": ""
+  },
+  {
+    "allowed": [
+      "On",
+      "Off"
+    ],
+    "kind": "string",
+    "name": "justMyCode",
+    "scope": "project",
+    "scopes": [
+      "project"
+    ],
+    "description": "Enables or disables Visual Studio Just My Code debugging feature by passing /JMC option to the compiler. This applies only to VS C++ projects.\nIf no value is set for a configuration, the toolset's default option (usually \"On\") will be performed.",
+    "parameter": {
+      "name": "value",
+      "options": [
+        {
+          "name": "On",
+          "description": "Turn on JustMyCode debugging support."
+        },
+        {
+          "name": "Off",
+          "description": "Turn off JustMyCode debugging support."
+        }
+      ]
+    },
+    "availability": "Premake 5.0 or later.\n\nVisual Studio 2017 version 15.8 or later.",
+    "examples": "```lua\njustmycode \"Off\"\n```"
+  },
+  {
+    "allowed": [],
+    "kind": "string",
+    "name": "shaderEntry",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "tokens": true,
+    "description": "- This page was auto-generated. Feel free to help us improve the documentation by creating a pull request.",
+    "parameter": {
+      "name": "value",
+      "description": "needs documentation."
+    },
+    "availability": "Premake 5.0.0 alpha 14 or later.",
+    "examples": "```lua\nshaderentry (value)\n```"
+  },
+  {
+    "allowed": [],
+    "kind": "path",
+    "name": "imagePath",
+    "paths": true,
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "tokens": true,
+    "description": "Sets the file name of the deployment image produced by the build.\nThis value is currently only used by the Xbox 360.",
+    "parameter": {
+      "name": "path",
+      "description": "The full path for the image file, relative to the currently executing script file.",
+      "additional": "This value is currently only used by the Xbox 360."
+    },
+    "availability": "Premake 5.0 or later.",
+    "examples": ""
+  },
+  {
+    "allowed": [],
+    "kind": "list:string",
+    "name": "debugEnvs",
+    "pathVars": true,
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "tokens": true,
+    "description": "Specifies environment variables for the debug session.",
+    "parameter": {
+      "name": "envs",
+      "description": "A list of environment variable definitions for the debug session."
+    },
+    "availability": "Premake 5.0 or later.",
+    "examples": ""
+  },
+  {
+    "allowed": [],
+    "kind": "list:file",
+    "name": "forceUsings",
+    "paths": true,
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "tokens": true,
+    "description": "Applies one or more \"forced using\" files to the project; these includes behave as it they had been injected into the first line of each source file in the project.",
+    "parameter": {
+      "name": "files",
+      "description": "Specifies a list of files to be force included. Paths should be specified relative to the currently running script file."
+    },
+    "availability": "Premake 5.0 or later.",
+    "examples": "```lua\nforceusings { \"stdafx.h\" }\n```"
+  },
+  {
+    "allowed": [
+      "On",
+      "Off"
+    ],
+    "kind": "string",
+    "name": "buildStlModules",
+    "scope": [
+      "config"
+    ],
+    "scopes": [
+      "config"
+    ],
+    "description": "Sets whether or not the compiler should build STL modules.",
+    "parameter": {
+      "name": "value",
+      "options": [
+        {
+          "name": "On"
+        },
+        {
+          "name": "Off"
+        }
+      ],
+      "additional": "Sets whether or not the compiler should build STL modules."
+    },
+    "availability": "Premake 5.0.0 beta 3 or later for Visual Studio 2022 and later.",
+    "examples": ""
+  },
+  {
+    "allowed": [],
+    "kind": "string",
+    "name": "impLibPrefix",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "tokens": true,
+    "description": "Specifies the import library file name prefix. Import libraries are generated for Windows DLL projects.\nBy default, the system naming convention will be used: no prefix on Windows, a prefix of `lib` (as in `libMyProject.a`) on other systems. The `implibprefix` function allows you to change this default.",
+    "parameter": {
+      "name": "prefix",
+      "description": "The new file name prefix."
+    },
+    "availability": "Premake 4.0 or later.",
+    "examples": "```lua\nimplibprefix \"plugin\"\n```\n\nThe prefix may also be set to an empty string for no prefix.\n\n```lua\nimplibprefix \"\"\n```"
+  },
+  {
+    "allowed": [],
+    "kind": "string",
+    "name": "preBuildMessage",
+    "pathVars": true,
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "tokens": true,
+    "description": "Specifies a message to display to the user before starting execution of any specified [pre-build commands](prebuildcommands.md).",
+    "parameter": {
+      "name": "message",
+      "description": "The message to be displayed to the user before starting execution of any specified pre-build commands."
+    },
+    "availability": "Premake 4.4 or later.",
+    "examples": "```lua\nproject \"MyProject\"\n   prebuildcommands { \"{COPYFILE} %[dependencies/*.lib] %[bin]\" }\n   prebuildmessage \"Copying dependencies...\"\n```"
+  },
+  {
+    "allowed": [],
+    "default": false,
+    "kind": "boolean",
+    "name": "enableDefaultCompileItems",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "description": "- This page was auto-generated. Feel free to help us improve the documentation by creating a pull request.",
+    "parameter": {
+      "name": "value",
+      "description": "Needs documentation."
+    },
+    "availability": "Premake 5.0.0 alpha 16 or later.",
+    "examples": "```lua\nenabledefaultcompileitems (value)\n```"
+  },
+  {
+    "allowed": [
+      "Default",
+      "GDB",
+      "LLDB",
+      "VisualStudioLocal",
+      "VisualStudioRemote",
+      "VisualStudioWebBrowser",
+      "VisualStudioWebService"
+    ],
+    "kind": "string",
+    "name": "debugger",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "description": "",
+    "parameter": {
+      "name": "value",
+      "options": [
+        {
+          "name": "Default",
+          "description": "needs documentation."
+        },
+        {
+          "name": "GDB",
+          "description": "needs documentation."
+        },
+        {
+          "name": "LLDB",
+          "description": "needs documentation."
+        },
+        {
+          "name": "VisualStudioLocal",
+          "description": "needs documentation."
+        },
+        {
+          "name": "VisualStudioRemote",
+          "description": "needs documentation."
+        },
+        {
+          "name": "VisualStudioWebBrowser",
+          "description": "needs documentation."
+        },
+        {
+          "name": "VisualStudioWebService",
+          "description": "needs documentation."
+        }
+      ]
+    },
+    "availability": "Premake 5.0.0 alpha 12 or later.",
+    "examples": "```lua\ndebugger \"value\"\n```"
+  },
+  {
+    "allowed": [],
+    "kind": "string",
+    "name": "shaderHeaderFileOutput",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "tokens": true,
+    "description": "- This page was auto-generated. Feel free to help us improve the documentation by creating a pull request.",
+    "parameter": {
+      "name": "value",
+      "description": "needs documentation."
+    },
+    "availability": "Premake 5.0.0 alpha 14 or later.",
+    "examples": "```lua\nshaderheaderfileoutput (value)\n```"
+  },
+  {
+    "allowed": [],
+    "kind": "list:file",
+    "name": "buildInputs",
+    "pathVars": false,
+    "paths": true,
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "tokens": true,
+    "description": "Specifies the source file file inputs of a custom build command or rule.",
+    "parameter": {
+      "name": "inputs",
+      "description": "The list of input source files."
+    },
+    "availability": "Premake 5.0 or later.",
+    "examples": ""
+  },
+  {
+    "allowed": [],
+    "kind": "string",
+    "name": "dotNetFramework",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "description": "Selects a .NET framework version.\nThis value currently is only applied to Visual Studio 2005 or later, and GNU makefiles using Mono. If no .NET framework version is specified the toolset default is used.",
+    "parameter": {
+      "name": "version",
+      "description": "Selects a .NET framework version.",
+      "options": [
+        {
+          "name": "1.0"
+        },
+        {
+          "name": "1.1"
+        },
+        {
+          "name": "2.0"
+        },
+        {
+          "name": "3.0"
+        },
+        {
+          "name": "3.5"
+        },
+        {
+          "name": "4.0"
+        },
+        {
+          "name": "4.5"
+        },
+        {
+          "name": "4.6"
+        }
+      ],
+      "additional": "This value currently is only applied to Visual Studio 2005 or later, and GNU makefiles using Mono. If no .NET framework version is specified the toolset default is used."
+    },
+    "availability": "Premake 5.0 or later.",
+    "examples": "Use the .NET framework 3.0.\n\n```lua\ndotnetframework \"3.0\"\n```"
+  },
+  {
+    "allowed": [],
+    "kind": "list:directory",
+    "name": "binDirs",
+    "paths": true,
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "tokens": true,
+    "description": "Specifies extra paths to use when executing build commands",
+    "parameter": {
+      "name": "directories",
+      "description": "Paths containing executable to run when building command."
+    },
+    "availability": "Premake 5.0.0 alpha 12 or later.",
+    "examples": "```lua\nbindirs { \"bin/\", \"scripts/\" }\n```"
+  },
+  {
+    "allowed": [],
+    "kind": "boolean",
+    "name": "assemblyDebug",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "description": "- This page was auto-generated. Feel free to help us improve the documentation by creating a pull request.",
+    "parameter": {
+      "name": "value",
+      "description": "Needs documentation."
+    },
+    "availability": "Premake 5.0.0 alpha 16 or later.",
+    "examples": "```lua\nassemblydebug (value)\n```"
+  },
+  {
+    "allowed": [
+      "Default",
+      "ASCII",
+      "MBCS",
+      "Unicode"
+    ],
+    "kind": "string",
+    "name": "characterSet",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "description": "Set the character encoding.",
+    "parameter": {
+      "name": "value",
+      "options": [
+        {
+          "name": "Default",
+          "description": "The default encoding for the toolset; usually `Unicode`."
+        },
+        {
+          "name": "MBCS",
+          "description": "Multi-byte Character Set; currently Visual Studio only."
+        },
+        {
+          "name": "Unicode",
+          "description": "Unicode character encoding."
+        },
+        {
+          "name": "ASCII",
+          "description": "No actual character set."
+        }
+      ]
+    },
+    "availability": "Premake 5.0 or later.",
+    "examples": ""
+  },
+  {
+    "allowed": [],
+    "kind": "string",
+    "name": "xcodeCodeSigningIdentity",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "description": "- This page was auto-generated. Feel free to help us improve the documentation by creating a pull request.",
+    "parameter": {
+      "name": "value",
+      "description": "needs documentation."
+    },
+    "availability": "Premake 5.0.0 alpha 14 or later.",
+    "examples": "```lua\nxcodecodesigningidentity (value)\n```"
+  },
+  {
+    "allowed": [],
+    "kind": "list:string",
+    "name": "buildCustomizations",
+    "scope": "project",
+    "scopes": [
+      "project"
+    ],
+    "description": "Imports custom .props files for Visual Studio.",
+    "parameter": {
+      "name": "value",
+      "description": "Needs documentation."
+    },
+    "availability": "Premake 5.0.0 alpha 12 or later.",
+    "examples": "```lua\nbuildcustomizations { \"string\" }\n```"
+  },
+  {
+    "allowed": [],
+    "kind": "list:mixed",
+    "name": "ignoreDefaultLibraries",
+    "paths": true,
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "tokens": true,
+    "description": "Specifies the default libraries to be ignored for a project.",
+    "parameter": {
+      "name": "libraries",
+      "description": "A list of library names. If a valid extension isn't present, `.lib` will be automatically appended, similar to [links](links.md). Currently, the valid extensions are `.lib` and `.obj`."
+    },
+    "availability": "Premake 5.0 or later.",
+    "examples": "Specify `MSVCRT.lib` as a default library to ignore.\n\n```lua\nproject \"MyProject\"\n  ignoredefaultlibraries { \"MSVCRT\" }\n```"
+  },
+  {
+    "allowed": [],
+    "kind": "list:string",
+    "name": "dependsOn",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "tokens": true,
+    "description": "Specify one or more non-linking project build order dependencies.",
+    "parameter": {
+      "name": "project_names",
+      "description": "One or more sibling project names."
+    },
+    "availability": "5.0 or later.",
+    "examples": ""
+  },
+  {
+    "allowed": [
+      "Mixed",
+      "NativeOnly",
+      "ManagedOnly",
+      "NativeWithManagedCore"
+    ],
+    "kind": "string",
+    "name": "debuggerType",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "description": "",
+    "parameter": {
+      "name": "value",
+      "options": [
+        {
+          "name": "Mixed",
+          "description": "Enables simultaneous debugging of native and .NET Framework code."
+        },
+        {
+          "name": "NativeOnly",
+          "description": "Restricts debugging to native code only."
+        },
+        {
+          "name": "ManagedOnly",
+          "description": "Restricts debugging to managed code only."
+        },
+        {
+          "name": "NativeWithManagedCore",
+          "description": "Enables simultaneous debugging of native and .NET Core code."
+        }
+      ]
+    },
+    "availability": "Premake 5.0.0 alpha 12 or later.",
+    "examples": "```lua\ndebuggertype \"value\"\n```"
+  },
+  {
+    "allowed": [
+      "Default",
+      "LLD"
+    ],
+    "kind": "string",
+    "name": "linker",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "description": "Specifies the linker.",
+    "parameter": {
+      "name": "value",
+      "description": "Specifies the linker.",
+      "options": [
+        {
+          "name": "Default",
+          "description": "Uses the toolset platform default linker."
+        },
+        {
+          "name": "LLD",
+          "description": "Uses LLVM's LLD linker (supported on `gcc` and `clang` toolsets)."
+        }
+      ]
+    },
+    "availability": "Premake 5.0 beta 3 or later.",
+    "examples": "Sets `LLD` as the linker.\n\n```lua\nfilter { \"toolset:clang\" }\n   linker { \"LLD\" }\n```"
+  },
+  {
+    "allowed": [],
+    "kind": "boolean",
+    "name": "allModulesPublic",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "description": "",
+    "parameter": {
+      "name": "value",
+      "options": [
+        {
+          "name": "On",
+          "description": "All C++ modules in the given project(s) will be public."
+        },
+        {
+          "name": "Off",
+          "description": "Not all C++ modules in the given project(s) will be public."
+        }
+      ]
+    },
+    "availability": "Visual Studio 2019 and later.\nPremake 5.0-beta2 or later.",
+    "examples": "```lua\nallmodulespublic \"On\"\n```"
+  },
+  {
+    "allowed": [],
+    "kind": "string",
+    "name": "targetName",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "tokens": true,
+    "description": "Specifies the base file name for the compiled binary target.\nBy default, the project name will be used as the file name of the compiled binary target. A Windows executable project named \"MyProject\" will produce a binary named MyProject.exe. The `targetname` function allows you to change this default.",
+    "parameter": {
+      "name": "name",
+      "description": "The new base file name."
+    },
+    "availability": "Premake 4.0 or later.",
+    "examples": "```lua\ntargetname \"mytarget\"\n```"
+  },
+  {
+    "allowed": [],
+    "kind": "boolean",
+    "name": "unsignedChar",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "description": "Force sign of `char`\nNote that `char` is still a distinct type from `signed char` and `unsigned char`.",
+    "parameter": {
+      "name": "value",
+      "options": [
+        {
+          "name": "Off",
+          "description": "Make `char` signed. (default on msc)"
+        },
+        {
+          "name": "On",
+          "description": "Make `char` unsigned."
+        }
+      ],
+      "additional": "Don't use that api to have default for gcc/clang"
+    },
+    "availability": "Premake 5.0.0 alpha 14 or later.",
+    "examples": "```lua\nunsignedchar \"On\"\n```"
+  },
+  {
+    "allowed": [
+      "Off",
+      "On"
+    ],
+    "kind": "string",
+    "name": "linkGroups",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "description": "Turns on or off the linkgroups for option for linked libraries.\n\nNotes:\n\nProjects using GCC or Clang will use order dependent linking by default with the default linker. While it is generally believed to be slower, this option enables order independent linking within a group of libraries by putting them inside of a link-group using the `-Wl,--start-group` and `-Wl,--end-group` linker command line arguments.",
+    "parameter": {
+      "name": "value",
+      "options": [
+        {
+          "name": "On",
+          "description": "Turn on link groups."
+        },
+        {
+          "name": "Off",
+          "description": "Turn off link groups."
+        }
+      ]
+    },
+    "availability": "Premake 5.0-alpha10 or later. GCC and Clang toolsets only. Codelite, gmakelegacy, and gmake exporters only.",
+    "examples": "```lua\nproject \"A\"\n    kind \"StaticLib\"\n\nproject \"B\"\n    kind \"StaticLib\"\n    links { \"A\" }\n\nproject \"C\"\n    kind \"ConsoleApp\"\n    links { \"A\", \"B\" }\n    linkgroups \"On\"\n```"
+  },
+  {
+    "allowed": [],
+    "kind": "string",
+    "name": "buildAction",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "description": "Specifies how a file or set of files should be treated during the compilation process. It is usually paired with a filter to select a file set. If no build action is specified for a file a default action will be used, based on the file's extension.",
+    "parameter": {
+      "name": "action",
+      "description": "Specifies how a file or set of files should be treated during the compilation process. It is usually paired with a filter to select a file set. If no build action is specified for a file a default action will be used, based on the file's extension.",
+      "options": [
+        {
+          "name": "ClInclude",
+          "description": "Treat the file as an include file."
+        },
+        {
+          "name": "ClCompile",
+          "description": "Treat the file as source code; compile and link it."
+        },
+        {
+          "name": "FxCompile",
+          "description": "Treat the file as HLSL shader source code; compile and link it."
+        },
+        {
+          "name": "None",
+          "description": "Do nothing with this file."
+        },
+        {
+          "name": "ResourceCompile",
+          "description": "Copy/embed the file with the project resources."
+        },
+        {
+          "name": "CustomBuild",
+          "description": "Treat the file as custom build code; compile and optionally link it."
+        },
+        {
+          "name": "Midl",
+          "description": "Treat the file as MIDL source code; compile and link it."
+        },
+        {
+          "name": "Masm",
+          "description": "Treat the file as MASM source code; compile and link it."
+        },
+        {
+          "name": "Image",
+          "description": "Treat the file as an Image."
+        },
+        {
+          "name": "Natvis",
+          "description": "Treat the file as Natvis source; use it for custom data layouts while debugging."
+        },
+        {
+          "name": "AppxManifest",
+          "description": "Treat the file as AppX Manifest; required for UWP applications."
+        },
+        {
+          "name": "Copy",
+          "description": "Copy the file to the target directory."
+        }
+      ],
+      "additional": "For C/C++, `action` is the name of the MSBuild action as defined by the vcxproj format; eg: `ClCompile`, `FxCompile`, `None`, etc, and may refer to any such action available to MSBuild. For C# projects, `buildaction` behaviour is special to support legacy implementation."
+    },
+    "availability": "Build actions are currently supported for C/C++ and C# projects.\n\n`Compile`, `Copy`, `Embed`, and `None` are available in Premake 4.4 or later. All actions are available in Premake 5.0 or later.",
+    "examples": "Embed all PNG images files into the target binary.\n\n```lua\nfilter \"files:**.png\"\n   buildaction \"Embed\"\n```\n\n[1]: http://msdn.microsoft.com/en-us/library/ms228287(v=vs.90).aspx\n[2]: http://msdn.microsoft.com/en-us/library/a6h7e207(v=vs.71).aspx"
+  },
+  {
+    "allowed": [],
+    "kind": "string",
+    "name": "impLibName",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "tokens": true,
+    "description": "Specifies the import library base file name. Import libraries are generated for Windows DLL projects.\nBy default, the target name will be used as the import library file name. The `implibname` function allows you to change this default.",
+    "parameter": {
+      "name": "name",
+      "description": "The new base file name for the import library."
+    },
+    "availability": "Premake 4.0 or later.",
+    "examples": "```lua\nimplibname \"mytarget\"\n```"
+  },
+  {
+    "allowed": [
+      "Off",
+      "On",
+      "Pure",
+      "Safe",
+      "Unsafe",
+      "NetCore"
+    ],
+    "kind": "string",
+    "name": "clr",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "description": "Enables Microsoft's Common Language Runtime for a project or configuration.\nSee [/clr (Common Language Runtime Compilation)](http://msdn.microsoft.com/en-us/library/k8d11d4s.aspx) in the Visual Studio documentation for more information.",
+    "parameter": {
+      "name": "value",
+      "description": "Specifies the level of Common Language Runtime (CLR) support.",
+      "options": [
+        {
+          "name": "Off",
+          "description": "No CLR support."
+        },
+        {
+          "name": "On",
+          "description": "Enable CLR support."
+        },
+        {
+          "name": "Pure",
+          "description": "Enable pure mode MSIL. Equivalent to 'On' for .NET projects."
+        },
+        {
+          "name": "Safe",
+          "description": "Enable verifiable MSIL. Equivalent to 'On' for .NET projects."
+        },
+        {
+          "name": "Unsafe",
+          "description": "Enable unsafe operations. Equivalent to 'On' for Managed C++ projects."
+        },
+        {
+          "name": "NetCore"
+        }
+      ],
+      "additional": "CLR settings that do not make sense for the current configuration, such as setting CLR support for a C# project to 'Off', will be ignored."
+    },
+    "availability": "Premake 5.0.",
+    "examples": "Set up a managed C++ project.\n\n```lua\nproject \"MyProject\"\n  kind \"ConsoleApp\"\n  language \"C++\"\n  clr \"On\"\n```\n\nEnable unsafe code in a C# project.\n\n```lua\nproject \"MyProject\"\n  kind \"ConsoleApp\"\n  language \"C#\"\n  clr \"Unsafe\"\n```"
+  },
+  {
+    "allowed": [],
+    "kind": "path",
+    "name": "targetDir",
+    "paths": true,
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "tokens": true,
+    "description": "Sets the destination directory for the compiled binary target.\nBy default, the generated project files will place their compiled output in the same directory as the script. The `targetdir` function allows you to change this location.",
+    "parameter": {
+      "name": "path",
+      "description": "The file system path to the directory where the compiled target file should be stored, specified relative to the currently executing script file."
+    },
+    "availability": "Premake 4.0 or later.",
+    "examples": "This project separates its compiled output by configuration type.\n\n```lua\nproject \"MyProject\"\n\n  filter { \"configurations:Debug\" }\n    targetdir \"bin/debug\"\n\n  filter { \"configurations:Release\" }\n    targetdir \"bin/release\"\n```"
+  },
+  {
+    "allowed": [],
+    "kind": "list",
+    "name": "embedAndSign",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "description": "Sets value of the *Embed* field in Xcode under *Frameworks, Libraries, and Embedded Content* to **Embed & Sign**\n\nThis results in the framework being copied into the built app bundle during the *Embed Libraries* build phase and signed.",
+    "parameter": {
+      "name": "value",
+      "description": "The name of the content to be embedded and signed."
+    },
+    "availability": "Premake 5.0.0 beta 1 or later.",
+    "examples": "```lua\nembedAndSign {\n\t\"SDL2.framework\",\n\t\"Another.framework\"\n}\n```"
+  },
+  {
+    "allowed": [],
+    "kind": "boolean",
+    "name": "editorIntegration",
+    "scope": "workspace",
+    "scopes": [
+      "workspace"
+    ],
+    "description": "Turns the Editor Integration feature on. This is simply a hint to the action to add extra information into the generated workspace that allows an IDE to know which/where and how premake was executed. This is currently really only implemented for the Visual Studio action, but other actions may use this too in the future.\n\nThere is a plugin that allows re-execution of the premake step from within Visual Studio, which can be found here:\nhttps://github.com/tvandijck/PremakeExtension\nIf no value is set for a configuration, the toolset's default setting (usually \"Off\") will be used.",
+    "parameter": {
+      "name": "value",
+      "description": "A boolean value that can be set to 'On' or 'Off'.",
+      "options": [
+        {
+          "name": "On"
+        },
+        {
+          "name": "Off"
+        }
+      ]
+    },
+    "availability": "Premake 5.0 or later.",
+    "examples": "```lua\n-- Turn on IDE integration\neditorintegration \"On\"\n```"
+  },
+  {
+    "allowed": [],
+    "kind": "list:directory",
+    "name": "frameworkDirs",
+    "paths": true,
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "tokens": true,
+    "description": "- This page was auto-generated. Feel free to help us improve the documentation by creating a pull request.",
+    "parameter": {
+      "name": "value",
+      "description": "Needs documentation."
+    },
+    "availability": "Premake 5.0.0 alpha 11 or later.",
+    "examples": "```lua\nframeworkdirs (value)\n```"
+  },
+  {
+    "allowed": [],
+    "kind": "string",
+    "name": "buildMessage",
+    "pathVars": true,
+    "scope": [
+      "config",
+      "rule"
+    ],
+    "scopes": [
+      "config",
+      "rule"
+    ],
+    "tokens": true,
+    "description": "Specifies the text to output to the when a custom build command or rule is executed.",
+    "parameter": {
+      "name": "message",
+      "description": "The text to write to standard output."
+    },
+    "availability": "Premake 5.0 or later.",
+    "examples": ""
+  },
+  {
+    "allowed": [],
+    "kind": "path",
+    "name": "debugCommand",
+    "pathVars": true,
+    "paths": true,
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "tokens": true,
+    "description": "Specifies the command to launch a project's target when debugging.\nIn Visual Studio, this file can be overridden by a per-user configuration file (such as `ProjectName.vcproj.MYDOMAIN-MYUSERNAME.user`). Removing this file (which is done by Premake's clean action) will restore the default settings.",
+    "parameter": {
+      "name": "command",
+      "description": "The command to run to start the target."
+    },
+    "availability": "Premake 5.0 or later.",
+    "examples": ""
+  },
+  {
+    "allowed": [],
+    "kind": "string",
+    "name": "remoteRootDir",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "description": "Specifies the base directory on the remote machine to deploy the source code to before compiling.",
+    "parameter": {
+      "name": "path",
+      "description": "Specifies the directory on the remote machine where the source files will be copied to before compiling."
+    },
+    "availability": "Premake 5.0.0 beta 3 or later, only applies to Visual Studio Linux projects.",
+    "examples": "```lua\nremoterootdir \"~/projects/%{prj.name}\"\n```"
+  },
+  {
+    "allowed": [
+      "Off",
+      "Default",
+      "High",
+      "Extra",
+      "Everything"
+    ],
+    "kind": "string",
+    "name": "externalWarnings",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "description": "Controls the level of warnings that are shown by the compiler for headers that are considered external.\nIf no value is set for a configuration, the toolset's default warning level will be used.",
+    "parameter": {
+      "name": "value",
+      "options": [
+        {
+          "name": "Off",
+          "description": "Do not show any warning messages."
+        },
+        {
+          "name": "Default",
+          "description": "Use the toolset's default warning level."
+        },
+        {
+          "name": "Extra",
+          "description": "Enable the toolset's maximum warning level."
+        },
+        {
+          "name": "High",
+          "description": "Enable the toolset's maximum warning level."
+        },
+        {
+          "name": "Everything",
+          "description": "Enable the toolset's maximum warning level."
+        }
+      ]
+    },
+    "availability": "Premake 5.0 or later.\nVisual Studio 2019 version or later.",
+    "examples": "```lua\nexternalwarnings \"Off\"\n```"
+  },
+  {
+    "allowed": [],
+    "kind": "string",
+    "name": "androidAppLibName",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "description": "Specfies the file name for the output APK.\nBy default, the project name will be used as the file name for the APK.",
+    "parameter": {
+      "name": "value",
+      "description": "The new file name for the output APK."
+    },
+    "availability": "Premake 5.0.0 alpha 14 or later.",
+    "examples": "```lua\nandroidapplibname \"MyProject\"\n```"
+  },
+  {
+    "allowed": [
+      "Default",
+      "Hidden",
+      "Internal",
+      "Protected"
+    ],
+    "kind": "string",
+    "name": "visibility",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "description": "Sets the default visibility for exported symbols in a shared object library.\nBy default, the generated project files will use the compilers default settings symbol visibility when building shared object libraries.",
+    "parameter": {
+      "name": "switch",
+      "options": [
+        {
+          "name": "Default",
+          "description": ""
+        },
+        {
+          "name": "Hidden",
+          "description": ""
+        },
+        {
+          "name": "Internal",
+          "description": ""
+        },
+        {
+          "name": "Protected",
+          "description": ""
+        }
+      ],
+      "additional": "Option Availability: gcc"
+    },
+    "availability": "Premake 5.0 or later.",
+    "examples": "This project hides exported symbols for release builds.\n\n```lua\nproject \"MyProject\"\n    filter \"configurations:Release\"\n        visibility \"Hidden\"\n```"
+  },
+  {
+    "allowed": [],
+    "kind": "boolean",
+    "name": "functionLevelLinking",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "description": "",
+    "parameter": {
+      "name": "value",
+      "options": [
+        {
+          "name": "on"
+        },
+        {
+          "name": "off"
+        }
+      ]
+    },
+    "availability": "Premake 5.0.0 alpha 12 or later.",
+    "examples": "```lua\nfunctionlevellinking \"value\"\n```"
+  },
+  {
+    "allowed": [],
+    "kind": "boolean",
+    "name": "inheritDependencies",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "description": "For Visual Studio project files, this controls the generation of the `%(AdditionalDependencies)` entry in the list of libraries that a project links.",
+    "parameter": {
+      "name": "value",
+      "description": "Controls the generation of the `%(AdditionalDependencies)` entry in the list of libraries that a project links.",
+      "options": [
+        {
+          "name": "On",
+          "description": "The project(s) will inherit library dependencies based on the parent project (if any) and project default settings. This is the default behavior."
+        },
+        {
+          "name": "Off",
+          "description": "The project(s) will not inherit any library dependencies. Only explicitly specified dependencies will be linked."
+        }
+      ]
+    },
+    "availability": "Visual Studio 2015 and later.\nPremake 5.0-beta2 or later.",
+    "examples": "```lua\ninheritdependencies \"Off\"\n```"
+  },
+  {
+    "allowed": [
+      "On",
+      "Off"
+    ],
+    "kind": "string",
+    "name": "openMp",
+    "scope": "project",
+    "scopes": [
+      "project"
+    ],
+    "description": "Enables or disables [OpenMP](https://en.wikipedia.org/wiki/OpenMP).\nIf no value is set for a configuration, the toolset's default OpenMP option (usually \"Off\") will be performed.",
+    "parameter": {
+      "name": "value",
+      "description": "Enables or disables OpenMP.",
+      "options": [
+        {
+          "name": "On",
+          "description": "Turn on OpenMP."
+        },
+        {
+          "name": "Off",
+          "description": "Turn off OpenMP."
+        }
+      ],
+      "additional": "If no value is set for a configuration, the toolset's default OpenMP option (usually \"Off\") will be performed."
+    },
+    "availability": "Premake 5.0-beta1 or later for Visual Studio 2010+ and the MSC toolset.\nPremake 5.0-beta2 or later for the GCC and Clang toolsets and for xcode.",
+    "examples": "```lua\nopenmp \"On\"\n```"
+  },
+  {
+    "allowed": [],
+    "kind": "list:mixed",
+    "name": "forceIncludes",
+    "paths": true,
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "tokens": true,
+    "description": "Applies one or more \"forced include\" files to the project; these includes behave as it they had been injected into the first line of each source file in the project.",
+    "parameter": {
+      "name": "files",
+      "description": "Specifies a list of files to be force included. Paths should be specified relative to the currently running script file."
+    },
+    "availability": "Premake 5.0 or later.",
+    "examples": "```lua\nforceincludes { \"stdafx.h\" }\n```"
+  },
+  {
+    "allowed": [
+      "Off",
+      "Default",
+      "High",
+      "Extra",
+      "Everything"
+    ],
+    "kind": "string",
+    "name": "warnings",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "description": "Controls the level of warnings that are shown by the compiler.\nIf no value is set for a configuration, the toolset's default warning level will be used.",
+    "parameter": {
+      "name": "value",
+      "description": "Specifies the desired level of warning.",
+      "options": [
+        {
+          "name": "Off",
+          "description": "Do not show any warning messages."
+        },
+        {
+          "name": "Default",
+          "description": "Use the toolset's default warning level."
+        },
+        {
+          "name": "Extra",
+          "description": "Enable the toolset's maximum warning level."
+        },
+        {
+          "name": "High"
+        },
+        {
+          "name": "Everything"
+        }
+      ]
+    },
+    "availability": "Premake 5.0.",
+    "examples": "```lua\nwarnings \"Extra\"\n```"
+  },
+  {
+    "allowed": [],
+    "kind": "string",
+    "name": "gccPrefix",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "tokens": true,
+    "description": "Sets a prefix to be prepended to commands used by the GCC toolchain.\nGCC toolsets, and cross-compilers in particular, typically have some common prefix prepended to all tools in the GCC suite. This prefix will be prepended to all such tools.\n\nPrefixes are usually composed of multiple segments separated by '-', and the prefix should contain the final dash.\nFor instance, a toolchain of the style `powerpc-eabi-gcc` should have gccprefix `powerpc-eabi-`.",
+    "parameter": {
+      "name": "gccprefix",
+      "description": "A string which is to be prepended to the GCC tools."
+    },
+    "availability": "Premake 5.0 or later.",
+    "examples": "Set a GCC prefix to be prepended to the compiler tools.\n\n```lua\ngccprefix \"powerpc-eabi-\"\n```"
+  },
+  {
+    "allowed": [
+      "Default",
+      "On",
+      "Off"
+    ],
+    "kind": "string",
+    "name": "editAndContinue",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "description": "Turns the edit-and-continue features of a toolset or platform on and off.\nIf no value is set for a configuration, the toolset's default setting (usually \"On\") will be used.",
+    "parameter": {
+      "name": "value",
+      "description": "A boolean value representing whether edit-and-continue features are enabled.",
+      "options": [
+        {
+          "name": "On"
+        },
+        {
+          "name": "Off"
+        },
+        {
+          "name": "Default",
+          "description": "Acts the same as specifying no value, using the toolset's default setting."
+        }
+      ]
+    },
+    "availability": "Premake 5.0 or later.",
+    "examples": "```lua\n-- Turn off edit and continue\neditandcontinue \"Off\"\n```"
+  },
+  {
+    "allowDuplicates": true,
+    "allowed": [],
+    "kind": "list:string",
+    "name": "preBuildCommands",
+    "pathVars": true,
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "tokens": true,
+    "description": "Specifies shell commands to run before each build.",
+    "parameter": {
+      "name": "commands",
+      "description": "One or more shell commands to run before each build."
+    },
+    "availability": "Premake 4.4 or later.",
+    "examples": "```lua\nprebuildcommands { \"{COPYFILE} %[default.config] %[bin/project.config]\" }\n```"
+  },
+  {
+    "allowed": [
+      "Off",
+      "On",
+      "Debug",
+      "Size",
+      "Speed",
+      "Full"
+    ],
+    "kind": "string",
+    "name": "optimize",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "description": "The **optimize** function specifies the level and type of optimization used while building the target configuration.\nIf no value is set for a configuration, the toolset's default optimization (usually none) will be performed.",
+    "parameter": {
+      "name": "value",
+      "options": [
+        {
+          "name": "Off",
+          "description": "No optimization will be performed."
+        },
+        {
+          "name": "On",
+          "description": "Perform a balanced set of optimizations."
+        },
+        {
+          "name": "Debug",
+          "description": "Optimization with some debugger step-through support."
+        },
+        {
+          "name": "Size",
+          "description": "Optimize for the smallest file size."
+        },
+        {
+          "name": "Speed",
+          "description": "Optimize for the best performance."
+        },
+        {
+          "name": "Full",
+          "description": "Full optimization."
+        }
+      ]
+    },
+    "availability": "Premake 5.0.",
+    "examples": "```lua\noptimize \"Speed\"\n```"
+  },
+  {
+    "allowed": [
+      "Default",
+      "None",
+      "High",
+      "HighPerMonitor"
+    ],
+    "kind": "string",
+    "name": "dpiAwareness",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "description": "Sets the DPI awareness settings.",
+    "parameter": {
+      "name": "value",
+      "options": [
+        {
+          "name": "Default",
+          "description": "Use the toolset's default setting for DPI awareness."
+        },
+        {
+          "name": "None",
+          "description": "Turn off DPI awareness."
+        },
+        {
+          "name": "High",
+          "description": "Turn on DPI awareness."
+        },
+        {
+          "name": "HighPerMonitor",
+          "description": "Turn on DPI awareness per monitor."
+        }
+      ]
+    },
+    "availability": "Premake 5.0 or later.",
+    "examples": "```lua\n-- Turn on DPI awareness\ndpiawareness \"High\"\n```"
+  },
+  {
+    "allowed": [],
+    "kind": "string",
+    "name": "targetPrefix",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "tokens": true,
+    "description": "Specifies the file name prefix for the compiled binary target.\nBy default, the system naming convention will be used: a \"lib\" prefix for POSIX libraries (as in `libMyProject.so`), and no prefix elsewhere. The `targetprefix` function allows you to change this default.",
+    "parameter": {
+      "name": "prefix",
+      "description": "The new file name prefix."
+    },
+    "availability": "Premake 4.0 or later.",
+    "examples": "```lua\ntargetprefix \"plugin\"\n```\n\nThe prefix may also be set to an empty string for no prefix.\n\n```lua\ntargetprefix \"\"\n```"
+  },
+  {
+    "allowed": [],
+    "kind": "list:string",
+    "name": "disableWarnings",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "tokens": true,
+    "description": "Disables specific compiler warnings.",
+    "parameter": {
+      "name": "warnings",
+      "description": "A list of warnings to disable."
+    },
+    "availability": "Premake 5.0 or later.\n\nXcode project generation does not yet support `disablewarnings`. As a workaround, you can use `xcodebuildsettings` like this:\n\n```lua\nxcodebuildsettings {\n    WARNING_CFLAGS = \"-Wall -Wextra \" ..\n        \"-Wno-missing-field-initializers \" ..\n        \"-Wno-unknown-pragmas \" ..\n        \"-Wno-unused-parameter \" ..\n        \"-Wno-unused-local-typedef \" ..\n        \"-Wno-missing-braces \" ..\n        \"-Wno-microsoft-anon-tag \"\n}\n```",
+    "examples": "Disable the GCC warning about using old-style C casts (`-Wno-old-style-cast` command line argument):\n\n```lua\nfilter \"options:cc=gcc\"\n  disablewarnings \"old-style-cast\"\n```"
+  },
+  {
+    "allowed": [
+      "Default",
+      "On",
+      "Off"
+    ],
+    "kind": "string",
+    "name": "rtti",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "description": "Enable or disable [run-time type information](https://en.wikipedia.org/wiki/Run-time_type_information).",
+    "parameter": {
+      "name": "value",
+      "description": "Enable or disable run-time type information.",
+      "options": [
+        {
+          "name": "Default",
+          "description": "Use the toolset's default setting for run-time type information."
+        },
+        {
+          "name": "On",
+          "description": "Turn on RTTI."
+        },
+        {
+          "name": "Off",
+          "description": "Turn off RTTI."
+        }
+      ]
+    },
+    "availability": "Premake 5.0 or later.",
+    "examples": ""
+  },
+  {
+    "allowed": [],
+    "kind": "list:string",
+    "name": "linkerFatalWarnings",
+    "reserved": {
+      "1": "All",
+      "all": "All"
+    },
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "description": "Specifies specific linker warnings that should be interpreted as errors.",
+    "parameter": {
+      "name": "warnings",
+      "description": "Specifies specific linker warnings that should be interpreted as errors.",
+      "options": [
+        {
+          "name": "All",
+          "description": "Treat all linker warnings as errors."
+        }
+      ],
+      "additional": "For Visual Studio, the MSC warning number should be used to specify the warning. On other compilers, the warning should be identified by name."
+    },
+    "availability": "Premake 5.0 or later. Special value `All` available since Premake 5.0-beta5 or later.",
+    "examples": "```lua\nfilter { \"toolset:msc\" }\n\tfatalwarnings { \"4044\" } -- unrecognized option 'option'; ignored\n\nfilter {}\n```"
+  },
+  {
+    "allowed": [],
+    "kind": "list:string",
+    "name": "preLinkCommands",
+    "pathVars": true,
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "tokens": true,
+    "description": "Specifies shell commands to run after the source files have been compiled, but before the link step (if unsupported by the action, it will be treated the same as [prebuildcommands](prebuildcommands.md)).",
+    "parameter": {
+      "name": "commands",
+      "description": "One or more shell commands."
+    },
+    "availability": "Premake 4.4 or later.",
+    "examples": "```lua\nprelinkcommands { \"{COPYFILE} %[default.config] %[bin/project.config]\" }\n```"
+  },
+  {
+    "allowed": [],
+    "kind": "list:mixed",
+    "name": "links",
+    "paths": true,
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "tokens": true,
+    "description": "Specifies a list of libraries and projects to link against.",
+    "parameter": {
+      "name": "references",
+      "description": "A list of library and project names to link against.",
+      "additional": "When linking against another project in the same workspace, specify the project name here rather than the library name. Premake will figure out the correct library to link against for the current configuration and create a dependency between the projects to ensure proper build order. When linking against system libraries, do not include any prefix or file extension; Premake will use the appropriate naming conventions for the current platform. Managed C++ projects can link against managed assemblies by explicitly specifying the '.dll' file extension; unmanaged libraries should continue to be specified without any decoration. Objective C frameworks can be linked by explicitly including the '.framework' file extension. For Visual Studio, this will add the specified project into References. In contrast, 'dependson' generates a build order dependency in the solution between two projects."
+    },
+    "availability": "Premake 4.0 or later.",
+    "examples": "Link against some system libraries.\n\n```lua\nfilter { \"system:windows\" }\n   links { \"user32\", \"gdi32\" }\n\nfilter { \"system:linux\" }\n   links { \"m\", \"png\" }\n\nfilter { \"system:macosx\" }\n   -- OS X frameworks need the extension to be handled properly\n   links { \"Cocoa.framework\", \"png\" }\n```\n\n  In a workspace with two projects, link the library into the executable. Note that the project name is used to specify the link; Premake will automatically figure out the correct library file name and directory and create a project dependency.\n\n```lua\nworkspace \"MyWorkspace\"\n   configurations { \"Debug\", \"Release\" }\n   language \"C++\"\n\n   project \"MyExecutable\"\n      kind \"ConsoleApp\"\n      files \"**.cpp\"\n      links { \"MyLibrary\" }\n\n   project \"MyLibrary\"\n      kind \"SharedLib\"\n      files \"**.cpp\"\n```\n\nYou may specify the linking mechanism explicitly for each library.  To set the link type of a library explicitly, add a `:static` or `:shared` suffix to the library.  Note that this functionality is only available for the `gcc` and `clang` toolsets.\n\n```lua\nworkspace \"MyWorkspace\"\n   configurations { \"Debug\", \"Release\" }\n   language \"C++\"\n\n   project \"MyExecutable\"\n      kind \"ConsoleApp\"\n      files \"**.cpp\"\n      links { \"LibraryA:static\", \"LibraryB:shared\" }\n```\n\nYou may also create links between non-library projects. In this case, Premake will generate a build dependency (the linked project will build first), but not an actual link. In this example, MyProject uses a build dependency to ensure that MyTool gets built first. It then uses MyTool as part of its build process.\n\n```lua\nworkspace \"MyWorkspace\"\n   configurations { \"Debug\", \"Release\" }\n   language \"C++\"\n\n   project \"MyProject\"\n      kind \"ConsoleApp\"\n      files \"**.cpp\"\n      links { \"MyTool\" }\n      prebuildcommands { \"MyTool --dosomething\" }\n\n   project \"MyTool\"\n      kind \"ConsoleApp\"\n      files \"**.cpp\"\n```"
+  },
+  {
+    "allowDuplicates": true,
+    "allowed": [],
+    "kind": "list:string",
+    "name": "postBuildCommands",
+    "pathVars": true,
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "tokens": true,
+    "description": "Specifies shell commands to run after build is finished.",
+    "parameter": {
+      "name": "commands",
+      "description": "One or more shell commands to run after the build is finished."
+    },
+    "availability": "Premake 4.4 or later.",
+    "examples": "```lua\npostbuildcommands { \"{COPYFILE} %[default.config] %[bin/project.config]\" }\n```"
+  },
+  {
+    "allowed": [
+      "Effect",
+      "Vertex",
+      "Pixel",
+      "Geometry",
+      "Hull",
+      "Domain",
+      "Compute",
+      "Library",
+      "Mesh",
+      "Amplification",
+      "Texture",
+      "RootSignature"
+    ],
+    "kind": "string",
+    "name": "shaderType",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "description": "Specifies the type of shader.",
+    "parameter": {
+      "name": "value",
+      "description": "Specifies the type of shader.",
+      "options": [
+        {
+          "name": "Effect"
+        },
+        {
+          "name": "Vertex"
+        },
+        {
+          "name": "Pixel"
+        },
+        {
+          "name": "Geometry"
+        },
+        {
+          "name": "Hull"
+        },
+        {
+          "name": "Domain"
+        },
+        {
+          "name": "Compute"
+        },
+        {
+          "name": "Library"
+        },
+        {
+          "name": "Mesh"
+        },
+        {
+          "name": "Amplification"
+        },
+        {
+          "name": "Texture"
+        },
+        {
+          "name": "RootSignature"
+        }
+      ]
+    },
+    "availability": "Premake 5.0.0 alpha 14 or later.",
+    "examples": "```lua\nshadertype \"Vertex\"\n```"
+  },
+  {
+    "allowed": [],
+    "kind": "string",
+    "name": "systemVersion",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "description": "Specifies the target operation system min and max versions.",
+    "parameter": {
+      "name": "value",
+      "description": "A colon-delimited string specifying the min and max version in the format `min:max`.",
+      "additional": "Ranges are currently only supported by the Windows targets with the Visual Studio actions. Otherwise, only a minimum version can be set for macOS/iOS/tvOS targets with `xcode` and `gmake`-based actions."
+    },
+    "availability": "Premake 5.0 or later.",
+    "examples": "```lua\nfilter \"system:windows\"\n   systemversion \"10.0.10240.0\" -- To specify the version of the SDK you want\n```\n\n```lua\nfilter \"system:windows\"\n   systemversion \"latest\" -- To use the latest version of the SDK available\n```\n\n```lua\nfilter \"system:windows\"\n   systemversion \"10.0.10240.0:latest\" -- To specify a range of minumum and maximum versions\n```\n\n```lua\nfilter \"system:macosx\"\n   systemversion \"13.0\" -- To target a minimum macOS deployment version of 13.0\n```"
+  },
+  {
+    "allowed": [],
+    "kind": "list:directory",
+    "name": "sysLibDirs",
+    "paths": true,
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "tokens": true,
+    "description": "Specifies the system library search paths.\nFor Visual Studio, these paths are placed in the \"VC++ Directories\" properties panel. For all other tools they are treated as a normal library search path.",
+    "parameter": {
+      "name": "paths",
+      "description": "Specifies a list of library search directories. Paths should be specified relative to the currently running script file."
+    },
+    "availability": "Premake 5.0 or later.",
+    "examples": "Define two system library search paths.\n\n```lua\nsyslibdirs { \"../lua/libs\", \"../zlib\" }\n```\n\nYou can also use wildcards to match multiple directories. The * will match against a single directory, ** will recurse into subdirectories as well.\n\n```lua\nsyslibdirs { \"../libs/**\" }\n```"
+  },
+  {
+    "allowed": [],
+    "kind": "list:string",
+    "name": "fileExtension",
+    "scope": "rule",
+    "scopes": [
+      "rule"
+    ],
+    "description": "Specifies the target file extensions for a [custom build rule](Custom-Rules.md).",
+    "parameter": {
+      "name": "ext",
+      "description": "The target file extension for the rule, including the leading dot."
+    },
+    "availability": "Premake 5.0 or later.",
+    "examples": "```lua\nrule \"Cg\"\n  display \"Cg Compiler\"\n  fileextension \".cg\"\n```"
+  },
+  {
+    "allowed": [],
+    "kind": "path",
+    "name": "objDir",
+    "paths": true,
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "tokens": true,
+    "description": "Sets the directory where object and other intermediate files should be placed when building a project.\nBy default, intermediate files will be stored in a directory named \"obj\" in the same directory as the project. The `objdir` function allows you to change this location.\n\nTo avoid conflicts between build configurations, Premake will ensure that each intermediate directory is unique by appending one or more of the build configuration name, platform name, or project name. You may use the \"!\" prefix to prevent this behavior, and allow overlapping intermediate directories. See the examples below for more information.",
+    "parameter": {
+      "name": "path",
+      "description": "The directory where the object and intermediate files should be stored, specified relative to the currently executing script file."
+    },
+    "availability": "Premake 4.0 or later. The \"!\" prefix was introduced in Premake 5.0.",
+    "examples": "Use a directory named \"obj\" (the default) for intermediate files. Actual directories will be `obj/Debug` and `obj/Release`.\n\n```lua\nworkspace \"MyWorkspace\"\n   configurations { \"Debug\", \"Release\" }\n\nproject \"MyProject\"\n   objdir \"obj\"\n```\n\nUse a directory named \"obj\" (the default) for intermediate files. Actual directories will be `obj/Debug/x32`, `obj/Debug/x64`, `obj/Release/x32`, and `obj/Release/x64`.\n\n```lua\nworkspace \"MyWorkspace\"\n   configurations { \"Debug\", \"Release\" }\n   platforms { \"x32\", \"x64\" }\n\nproject \"MyProject\"\n   objdir \"obj\"\n```\n\nUse tokens to reformat the path. Since the end result is unique, Premake will not append any extra directories. Actual directories will be `obj/x32_Debug`, `obj/x64_Debug`, `obj/x32_Release`, and `obj/x64_Release`.\n\n```lua\nworkspace \"MyWorkspace\"\n   configurations { \"Debug\", \"Release\" }\n   platforms { \"x32\", \"x64\" }\n\nproject \"MyProject\"\n   objdir \"obj/%{cfg.platform}_%{cfg.buildcfg}\"\n```\n\nUse the \"!\" prefix to force a specific directory using Visual Studio's provided environment variables instead of Premake tokens.\n\n```lua\nworkspace \"MyWorkspace\"\n   configurations { \"Debug\", \"Release\" }\n   platforms { \"x32\", \"x64\" }\n\nproject \"MyProject\"\n   objdir \"!obj/$(Platform)_$(Configuration)\"\n```"
+  },
+  {
+    "allowed": [],
+    "kind": "list:mixed",
+    "name": "copyLocal",
+    "paths": true,
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "tokens": true,
+    "description": "Specifies a list of libraries or assembly references which should be copied to the target directory as part of the build. Refer to the Visual Studio C# project feature of the same name.\nIf a project includes multiple calls to `copylocal` the lists are concatenated, in the order in which they appear in the script.\n\nNote that, by default, all referenced non-system assemblies in a C# project are copied. This function only needs to called when a subset of the referenced assemblies should be copied. To disable copying of *all* references, use the `NoLocalCopy` build flag instead (see Examples, below).",
+    "parameter": {
+      "name": "libraries",
+      "description": "A list of the libraries or assemblies to be copied as part of the build.",
+      "additional": "The names specified here should match the names used in the call to `links()`."
+    },
+    "availability": "Premake 5.0 and later. This feature is currently only supported for Visual Studio C# projects.",
+    "examples": "Copy only the **Renderer** and **Physics** assemblies to the target directory; do not copy **nunit.framework**. Note that the links may refer to project or assembly references.\n\n```lua\nlinks { \"Renderer\", \"Physics\", \"nunit.framework\" }\ncopylocal { \"Renderer\", \"Physics\" }\n```\n\nThe link should be specified in exactly the same way in both `links()` and `copylocal()`.\n\n```lua\nlinks { \"Renderer\", \"../ThirdParty/nunit.framework\" }\ncopylocal { \"../ThirdParty/nunit.framework\" }\n```\n\nIf you want to prevent any assemblies from being copied, use the **NoLocalCopy** flag instead.\n\n```lua\nflags { \"NoCopyLocal\" }\n```"
+  },
+  {
+    "allowed": [],
+    "kind": "list:string",
+    "name": "cleanExtensions",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "description": "Specifies one or more file extensions to find and remove when cleaning the project.",
+    "parameter": {
+      "name": "file_extensions",
+      "description": "A list of dot-prefixed file extensions to be cleaned."
+    },
+    "availability": "Premake 5.0 or later. This function is currently implemented only for Visual Studio 201x.",
+    "examples": "Remove .zip files from the output directory when cleaning.\n\n```lua\ncleanextensions { \".zip\" }\n```"
+  },
+  {
+    "allowed": [],
+    "kind": "string",
+    "name": "nuGetSource",
+    "scope": "project",
+    "scopes": [
+      "project"
+    ],
+    "tokens": true,
+    "description": "Used to specify the NuGet package source. Only NuGet \"galleries\" are currently supported. Defaults to the official NuGet Gallery at nuget.org.",
+    "parameter": {
+      "name": "url",
+      "description": "The NuGet v3 feed URL."
+    },
+    "availability": "Premake 5.0.0 alpha 12 or later.",
+    "examples": "```lua\nnugetsource \"https://api.nuget.org/v3/index.json\"\n```"
+  },
+  {
+    "allowed": [],
+    "kind": "list:string",
+    "name": "makeSettings",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "tokens": true,
+    "description": "Adds arbitrary GNU make markup to a generated Makefile.\nOnly used for makefile generating actions.",
+    "parameter": {
+      "name": "values",
+      "description": "Specifies one or more lines to be written to the Makefile."
+    },
+    "availability": "Premake 5.0 or later.",
+    "examples": "```lua\nmakesettings [[\n  ifeq ($(strip $(DEVKITPPC)),)\n    $(error \"DEVKITPPC environment variable is not set\")'\n  endif\n  include $(DEVKITPPC)/wii_rules'\n]]\n```"
+  },
+  {
+    "allowed": [],
+    "kind": "list:string",
+    "name": "undefines",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "tokens": true,
+    "description": "Removes preprocessor or compiler symbols from a project.\nIf a project includes multiple calls to `undefines` the lists are concatenated, in the order in which they appear in the script.",
+    "parameter": {
+      "name": "symbols",
+      "description": "Specifies a list of symbols to be undefined."
+    },
+    "availability": "Premake 5.0 or later",
+    "examples": "Undefine two symbols in the current project.\n\n```lua\nundefines { \"DEBUG\", \"TRACE\" }\n```"
+  }
+]
