@@ -1,7 +1,7 @@
 import { OpenAI } from 'openai';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { runPremake } from '../generator/util.ts';
+import { execPremake } from '../generator/util.ts';
 import { extractFieldDocumentation, extractGlobalDocumentation, type IClass } from './documentation.ts';
 import { generateLuaDefinitions } from './generate-lua.ts';
 import { generateAllInterfaces } from './generate-ts.ts';
@@ -31,8 +31,8 @@ const VALID_SECTIONS = new Set([
 ]);
 
 async function main() {
-	const filePath = path.join(__dirname, 'dumpfields.lua');
-	await runPremake([`--file=${filePath}`]);
+	const filePath = path.join(__dirname, 'dump-fields.lua');
+	await execPremake([`--file=${filePath}`]);
 	const fields = loadData<DocumentedField>('data/fields.json');
 	fields.sort((a, b) => a.name.localeCompare(b.name));
 	saveData(fields, 'data/fields.json');

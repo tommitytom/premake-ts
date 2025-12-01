@@ -2,16 +2,11 @@ import fs from 'node:fs';
 import path, { dirname, join, resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { generate } from '../generator/generator.ts';
+import { dumpGlobals, execPremake } from '../generator/util.ts';
 import sanitized from "../parser/data/sanitized.json" with { type: "json" };
 import { type IGlobals, PremakeScope } from '../scopes/PremakeScope.ts';
 import type { ProjectScope, WorkspaceScope } from '../scopes/scopes.ts';
 import type { IModule, IOrbBase, IPackage } from './types.ts';
-import { runPremake } from '../generator/util.ts';
-import { extractGlobals } from '../generator/main.ts';
-import { fileURLToPath } from 'url';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 
 export interface IBuildOrb<T extends IOrbBase = IOrbBase> {
 	rootDir: string;
@@ -296,8 +291,7 @@ function collectDependencies(rootOrb: IModuleOrb, lookup: Map<string, IModuleOrb
 async function main() {
 	const args = process.argv.slice(2);
 
-	const filePath = path.join(__dirname, '..', 'generator', 'dumpglobals.lua');
-	const globals = extractGlobals(filePath);
+	const globals = dumpGlobals('vs2022');
 
 	let scriptPath = 'orb.ts'; // Default to orb.ts in current directory
 	const fileArgIndex = args.findIndex(arg => arg.startsWith('--file='));
@@ -330,7 +324,7 @@ async function main() {
 		fs.writeFileSync(luaFilePath, premakeFile, 'utf-8');
 
 		// Pass the generated Lua file path to premake
-		runPremake([`--file=${luaFilePath}`, 'vs2022']);
+		execPremake([`--file=${luaFilePath}`, 'vs2022']);
 	} catch (error) {
 		console.error('Error running script:', error);
 		process.exit(1);

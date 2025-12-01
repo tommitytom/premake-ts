@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import { spawn } from 'child_process';
-import { fileURLToPath, pathToFileURL } from 'url';
 import { dirname, join } from 'path';
+import { fileURLToPath, pathToFileURL } from 'url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const tsFile = join(__dirname, '../src/generator/main.ts');

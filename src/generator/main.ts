@@ -1,40 +1,18 @@
-import { execSync } from 'node:child_process';
-import fs from 'node:fs';
+import { existsSync, unlinkSync, writeFileSync } from 'node:fs';
 import { basename, dirname, join, resolve } from 'node:path';
-import { fileURLToPath, pathToFileURL } from 'node:url';
+import { pathToFileURL } from 'node:url';
 import { type IGlobals, PremakeScope } from '../scopes/PremakeScope.ts';
 import type { WorkspaceFunc, WorkspaceScope } from '../scopes/scopes.ts';
 import { displayHelp, parseCliArgs } from './cli-args.ts';
 import { generate } from './generator.ts';
 import { initProject, installTypes } from './init.ts';
-import { runPremake } from './util.ts';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+import { dumpGlobals, execPremake } from './util.ts';
 
 function processScope(globals: IGlobals, name: string, func: WorkspaceFunc): PremakeScope {
 	const scope = new PremakeScope(globals);
 	scope.command("workspace", name);
 	func(scope.createProxy<WorkspaceScope>());
 	return scope;
-}
-
-export function extractGlobals(scriptPath: string): IGlobals {
-	const args = process.argv.slice(2);
-
-	const filePath = join(scriptPath);
-	let globals: Partial<IGlobals> = {};
-
-	const output = execSync(`premake5 --file=${filePath}`, { encoding: 'utf-8' });
-	globals = JSON.parse(output) as IGlobals;
-
-	// Parse the last argument that does not start with --
-	globals.action = args.find(arg => !arg.startsWith('--'));
-	if (!globals.action) {
-		throw new Error('No action specified');
-	}
-
-	return globals as IGlobals;
 }
 
 async function main() {
@@ -71,8 +49,7 @@ async function main() {
 
 	try {
 		// Extract globals from premake
-		const dumpGlobalsPath = join(__dirname, 'dumpglobals.lua');
-		const globals = extractGlobals(dumpGlobalsPath);
+		const globals = dumpGlobals(cliArgs.action);
 
 		// Import and process the TypeScript file
 		const absolutePath = resolve(scriptPath);
@@ -87,7 +64,7 @@ async function main() {
 		const luaFileName = basename(scriptPath, '.ts') + '.lua';
 		luaFilePath = join(scriptDir, luaFileName);
 
-		fs.writeFileSync(luaFilePath, result, 'utf-8');
+		writeFileSync(luaFilePath, result, 'utf-8');
 
 		// If emitOnly, stop here
 		if (cliArgs.emitOnly) {
@@ -97,18 +74,18 @@ async function main() {
 
 		// Pass the generated Lua file path to premake
 		const premakeBinary = cliArgs.premakeBinary || 'premake5';
-		await runPremake([`--file=${luaFilePath}`, cliArgs.action, ...cliArgs.premakeArgs], premakeBinary);
+		await execPremake([`--file=${luaFilePath}`, cliArgs.action, ...cliArgs.premakeArgs], premakeBinary);
 
 		// Clean up intermediate file unless keepIntermediate or emitOnly is set
-		if (!shouldKeepIntermediate && fs.existsSync(luaFilePath)) {
-			fs.unlinkSync(luaFilePath);
+		if (!shouldKeepIntermediate && existsSync(luaFilePath)) {
+			unlinkSync(luaFilePath);
 		}
 	} catch (error) {
 		console.error('Error running script:', error);
 
 		// Clean up intermediate file on error unless keepIntermediate or emitOnly is set
-		if (!shouldKeepIntermediate && luaFilePath && fs.existsSync(luaFilePath)) {
-			fs.unlinkSync(luaFilePath);
+		if (!shouldKeepIntermediate && luaFilePath && existsSync(luaFilePath)) {
+			unlinkSync(luaFilePath);
 		}
 
 		process.exit(1);

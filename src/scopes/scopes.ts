@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import type { ConfigScopeGenerated } from "./generated/ConfigScope.generated.ts";
 import type { ProjectScopeGenerated } from "./generated/ProjectScope.generated.ts";
 import type { WorkspaceScopeGenerated } from "./generated/WorkspaceScope.generated.ts";

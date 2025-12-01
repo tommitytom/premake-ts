@@ -53,7 +53,7 @@ export async function gatherInitOptions(): Promise<InitOptions> {
 	console.log('This utility will walk you through creating a premake5.ts file.\n');
 
 	const workspaceName = await prompt('Workspace name', 'MyWorkspace');
-	const installTypes = await promptYesNo('Install TypeScript type definitions? (./.premake/premake-ts.d.ts)', true);
+	const installTypes = await promptYesNo('Install TypeScript type definitions? (./.premake/premake-ts.d.ts and ./tsconfig.json)', true);
 
 	console.log('');
 
@@ -75,6 +75,7 @@ export default workspace("${workspaceName}", (p) => {
 	p.project("${workspaceName}", (p) => {
 		p.kind("ConsoleApp");
 		p.language("C++");
+		p.files("**.h", "**.cpp");
 	});
 });
 `;
@@ -87,6 +88,8 @@ export function copyTypeDefinitions(targetDir: string): void {
 	// Find the types/premake-ts.d.ts file relative to this module
 	const typesSource = join(__dirname, '../../types/premake-ts.d.ts');
 	const typesTarget = join(targetDir, '.premake/premake-ts.d.ts');
+	const tsConfigSource = join(__dirname, '../../types/tsconfig.json');
+	const tsConfigTarget = join(targetDir, 'tsconfig.json');
 
 	// Create .premake directory if it doesn't exist
 	const premakeDir = dirname(typesTarget);
@@ -94,10 +97,12 @@ export function copyTypeDefinitions(targetDir: string): void {
 		fs.mkdirSync(premakeDir, { recursive: true });
 	}
 
-	// Copy the file
 	fs.copyFileSync(typesSource, typesTarget);
-	console.log(`Created ${typesTarget}`);
-}/**
+	fs.copyFileSync(tsConfigSource, tsConfigTarget);
+	console.log(`Created ${typesTarget} and ${tsConfigTarget}`);
+}
+
+/**
  * Initialize a new premake-ts project
  */
 export async function initProject(cwd: string = process.cwd()): Promise<void> {

@@ -30,7 +30,7 @@ export interface ArgDefinition {
  */
 export const PREMAKE_TS_ARGS: ArgDefinition[] = [
 	{ name: '--file=<path>', description: 'Path to the premake5.ts file (default: premake5.ts)', isFlag: false },
-	{ name: '--emitOnly', description: 'Only generate the Lua file without running premake', isFlag: true },
+	{ name: '--emitOnly', description: 'Only generate the Lua file without running premake (infers --keepIntermediate)', isFlag: true },
 	{ name: '--premakeBinary=<path>', description: 'Path to a custom premake5 binary (default: premake5)', isFlag: false },
 	{ name: '--keepIntermediate', description: 'Keep the generated premake5.lua file after execution', isFlag: true }
 ];
@@ -40,7 +40,7 @@ export const PREMAKE_TS_ARGS: ArgDefinition[] = [
  */
 export const PREMAKE_TS_COMMANDS: ArgDefinition[] = [
 	{ name: 'init', description: 'Initialize a new premake-ts project interactively', isFlag: false },
-	{ name: 'install-types', description: 'Install TypeScript type definitions to .premake/', isFlag: false },
+	{ name: 'install-types', description: 'Install TypeScript type definitions to ./.premake/premake-ts.d.ts and ./tsconfig.json', isFlag: false },
 	{ name: 'help', description: 'Display this help information', isFlag: false },
 	{ name: '<action>', description: 'Run premake with the specified action (e.g., vs2022, xcode, gmake)', isFlag: false }
 ];
