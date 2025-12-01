@@ -551,6 +551,23 @@
   },
   {
     "allowed": [
+      "Local",
+      "Remote",
+      "WebBrowser",
+      "WebService"
+    ],
+    "deprecated": {
+      "message": "Use `debugger` instead."
+    },
+    "kind": "string",
+    "name": "debuggerflavor",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ]
+  },
+  {
+    "allowed": [
       "Mixed",
       "NativeOnly",
       "ManagedOnly",
@@ -925,6 +942,61 @@
     "kind": "list:string",
     "name": "filter",
     "optional": true,
+    "scope": "config",
+    "scopes": [
+      "config"
+    ]
+  },
+  {
+    "allowed": [
+      "DebugEnvsDontMerge",
+      "DebugEnvsInherit",
+      "ExcludeFromBuild",
+      "FatalCompileWarnings",
+      "FatalLinkWarnings",
+      "FatalWarnings",
+      "LinkTimeOptimization",
+      "Maps",
+      "MFC",
+      "MultiProcessorCompile",
+      "No64BitChecks",
+      "NoCopyLocal",
+      "NoImplicitLink",
+      "NoImportLib",
+      "NoIncrementalLink",
+      "NoManifest",
+      "NoMinimalRebuild",
+      "NoPCH",
+      "NoRuntimeChecks",
+      "NoBufferSecurityCheck",
+      "OmitDefaultLibrary",
+      "RelativeLinks",
+      "ShadowedVariables",
+      "UndefinedIdentifiers",
+      "WPF"
+    ],
+    "deprecated": {
+      "FatalCompileWarnings": {
+        "message": "Use `fatalwarnings { \"All\" }` instead."
+      },
+      "FatalLinkWarnings": {
+        "message": "Use `linkerfatalwarnings { \"All\" }` instead."
+      },
+      "FatalWarnings": {
+        "message": "Use `fatalwarnings { \"All\" }` instead."
+      },
+      "LinkTimeOptimization": {
+        "message": "Use `linktimeoptimization` instead."
+      },
+      "MFC": {
+        "message": "Use `mfc` instead."
+      },
+      "WPF": {
+        "message": "Use `dotnetsdk \"WindowsDesktop\"` instead."
+      }
+    },
+    "kind": "list:string",
+    "name": "flags",
     "scope": "config",
     "scopes": [
       "config"
@@ -2172,6 +2244,20 @@
     "allowed": [],
     "kind": "path",
     "name": "symbolspath",
+    "paths": true,
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "tokens": true
+  },
+  {
+    "allowed": [],
+    "deprecated": {
+      "message": "Use `externalincludedirs` instead."
+    },
+    "kind": "list:directory",
+    "name": "sysincludedirs",
     "paths": true,
     "scope": "config",
     "scopes": [

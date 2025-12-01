@@ -17,7 +17,7 @@ const LLM_MODEL = 'qwen2.5-coder-14b-instruct';
 const MAX_FIELDS = 500;
 
 const ENABLE_DOC_EXTRACTION = true;
-const ENABLE_SANITIZATION = false;
+const ENABLE_SANITIZATION = true;
 
 const VALID_SECTIONS = new Set([
 	'description',

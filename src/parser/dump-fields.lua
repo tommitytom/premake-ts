@@ -4,24 +4,22 @@ print("Extracting field data to fields.json")
 local p = premake
 
 local function removeFunctions(t)
-	if t.allowed == nil then
+	if type(t) ~= "table" then
 		return
 	end
 
-	if type(t.allowed) == "function" then
-		t.allowed = {}
-	elseif type(t.allowed) == "table" then
-		for k,v in pairs(t.allowed) do
-			if type(v) == "function" then
-				t.allowed[k] = nil
-			end
+	for k, v in pairs(t) do
+		if type(v) == "function" then
+			t[k] = nil
+		elseif type(v) == "table" then
+			removeFunctions(v)
 		end
 	end
 end
 
 local items = {}
 for k,v in pairs(p.fields) do
-	if type(v) == "table" and v.deprecated == nil then
+	if type(v) == "table" then
 		removeFunctions(v)
 
 		local allowList = {}
@@ -41,12 +39,6 @@ for k,v in pairs(p.fields) do
 		local j, err = json.encode(v)
 		if err then
 			print(k .. ": Error encoding to JSON: " .. err)
-
-			print(k, v)
-
-			for k,v in pairs(v.allowed) do
-				print("  ", k, type(v))
-			end
 		else
 			table.insert(items, v)
 		end

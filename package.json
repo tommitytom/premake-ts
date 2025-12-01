@@ -4,6 +4,7 @@
   "description": "TypeScript-based Premake configuration generator",
   "type": "module",
   "main": "src/generator/main.ts",
+  "typings": "src/generator/index.ts",
   "scripts": {
     "start": "node --experimental-strip-types --disable-warning=DEP0190 src/generator/main.ts",
     "test": "npm start -- --file=test/premake5.ts",

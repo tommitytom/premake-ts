@@ -3,6 +3,42 @@
 export type PreferredToolArchitectureType = 'Default' | 'x86' | 'x86_64'
 export interface WorkspaceScopeGenerated {
 	/**
+	 * Turns the Editor Integration feature on. This is simply a hint to the action to add extra information into the generated workspace that allows an IDE to know which/where and how premake was executed. This is currently really only implemented for the Visual Studio action, but other actions may use this too in the future.
+	 * 
+	 * There is a plugin that allows re-execution of the premake step from within Visual Studio, which can be found here:
+	 * https://github.com/tvandijck/PremakeExtension
+	 * If no value is set for a configuration, the toolset's default setting (usually "Off") will be used.
+	 * 
+	 * 
+	 * Premake 5.0 or later.
+	 * @param value A boolean value that can be set to 'On' or 'Off'.
+	 * Available options:
+	 * - `On`
+	 * - `Off`
+	 * 
+	 * ### Examples
+	 * ```lua
+	 * -- Turn on IDE integration
+	 * editorintegration "On"
+	 * ```
+	 */
+	editorIntegration(value: boolean): this;
+
+	/**
+	 * 
+	 * 
+	 * 
+	 * Premake 5.0.0 alpha 12 or later.
+	 * @param value
+	 * Available options:
+	 * - `Default`: needs documentation.
+	 * - `x86`: needs documentation.
+	 * - `x86_64`: needs documentation.
+	 * 
+	 */
+	preferredToolArchitecture(value: PreferredToolArchitectureType): this;
+
+	/**
 	 * Specify the startup project for a workspace.
 	 * Startup projects are currently only supported by Visual Studio.
 	 * 
@@ -24,41 +60,5 @@ export interface WorkspaceScopeGenerated {
 	 * ```
 	 */
 	startProject(name: string): this;
-
-	/**
-	 * 
-	 * 
-	 * 
-	 * Premake 5.0.0 alpha 12 or later.
-	 * @param value
-	 * Available options:
-	 * - `Default`: needs documentation.
-	 * - `x86`: needs documentation.
-	 * - `x86_64`: needs documentation.
-	 * 
-	 */
-	preferredToolArchitecture(value: PreferredToolArchitectureType): this;
-
-	/**
-	 * Turns the Editor Integration feature on. This is simply a hint to the action to add extra information into the generated workspace that allows an IDE to know which/where and how premake was executed. This is currently really only implemented for the Visual Studio action, but other actions may use this too in the future.
-	 * 
-	 * There is a plugin that allows re-execution of the premake step from within Visual Studio, which can be found here:
-	 * https://github.com/tvandijck/PremakeExtension
-	 * If no value is set for a configuration, the toolset's default setting (usually "Off") will be used.
-	 * 
-	 * 
-	 * Premake 5.0 or later.
-	 * @param value A boolean value that can be set to 'On' or 'Off'.
-	 * Available options:
-	 * - `On`
-	 * - `Off`
-	 * 
-	 * ### Examples
-	 * ```lua
-	 * -- Turn on IDE integration
-	 * editorintegration "On"
-	 * ```
-	 */
-	editorIntegration(value: boolean): this;
 
 }

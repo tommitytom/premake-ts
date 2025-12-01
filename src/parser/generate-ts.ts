@@ -1,11 +1,11 @@
-import fs from 'fs';
-import path from 'path';
-import { fileURLToPath } from 'url';
+import { writeFileSync } from 'node:fs';
+import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import type { DocumentedField, SanitizedField } from './types.ts';
 import { generateFunction, generateFunctionType, removeSimpleExamples } from './utils.ts';
 
 const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const __dirname = dirname(__filename);
 
 export function generateInterface(name: string, scopeFields: DocumentedField[], outputDir: string): void {
 	const output = `// Auto-generated file. Do not edit directly.
@@ -15,8 +15,8 @@ export interface ${name}Generated {
 ${scopeFields.map(f => generateFunction(f)).join('\n')}
 }
 `;
-	const finalPath = path.join(outputDir, `${name}.generated.ts`);
-	fs.writeFileSync(finalPath, output, 'utf-8');
+	const finalPath = join(outputDir, `${name}.generated.ts`);
+	writeFileSync(finalPath, output, 'utf-8');
 }
 
 function renameArgumentNames(fields: SanitizedField[]) {
@@ -46,7 +46,7 @@ export function generateAllInterfaces(sanitized: SanitizedField[]): void {
 	const workspaceScope = sanitized.filter(f => f.scopes.includes('workspace'));
 	const ruleScope = sanitized.filter(f => f.scopes.includes('rule'));
 
-	const outputDir = path.join(__dirname, '..', 'scopes', 'generated');
+	const outputDir = join(__dirname, '..', 'scopes', 'generated');
 
 	generateInterface('ConfigScope', configScope, outputDir);
 	generateInterface('ProjectScope', projectScope, outputDir);
