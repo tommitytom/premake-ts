@@ -1,15 +1,14 @@
 import { execSync } from 'node:child_process';
 import fs from 'node:fs';
-import path, { basename, dirname, join, resolve } from 'node:path';
-import { pathToFileURL } from 'node:url';
-import { fileURLToPath } from 'url';
+import { basename, dirname, join, resolve } from 'node:path';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 import { type IGlobals, PremakeScope } from '../scopes/PremakeScope.ts';
 import type { WorkspaceFunc, WorkspaceScope } from '../scopes/scopes.ts';
 import { generate } from './generator.ts';
 import { runPremake } from './util.ts';
 
 const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const __dirname = dirname(__filename);
 
 function processScope(globals: IGlobals, name: string, func: WorkspaceFunc): PremakeScope {
 	const scope = new PremakeScope(globals);
@@ -21,7 +20,7 @@ function processScope(globals: IGlobals, name: string, func: WorkspaceFunc): Pre
 export function extractGlobals(scriptPath: string): IGlobals {
 	const args = process.argv.slice(2);
 
-	const filePath = path.join(scriptPath);
+	const filePath = join(scriptPath);
 	let globals: Partial<IGlobals> = {};
 
 	const output = execSync(`premake5 --file=${filePath}`, { encoding: 'utf-8' });
@@ -39,7 +38,7 @@ export function extractGlobals(scriptPath: string): IGlobals {
 async function main() {
 	const args = process.argv.slice(2);
 
-	const filePath = path.join(__dirname, 'dumpglobals.lua');
+	const filePath = join(__dirname, 'dumpglobals.lua');
 	const globals = extractGlobals(filePath);
 
 	// Parse --file argument
