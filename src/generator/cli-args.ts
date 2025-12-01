@@ -40,7 +40,7 @@ export const PREMAKE_TS_ARGS: ArgDefinition[] = [
  */
 export const PREMAKE_TS_COMMANDS: ArgDefinition[] = [
 	{ name: 'init', description: 'Initialize a new premake-ts project interactively', isFlag: false },
-	{ name: 'install-types', description: 'Install TypeScript type definitions to ./.premake/premake-ts.d.ts and ./tsconfig.json', isFlag: false },
+	{ name: 'install-types', description: 'Install TypeScript type definitions to ./premake-ts.d.ts and ./tsconfig.json', isFlag: false },
 	{ name: 'help', description: 'Display this help information', isFlag: false },
 	{ name: '<action>', description: 'Run premake with the specified action (e.g., vs2022, xcode, gmake)', isFlag: false }
 ];

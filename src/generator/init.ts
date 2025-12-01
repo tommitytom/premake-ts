@@ -1,15 +1,18 @@
-import fs from 'node:fs';
-import { createInterface } from 'node:readline';
+import { copyFileSync, existsSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
+import { createInterface } from 'node:readline';
 import { fileURLToPath } from 'node:url';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+export type Language = 'C' | 'C++' | 'C#' | 'F#';
 
 export interface InitOptions {
 	workspaceName: string;
+	language: Language;
 	installTypes: boolean;
 }
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 /**
  * Prompt user for input
@@ -47,26 +50,66 @@ async function promptYesNo(question: string, defaultValue: boolean = true): Prom
 }
 
 /**
+ * Prompt user to select from a list of options
+ */
+async function promptChoice<T extends string>(question: string, choices: readonly T[], defaultIndex: number = 0): Promise<T> {
+	console.log(question);
+	for (let i = 0; i < choices.length; i++) {
+		const prefix = i === defaultIndex ? '*' : ' ';
+		console.log(`  ${prefix} ${i + 1}. ${choices[i]}`);
+	}
+
+	const answer = await prompt('Enter choice (number)', String(defaultIndex + 1));
+	const index = parseInt(answer, 10) - 1;
+
+	if (isNaN(index) || index < 0 || index >= choices.length) {
+		return choices[defaultIndex];
+	}
+
+	return choices[index];
+}
+
+/**
  * Gather initialization options from user
  */
 export async function gatherInitOptions(): Promise<InitOptions> {
 	console.log('This utility will walk you through creating a premake5.ts file.\n');
 
 	const workspaceName = await prompt('Workspace name', 'MyWorkspace');
-	const installTypes = await promptYesNo('Install TypeScript type definitions? (./.premake/premake-ts.d.ts and ./tsconfig.json)', true);
+	const language = await promptChoice('Select language:', ['C', 'C++', 'C#', 'F#'] as const, 1);
+	const installTypes = await promptYesNo('Install TypeScript type definitions? (./premake-ts.d.ts and ./tsconfig.json)', true);
 
 	console.log('');
 
 	return {
 		workspaceName,
+		language,
 		installTypes
 	};
 }
 
 /**
+ * Get file patterns for a given language
+ */
+function getFilePatterns(language: Language): string[] {
+	switch (language) {
+		case 'C':
+			return ['"**.h"', '"**.c"'];
+		case 'C++':
+			return ['"**.h"', '"**.cpp"'];
+		case 'C#':
+			return ['"**.cs"'];
+		case 'F#':
+			return ['"**.fs"'];
+	}
+}
+
+/**
  * Generate the premake5.ts file content
  */
-function generatePremake5Content(workspaceName: string): string {
+function generatePremake5Content(workspaceName: string, language: Language): string {
+	const filePatterns = getFilePatterns(language).join(', ');
+
 	return `import { workspace } from "premake-ts";
 
 export default workspace("${workspaceName}", (p) => {
@@ -74,32 +117,11 @@ export default workspace("${workspaceName}", (p) => {
 
 	p.project("${workspaceName}", (p) => {
 		p.kind("ConsoleApp");
-		p.language("C++");
-		p.files("**.h", "**.cpp");
+		p.language("${language}");
+		p.files(${filePatterns});
 	});
 });
 `;
-}
-
-/**
- * Copy type definitions to project
- */
-export function copyTypeDefinitions(targetDir: string): void {
-	// Find the types/premake-ts.d.ts file relative to this module
-	const typesSource = join(__dirname, '../../types/premake-ts.d.ts');
-	const typesTarget = join(targetDir, '.premake/premake-ts.d.ts');
-	const tsConfigSource = join(__dirname, '../../types/tsconfig.json');
-	const tsConfigTarget = join(targetDir, 'tsconfig.json');
-
-	// Create .premake directory if it doesn't exist
-	const premakeDir = dirname(typesTarget);
-	if (!fs.existsSync(premakeDir)) {
-		fs.mkdirSync(premakeDir, { recursive: true });
-	}
-
-	fs.copyFileSync(typesSource, typesTarget);
-	fs.copyFileSync(tsConfigSource, tsConfigTarget);
-	console.log(`Created ${typesTarget} and ${tsConfigTarget}`);
 }
 
 /**
@@ -108,7 +130,7 @@ export function copyTypeDefinitions(targetDir: string): void {
 export async function initProject(cwd: string = process.cwd()): Promise<void> {
 	// Check if premake5.ts already exists
 	const premakeFile = join(cwd, 'premake5.ts');
-	if (fs.existsSync(premakeFile)) {
+	if (existsSync(premakeFile)) {
 		console.error('Error: premake5.ts already exists in this directory');
 		process.exit(1);
 	}
@@ -117,13 +139,14 @@ export async function initProject(cwd: string = process.cwd()): Promise<void> {
 	const options = await gatherInitOptions();
 
 	// Generate and write premake5.ts
-	const content = generatePremake5Content(options.workspaceName);
-	fs.writeFileSync(premakeFile, content, 'utf-8');
+	const content = generatePremake5Content(options.workspaceName, options.language);
+	writeFileSync(premakeFile, content, 'utf-8');
 	console.log(`Created premake5.ts`);
 
-	// Copy type definitions if requested
+	// Install type definitions if requested
 	if (options.installTypes) {
-		copyTypeDefinitions(cwd);
+		console.log('');
+		await installTypes(cwd);
 	}
 
 	console.log('\nDone! You can now run premake-ts with an action:');
@@ -136,17 +159,41 @@ export async function initProject(cwd: string = process.cwd()): Promise<void> {
  * Install type definitions only
  */
 export async function installTypes(cwd: string = process.cwd()): Promise<void> {
-	const typesTarget = join(cwd, '.premake/premake-ts.d.ts');
+	const typesSource = join(__dirname, '../../types/premake-ts.d.ts');
+	const typesTarget = join(cwd, 'premake-ts.d.ts');
+	const tsConfigSource = join(__dirname, '../../types/tsconfig.json');
+	const tsConfigTarget = join(cwd, 'tsconfig.json');
 
-	if (fs.existsSync(typesTarget)) {
-		console.log('Type definitions already exist at .premake/premake-ts.d.ts');
-		const overwrite = await promptYesNo('Overwrite existing types?', false);
-		if (!overwrite) {
-			console.log('Installation cancelled.');
-			return;
-		}
+	// Check if files exist
+	const typesExist = existsSync(typesTarget);
+	const tsConfigExist = existsSync(tsConfigTarget);
+
+	let installTypeDefs = true;
+	let installTsConfig = true;
+
+	if (typesExist) {
+		console.log('premake-ts.d.ts already exists');
+		installTypeDefs = await promptYesNo('Overwrite premake-ts.d.ts?', true);
 	}
 
-	copyTypeDefinitions(cwd);
-	console.log('\nDone! TypeScript definitions installed to .premake/premake-ts.d.ts');
+	if (tsConfigExist) {
+		console.log('tsconfig.json already exists');
+		installTsConfig = await promptYesNo('Overwrite tsconfig.json?', true);
+	}
+
+	if (!installTypeDefs && !installTsConfig) {
+		console.log('Installation cancelled.');
+		return;
+	}
+
+	// Install the files that were selected
+	if (installTypeDefs) {
+		copyFileSync(typesSource, typesTarget);
+		console.log('Created ./premake-ts.d.ts');
+	}
+
+	if (installTsConfig) {
+		copyFileSync(tsConfigSource, tsConfigTarget);
+		console.log('Created tsconfig.json');
+	}
 }

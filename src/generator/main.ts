@@ -32,6 +32,7 @@ async function main() {
 
 	if (cliArgs.action === 'install-types') {
 		await installTypes();
+		console.log('\nDone! TypeScript definitions installed.');
 		return;
 	}
 
