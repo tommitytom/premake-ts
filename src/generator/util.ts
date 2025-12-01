@@ -11,7 +11,7 @@ export function runPremake(args: string[]): Promise<number> {
 			if (code === 0) {
 				resolve(code);
 			} else {
-				reject(new Error(`premake exited with code ${code}`));
+				reject(new Error(`premake exited with code ${code}. Args: ${args.join(' ')}`));
 			}
 		});
 

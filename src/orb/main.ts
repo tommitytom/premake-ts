@@ -3,10 +3,15 @@ import path, { dirname, join, resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { generate } from '../generator/generator.ts';
 import sanitized from "../parser/data/sanitized.json" with { type: "json" };
-import { PremakeScope } from '../scopes/PremakeScope.ts';
+import { type IGlobals, PremakeScope } from '../scopes/PremakeScope.ts';
 import type { ProjectScope, WorkspaceScope } from '../scopes/scopes.ts';
 import type { IModule, IOrbBase, IPackage } from './types.ts';
 import { runPremake } from '../generator/util.ts';
+import { extractGlobals } from '../generator/main.ts';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 export interface IBuildOrb<T extends IOrbBase = IOrbBase> {
 	rootDir: string;
@@ -60,12 +65,15 @@ async function collectOrbs(filePath: string): Promise<IBuildOrb[]> {
 	const orbs: IBuildOrb[] = [];
 	let root: IBuildOrb | null = null;
 
+	console.log('process.cwd()', process.cwd());
+
+
 	while (pendingOrbs.length > 0) {
 		const pending = pendingOrbs.pop()!;
 		const filePath = findOrb(workingDir, pending.rootDir, pending.filename);
 
 		if (!filePath) {
-			throw new Error(`Orb file not found: ${pending.rootDir}`);
+			throw new Error(`Orb file not found: ${path.join(pending.rootDir, pending.filename ?? '')}`);
 		}
 
 		const orbUrl = pathToFileURL(path.join(workingDir, filePath)).href;
@@ -132,27 +140,27 @@ function createLookup(orbs: IModuleOrb[]): Map<string, IModuleOrb> {
 	return map;
 }
 
-function processScopes(orbs: IModuleOrb[]) {
+function processScopes(globals: IGlobals, orbs: IModuleOrb[]) {
 	for (const orb of orbs) {
 		const module = orb.orbModule;
 
 		if (module.private) {
 			console.assert(orb.privateScope === undefined, "Private scope already defined");
-			const privateScope = new PremakeScope();
+			const privateScope = new PremakeScope(globals);
 			module.private(privateScope.createProxy<ProjectScope>());
 			orb.privateScope = privateScope;
 		}
 
 		if (module.public) {
 			console.assert(orb.publicScope === undefined, "Public scope already defined");
-			const publicScope = new PremakeScope();
+			const publicScope = new PremakeScope(globals);
 			module.public(publicScope.createProxy<ProjectScope>());
 			orb.publicScope = publicScope;
 		}
 
 		if (module.link) {
 			console.assert(orb.linkScope === undefined, "Link scope already defined");
-			const linkScope = new PremakeScope();
+			const linkScope = new PremakeScope(globals);
 			module.link(linkScope.createProxy<ProjectScope>());
 			orb.linkScope = linkScope;
 		}
@@ -214,8 +222,8 @@ function setupWorkspace(w: WorkspaceScope) {
 	});
 }
 
-function createWorkspaceScope(name: string, lookup: Map<string, IModuleOrb>): PremakeScope {
-	const workspaceScope = new PremakeScope();
+function createWorkspaceScope(globals: IGlobals, name: string, lookup: Map<string, IModuleOrb>): PremakeScope {
+	const workspaceScope = new PremakeScope(globals);
 	workspaceScope.command("workspace", name);
 
 	setupWorkspace(workspaceScope.createProxy<WorkspaceScope>());
@@ -288,6 +296,9 @@ function collectDependencies(rootOrb: IModuleOrb, lookup: Map<string, IModuleOrb
 async function main() {
 	const args = process.argv.slice(2);
 
+	const filePath = path.join(__dirname, '..', 'generator', 'dumpglobals.lua');
+	const globals = extractGlobals(filePath);
+
 	let scriptPath = 'orb.ts'; // Default to orb.ts in current directory
 	const fileArgIndex = args.findIndex(arg => arg.startsWith('--file='));
 
@@ -304,9 +315,9 @@ async function main() {
 		const modules = orbs.filter(orb => orb.orbModule.type !== 'Package') as IModuleOrb[];
 		const lookup = createLookup(modules);
 		resolveDependencies(lookup);
-		processScopes(modules);
+		processScopes(globals, modules);
 		resolveModulePaths(modules);
-		const workspaceScope = createWorkspaceScope(orbs[0].orbModule.name, lookup);
+		const workspaceScope = createWorkspaceScope(globals, orbs[0].orbModule.name, lookup);
 		const premakeFile = generate(workspaceScope);
 
 		console.log(premakeFile);

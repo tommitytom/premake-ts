@@ -1,6 +1,3 @@
-/**
- * Utility functions shared across the parser
- */
 import type { DocumentedField, PremakeParameter } from './types.ts';
 
 /**

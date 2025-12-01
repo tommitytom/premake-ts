@@ -509,7 +509,7 @@ export interface ProjectScopeGenerated {
 	 * Premake 5.0 beta5 or later.
 	 * 
 	 * Visual studio is the only toolset currently supported.
-	 * @param SDK
+	 * @param sdk
 	 * Available options:
 	 * - `Default`
 	 * - `Web`
@@ -536,6 +536,6 @@ export interface ProjectScopeGenerated {
 	 * dotnetsdk "CustomSDK/3.4.0" -- Specifying a version with a custom SDK is also supported
 	 * ```
 	 */
-	dotNetSdk(SDK: DotNetSdkType): this;
+	dotNetSdk(sdk: DotNetSdkType): this;
 
 }

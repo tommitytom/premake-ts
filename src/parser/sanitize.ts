@@ -11,11 +11,7 @@ import { sanitizeText, sanitizeToJson } from './llm.ts';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-/**
- * Preprocesses a field's description by removing redundant content
- * @param field The field to preprocess
- */
-function preprocessField(field: SanitizedField): void {
+function removeRedundantContent(field: SanitizedField): void {
 	// Sometimes documentation starts with the field name, remove it
 	if (field.description.startsWith(field.name)) {
 		field.description = field.description.slice(field.name.length).trim();
@@ -31,15 +27,7 @@ function preprocessField(field: SanitizedField): void {
 	}
 }
 
-/**
- * Sanitizes field documentation using LLM
- * @param client OpenAI client instance
- * @param model The LLM model to use
- * @param documented Documented fields to sanitize
- * @param unsanitizedNames Names of fields that need sanitization
- * @param maxFields Maximum number of fields to process
- * @returns Array of sanitized fields
- */
+// Sanitizes field documentation using LLM
 export async function sanitizeFields(
 	client: OpenAI,
 	model: string,
@@ -59,7 +47,7 @@ export async function sanitizeFields(
 
 		const field = documented.find(f => f.name === fieldName)! as SanitizedField;
 
-		preprocessField(field);
+		removeRedundantContent(field);
 
 		const newName = await sanitizeText(client, model, namePrompt, field.name!) as string;
 		if (newName && field.name.length === newName.length) {
@@ -103,14 +91,4 @@ export function createLLMClient(baseURL: string = 'http://localhost:1234/v1', ap
 		apiKey,
 		baseURL,
 	});
-}
-
-/**
- * Saves sanitized fields to a JSON file
- * @param sanitized The sanitized fields to save
- * @param filename The output filename
- */
-export function saveSanitized(sanitized: SanitizedField[], filename: string = 'sanitized.json'): void {
-	const outputPath = path.join(__dirname, filename);
-	fs.writeFileSync(outputPath, JSON.stringify(sanitized, null, 2), 'utf-8');
 }

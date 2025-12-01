@@ -1,6 +1,3 @@
-/**
- * Generate TypeScript interfaces from sanitized field data
- */
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -10,14 +7,7 @@ import { generateFunction, generateFunctionType, removeSimpleExamples } from './
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-/**
- * Generates a TypeScript interface file for a specific scope
- * @param name The name of the interface
- * @param scopeFields Fields belonging to this scope
- */
-export function generateInterface(name: string, scopeFields: DocumentedField[]): void {
-	console.log(`Generating ${name}`);
-
+export function generateInterface(name: string, scopeFields: DocumentedField[], outputDir: string): void {
 	const output = `// Auto-generated file. Do not edit directly.
 
 ${scopeFields.filter(f => f.allowed && f.allowed.length > 0).map(f => generateFunctionType(f)).join('\n')}
@@ -25,9 +15,8 @@ export interface ${name}Generated {
 ${scopeFields.map(f => generateFunction(f)).join('\n')}
 }
 `;
-
-	const outputPath = path.join(__dirname, '..', 'scopes', 'generated', `${name}.generated.ts`);
-	fs.writeFileSync(outputPath, output, 'utf-8');
+	const finalPath = path.join(outputDir, `${name}.generated.ts`);
+	fs.writeFileSync(finalPath, output, 'utf-8');
 }
 
 function renameArgumentNames(fields: SanitizedField[]) {
@@ -38,6 +27,11 @@ function renameArgumentNames(fields: SanitizedField[]) {
 	});
 }
 
+function removeUnusedFields(fields: SanitizedField[]) {
+	const unused = new Set(['filter', 'project', 'group', 'workspace']);
+	return fields.filter(f => !unused.has(f.name));
+}
+
 /**
  * Generates all scope interfaces from sanitized data
  * @param sanitized Array of sanitized fields
@@ -45,14 +39,17 @@ function renameArgumentNames(fields: SanitizedField[]) {
 export function generateAllInterfaces(sanitized: SanitizedField[]): void {
 	renameArgumentNames(sanitized);
 	removeSimpleExamples(sanitized);
+	sanitized = removeUnusedFields(sanitized);
 
 	const configScope = sanitized.filter(f => f.scopes.includes('config'));
 	const projectScope = sanitized.filter(f => f.scopes.includes('project'));
 	const workspaceScope = sanitized.filter(f => f.scopes.includes('workspace'));
 	const ruleScope = sanitized.filter(f => f.scopes.includes('rule'));
 
-	generateInterface('ConfigScope', configScope);
-	generateInterface('ProjectScope', projectScope);
-	generateInterface('WorkspaceScope', workspaceScope);
-	generateInterface('RuleScope', ruleScope);
+	const outputDir = path.join(__dirname, '..', 'scopes', 'generated');
+
+	generateInterface('ConfigScope', configScope, outputDir);
+	generateInterface('ProjectScope', projectScope, outputDir);
+	generateInterface('WorkspaceScope', workspaceScope, outputDir);
+	generateInterface('RuleScope', ruleScope, outputDir);
 }

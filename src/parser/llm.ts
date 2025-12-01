@@ -1,5 +1,8 @@
 import OpenAI from "openai";
-import { formatJsonString } from "./formatting.ts";
+
+function formatJsonString(jsonString: string): string {
+	return jsonString.replace(/^```(?:json|markdown)?\n?/, "").replace(/\n?```$/, "");
+}
 
 export async function queryPrompt(client: OpenAI, model: string, prompt: string): Promise<string|null> {
 	try {

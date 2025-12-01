@@ -3,10 +3,18 @@
   "version": "1.0.0",
   "description": "TypeScript-based Premake configuration generator",
   "type": "module",
-  "main": "src/main.ts",
+  "main": "src/generator/main.ts",
   "scripts": {
-    "start": "node --experimental-strip-types --disable-warning=DEP0190 src/main.ts",
-    "test": "node --experimental-strip-types src/main.ts test/premake.ts"
+    "start": "node --experimental-strip-types --disable-warning=DEP0190 src/generator/main.ts",
+    "test": "npm start -- --file=test/premake5.ts",
+    "parse": "node --experimental-strip-types --disable-warning=DEP0190 src/parser/main.ts",
+    "orb": "node --experimental-strip-types --disable-warning=DEP0190 src/orb/main.ts"
+  },
+  "bin": {
+    "premake-ts": "bin/cli.js"
+  },
+  "exports": {
+    ".": "./src/generator/index.ts"
   },
   "keywords": [
     "premake",
@@ -16,7 +24,7 @@
   "author": "Tom Yaxley",
   "license": "MIT",
   "devDependencies": {
-    "@types/node": "^22.0.0",
+    "@types/node": "^24.10.1",
     "typescript": "^5.7.0"
   },
   "dependencies": {

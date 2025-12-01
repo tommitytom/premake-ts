@@ -1,32 +1,46 @@
-import { pathToFileURL } from 'node:url';
-import { resolve, dirname, join, basename } from 'node:path';
+import { execSync } from 'node:child_process';
 import fs from 'node:fs';
-import { spawn } from 'node:child_process';
+import path, { basename, dirname, join, resolve } from 'node:path';
+import { pathToFileURL } from 'node:url';
+import { fileURLToPath } from 'url';
+import { type IGlobals, PremakeScope } from '../scopes/PremakeScope.ts';
+import type { WorkspaceFunc, WorkspaceScope } from '../scopes/scopes.ts';
 import { generate } from './generator.ts';
+import { runPremake } from './util.ts';
 
-function runPremake(args: string[]): Promise<number> {
-	return new Promise((resolve, reject) => {
-		const premake = spawn('premake5', args, {
-			stdio: 'inherit',
-			shell: true
-		});
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
-		premake.on('close', (code) => {
-			if (code === 0) {
-				resolve(code);
-			} else {
-				reject(new Error(`premake exited with code ${code}`));
-			}
-		});
+function processScope(globals: IGlobals, name: string, func: WorkspaceFunc): PremakeScope {
+	const scope = new PremakeScope(globals);
+	scope.command("workspace", name);
+	func(scope.createProxy<WorkspaceScope>());
+	return scope;
+}
 
-		premake.on('error', (error) => {
-			reject(error);
-		});
-	});
+export function extractGlobals(scriptPath: string): IGlobals {
+	const args = process.argv.slice(2);
+
+	const filePath = path.join(scriptPath);
+	let globals: Partial<IGlobals> = {};
+
+	const output = execSync(`premake5 --file=${filePath}`, { encoding: 'utf-8' });
+	globals = JSON.parse(output) as IGlobals;
+
+	// Parse the last argument that does not start with --
+	globals.action = args.find(arg => !arg.startsWith('--'));
+	if (!globals.action) {
+		throw new Error('No action specified');
+	}
+
+	return globals as IGlobals;
 }
 
 async function main() {
 	const args = process.argv.slice(2);
+
+	const filePath = path.join(__dirname, 'dumpglobals.lua');
+	const globals = extractGlobals(filePath);
 
 	// Parse --file argument
 	let scriptPath = 'premake5.ts'; // Default to premake5.ts in current directory
@@ -42,8 +56,9 @@ async function main() {
 		const absolutePath = resolve(scriptPath);
 		const fileUrl = pathToFileURL(absolutePath).href;
 		const module = await import(fileUrl);
-
-		const result = generate(module.default);
+		const workspace = module.default as { name: string; func: WorkspaceFunc };
+		const scope = processScope(globals as IGlobals, workspace.name, workspace.func);
+		const result = generate(scope);
 
 		// Write the Lua file to the same directory as the TypeScript file
 		const scriptDir = dirname(absolutePath);

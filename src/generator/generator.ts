@@ -18,7 +18,7 @@ function formatArgs(arg: string | string[]): string {
 	return `"${arg}"`;
 }
 
-export function generate(scope: PremakeScope) {
+export function generate(scope: PremakeScope): string {
 	const commands = scope.getCommands();
 
 	let output: string[] = [];

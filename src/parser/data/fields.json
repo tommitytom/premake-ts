@@ -922,8 +922,9 @@
   },
   {
     "allowed": [],
-    "kind": "string",
+    "kind": "list:string",
     "name": "filter",
+    "optional": true,
     "scope": "config",
     "scopes": [
       "config"

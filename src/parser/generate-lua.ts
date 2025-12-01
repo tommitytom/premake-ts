@@ -3,6 +3,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import type { DocumentedField, SanitizedField } from './types.ts';
 import { removeSimpleExamples, toUpperCamelCase } from './utils.ts';
+import type { IClass } from './documentation.ts';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -28,7 +29,7 @@ function getParamType(field: DocumentedField): string {
 		case 'list:file':
 		case 'list:directory':
 		case 'list:string':
-			return `string[]`;
+			return `(string | string[])`;
 		case 'boolean':
 			return `boolean`;
 		default:
@@ -36,7 +37,7 @@ function getParamType(field: DocumentedField): string {
 	}
 }
 
-function generateFunction(field: SanitizedField): string {
+function generateFieldFunction(field: SanitizedField): string {
 	const items: string[] = [];
 
 	const hasDescription = field.description && field.description !== '';
@@ -81,6 +82,38 @@ function generateFunction(field: SanitizedField): string {
 	return description;
 }
 
+function getSection(sections: Record<string, string>, key: string): string | undefined {
+	return sections[key.toLowerCase()];
+}
+
+const RESERVED = new Set<string>(['globals', 'string', 'table', 'os']);
+
+function generateUtilFunctions(utils: IClass[]): string {
+	const output: string[] = [];
+	for (const util of utils) {
+		const isReserved = RESERVED.has(util.name.toLowerCase());
+		const functionPrefix = util.name === 'globals' ? '' : `${util.name}.`;
+
+		if (!isReserved) {
+			output.push(`${util.name} = {}`);
+			output.push('');
+		}
+
+		for (const func of util.functions) {
+			output.push('--[[');
+
+			const desc = getSection(func.sections, 'description');
+			if (desc) output.push(desc);
+
+			output.push(']]');
+			output.push(`function ${functionPrefix}${func.name}() end`);
+			output.push('');
+		}
+	}
+
+	return output.join('\n');
+}
+
 function sanitizeFields(fields: SanitizedField[]) {
 	const makeSettings = fields.find(field => field.name === 'makeSettings')!;
 	makeSettings.examples = '';
@@ -95,7 +128,7 @@ ${field.allowed.map(a => `---|'${a}'`).join('\n')}\n`;
  * Generates all scope interfaces from sanitized data
  * @param sanitized Array of sanitized fields
  */
-export function generateLuaDefinitions(sanitized: SanitizedField[]): void {
+export function generateLuaDefinitions(sanitized: SanitizedField[], utils: IClass[]): void {
 	sanitizeFields(sanitized);
 	removeSimpleExamples(sanitized);
 
@@ -103,22 +136,24 @@ export function generateLuaDefinitions(sanitized: SanitizedField[]): void {
 
 	output += sanitized.filter(f => f.allowed && f.allowed.length > 0).map(f => generateFunctionType(f)).join('\n') + '\n';
 
-	output += sanitized.map(f => generateFunction(f)).join('\n');
+	output += sanitized.map(f => generateFieldFunction(f)).join('\n');
+
+	output += '\n\n' + generateUtilFunctions(utils) + '\n';
 
 	const config = {
 		$schema: "https://raw.githubusercontent.com/LuaLS/LLS-Addons/main/schemas/addon_config.schema.json",
 		name: "premake",
 		settings: {
-			"Lua.diagnostics.globals": sanitized.map(f => f.name.toLowerCase())
+			"Lua.diagnostics.globals": [...sanitized.map(f => f.name.toLowerCase()), ...utils.map(u => u.name)].sort(),
 		},
 		files: [
 			"**/premake5.lua"
 		]
 	};
 
-	const outputPath = path.join(__dirname, '..', '..', 'premake-definitions', 'library', `premake.lua`);
+	const outputPath = path.join(__dirname, '..', '..', 'test', 'premake-definitions', 'library', `premake.lua`);
 	fs.writeFileSync(outputPath, output, 'utf-8');
 
-	const configPath = path.join(__dirname, '..', '..', 'premake-definitions', `config.json`);
+	const configPath = path.join(__dirname, '..', '..', 'test', 'premake-definitions', `config.json`);
 	fs.writeFileSync(configPath, JSON.stringify(config, null, 2), 'utf-8');
 }

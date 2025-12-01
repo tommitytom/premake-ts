@@ -80,10 +80,11 @@ table.insert(items, {
 
 table.insert(items, {
 	allowed = {},
-	kind = "string",
+	kind = "list:string",
 	name = "filter",
 	scope = "config",
-	scopes = {"config"}
+	scopes = {"config"},
+	optional = true
 })
 
 local j, err = json.encode(items)

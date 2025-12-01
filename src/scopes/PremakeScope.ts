@@ -1,6 +1,12 @@
 import type { ProjectScope, WorkspaceScope } from "./scopes.ts";
 import fields from "../parser/data/fields.json" with { type: "json" };
 
+export interface IGlobals {
+	premakeVersion: string;
+	targetOs: string;
+	action: string;
+}
+
 interface ICommand {
 	name: string;
 	args?: string | string[];
@@ -8,10 +14,22 @@ interface ICommand {
 
 export class PremakeScope {
 	private _commands: ICommand[] = [];
-	private _action = 'vs2022';
+	private _globals: IGlobals;
+
+	constructor(globals: IGlobals) {
+		this._globals = globals;
+	}
 
 	get action(): string {
-		return this._action;
+		return this._globals.action;
+	}
+
+	get premakeVersion(): string {
+		return this._globals.premakeVersion;
+	}
+
+	get targetOs(): string {
+		return this._globals.targetOs;
 	}
 
 	addCommands(commands: ICommand[]) {
