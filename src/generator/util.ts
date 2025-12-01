@@ -1,8 +1,8 @@
 import { spawn } from 'node:child_process';
 
-export function runPremake(args: string[]): Promise<number> {
+export function runPremake(args: string[], binaryPath: string = 'premake5'): Promise<number> {
 	return new Promise((resolve, reject) => {
-		const premake = spawn('premake5', args, {
+		const premake = spawn(binaryPath, args, {
 			stdio: 'inherit',
 			shell: true
 		});
