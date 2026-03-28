@@ -10,8 +10,10 @@
   "scripts": {
     "start": "node --experimental-strip-types --disable-warning=DEP0190 packages/premake-ts/src/main.ts",
     "test": "npm start -- --file=test/premake5.ts",
+    "orb-test": "npm run orb -- generate --file=test/orb.ts",
     "parse": "node --experimental-strip-types --disable-warning=DEP0190 packages/premake-ts-generator/src/main.ts",
-    "orb": "node --experimental-strip-types --disable-warning=DEP0190 packages/build/src/main.ts"
+    "orb": "node --experimental-strip-types --disable-warning=DEP0190 packages/build/src/main.ts",
+    "vitest": "vitest"
   },
   "keywords": [
     "premake",
@@ -22,6 +24,7 @@
   "license": "MIT",
   "devDependencies": {
     "@types/node": "^24.10.1",
-    "typescript": "^5.7.0"
+    "typescript": "^5.7.0",
+    "vitest": "^4.1.2"
   }
 }

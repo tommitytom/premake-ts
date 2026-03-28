@@ -1,6 +1,5 @@
 import { existsSync, unlinkSync, writeFileSync } from "node:fs";
 import { basename, dirname, join, resolve } from "node:path";
-import { parseArgs } from "./cli/args.ts";
 import { loadProject } from "./config/loader.ts";
 import { resolveOptions } from "./config/options.ts";
 import { buildDependencyGraph } from "./resolver/graph.ts";
@@ -9,6 +8,7 @@ import { findProjectRoot } from "./utils/paths.ts";
 import { dumpGlobals, execPremake } from "@orb/premake-ts/util";
 import type { IGlobals } from "@orb/premake-ts/scopes/PremakeScope";
 import * as logger from "./utils/logger.ts";
+import { parseArgs } from "./cli/args.ts";
 
 async function main() {
 	const args = parseArgs(process.argv.slice(2));

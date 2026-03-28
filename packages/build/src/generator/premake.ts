@@ -245,6 +245,9 @@ export function generatePremake(opts: GenerateOptions): string {
 	// Emit workspace
 	scope.command("workspace", project.name);
 
+	// Direct output to build/<action>/ subdirectory
+	scope.command("location", `build/${globals.action}`);
+
 	const proxy = scope.createProxy<WorkspaceScope>();
 
 	// Emit configurations

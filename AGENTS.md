@@ -10,7 +10,7 @@ This is an npm workspaces monorepo named `orb` with three packages under `packag
 packages/
 ├── premake-ts/              @orb/premake-ts         - CLI generator (user-facing)
 ├── premake-ts-generator/    @orb/premake-ts-generator - Parser/codegen pipeline
-└── build/                   @orb/build              - Module-based build system (prototype)
+└── build/                   @orb/build              - Module-based build system
 ```
 
 ## Runtime Environment
@@ -90,21 +90,54 @@ The parser generates files directly into `@orb/premake-ts`:
 
 ## Package: @orb/build
 
-**Purpose:** Prototype hierarchical module/dependency build system on top of premake-ts.
+**Purpose:** Hierarchical module/dependency build system on top of premake-ts. Users write `orb.ts` files that define projects, packages, and modules; the system resolves dependencies, then generates premake-ts Lua.
 
 ### Key Files
-- `src/main.ts` — Module collector, dependency resolver, workspace flattener
-- `src/types.ts` — Module/Package type definitions and factory functions
+- `src/main.ts` — CLI entry point: parse args → load project → resolve deps → generate Lua → run premake
+- `src/index.ts` — Public API re-exports for user `orb.ts` files
+- `src/cli/args.ts` — Commander-based CLI parser (generate, build, list, clean commands)
+- `src/config/schema.ts` — Core TypeScript types (IProject, IPackage, IModule, ModuleScope, filter types, IConfigDefaults, BuildStrategy)
+- `src/config/helpers.ts` — Factory functions: `defineProject`, `definePackage`, `defineLibrary`, `defineSharedLibrary`, `defineHeaderOnly`, `defineExecutable`, `defineWindowedApp`
+- `src/config/loader.ts` — Discovers and loads `orb.ts`/`orb.package.ts`/`orb.module.ts` files, auto-wraps single modules/packages into projects
+- `src/config/options.ts` — Zod-based options resolution (defaults → config file → CLI flags)
+- `src/resolver/graph.ts` — Dependency graph builder: cycle detection (Kahn's algorithm), bare/qualified name resolution, reachability pruning (BFS from roots), `getTransitiveDeps()`
+- `src/generator/premake.ts` — `ModuleScopeImpl` recorder + premake-ts code generation; replays scope operations into `PremakeScope` proxy
+- `src/generator/filters.ts` — `not()`, `or()`, `compileFilter()` for premake filter expressions
+- `src/utils/paths.ts` — `findProjectRoot()`, `resolvePath()`, `makeRelative()` path utilities
+- `src/utils/logger.ts` — Colored console logging with level filtering (chalk)
+
+### Exports
+```
+"."                          → src/index.ts (defineProject, definePackage, defineLibrary, ...)
+"./config/schema"            → src/config/schema.ts (IProject, IModule, ModuleScope, ...)
+"./config/helpers"           → src/config/helpers.ts (factory functions)
+"./config/loader"            → src/config/loader.ts (loadProject)
+"./config/options"           → src/config/options.ts (resolveOptions)
+"./resolver"                 → src/resolver/graph.ts (buildDependencyGraph, getTransitiveDeps)
+"./generator"                → src/generator/premake.ts (generatePremake)
+"./generator/filters"        → src/generator/filters.ts (not, or, compileFilter)
+```
+
+### Architecture / Pipeline
+1. **Load** — `loadProject(orbFile)` discovers and imports `orb.ts` files from disk, resolving package/module references by convention (`<name>/orb.ts`, `<name>.ts`, etc.)
+2. **Resolve** — `buildDependencyGraph(project, options)` registers modules, resolves dependency names (bare → same-package → global), detects cycles via topological sort, marks root executables, and BFS-prunes unreachable modules
+3. **Generate** — `generatePremake(opts)` creates a `PremakeScope`, emits workspace/configurations/defaults, then for each reachable module: records `ModuleScopeImpl` operations from user callbacks (`private`, `public`, `link`), resolves paths relative to workspace root, replays into the premake-ts proxy, auto-links libraries (skipping HeaderOnly), and emits MSVC runtime per-config
+4. **Output** — `generate()` from `@orb/premake-ts/generator` serializes the scope tree to Lua; premake5 is invoked on the result
 
 ### Module System
-Orb uses a tree of `orb.ts` files (or `{name}.ts`) that define Packages and Modules:
-- **Package** — Container of other packages/modules (like a folder)
-- **Module** — Build target (StaticLib, ConsoleApp, etc.) with public/private/link scopes
-- Dependencies are resolved by full path (e.g., `thirdparty/entt`)
-- Modules expose three scope callbacks: `public`, `private`, `link`
+Orb uses a tree of `orb.ts` files that define Projects, Packages, and Modules:
+- **Project** (`defineProject`) — Top-level container with packages, config defaults, options, and build strategy
+- **Package** (`definePackage`) — Container of modules (like a folder)
+- **Module** (`defineLibrary`, `defineExecutable`, `defineHeaderOnly`, etc.) — Build target with public/private/link scope callbacks
+- Dependencies are resolved by qualified name (`thirdparty/entt`) or bare name (auto-resolved within same package, then globally)
+- Modules expose three scope callbacks: `public` (transitive), `private` (local), `link` (link-time settings)
 
-### Status
-This package is in **prototype state**. It builds correctly but is not feature-complete. Do not add new features unless explicitly requested.
+### Dependencies
+- `@orb/premake-ts` — PremakeScope proxy and Lua generation
+- `commander` — CLI argument parsing
+- `zod` — Option schema validation
+- `glob` — File pattern matching
+- `chalk` — Colored terminal output
 
 ## Dependency Graph
 
@@ -115,17 +148,43 @@ This package is in **prototype state**. It builds correctly but is not feature-c
 
 `@orb/premake-ts` has **no dependencies** on other packages and should remain that way.
 
+## Testing
+
+**Framework:** [Vitest](https://vitest.dev/) v4 — config at `vitest.config.ts`, pattern `packages/*/tests/**/*.test.ts`.
+
+### premake-ts tests (`packages/premake-ts/tests/`)
+- `generator.test.ts` — Tests Lua generation from `PremakeScope` proxy: basic workspace, filter blocks, multiple projects, globals exposure
+- `fixtures/basic/` — Minimal C++ source files (main.cpp, math.h, math.cpp)
+
+### @orb/build tests (`packages/build/tests/`)
+- `build.test.ts` — Tests the full loader → resolver → generator pipeline:
+  - **loader**: discovers packages and modules from fixture orb.ts files
+  - **resolver**: dependency resolution, reachability marking, topological ordering
+  - **generator**: workspace/project Lua output, transitive public includes, auto-linking (skips HeaderOnly), configuration defaults, output location
+- `fixtures/project/` — Self-contained test project with:
+  - `orb.ts` — Project root (TestProject, Debug/Release, C++20)
+  - `src/orb.ts` — Package with `core` (StaticLib) and `app` (ConsoleApp)
+  - `thirdparty/orb.ts` — Package with `mocklib` (HeaderOnly)
+  - Minimal C++ source files for each module
+
 ## Common Tasks
 
-### Testing the generator
+### Running tests
+```bash
+npm run vitest                             # Run all vitest tests (watch mode)
+npx vitest run                             # Run all tests once
+```
+
+### Testing premake-ts end-to-end
 ```bash
 npm test                                    # Runs premake-ts on test/premake5.ts
 npm start -- --emitOnly --file=test/premake5.ts vs2022  # Generate Lua only
 ```
 
-### Testing orb
+### Testing orb end-to-end
 ```bash
-cd test && node --experimental-strip-types --disable-warning=DEP0190 ../packages/build/src/main.ts --file=orb.ts
+npm run orb-test -- vs2022                  # Generate VS2022 solution from test/orb.ts
+npm run orb -- generate --file=test/orb.ts vs2022  # Equivalent explicit command
 ```
 
 ### Regenerating types
@@ -140,3 +199,5 @@ npm run parse   # Requires premake5 binary and local LLM server
 - `__dirname` is derived from `import.meta.url` using `fileURLToPath`
 - Generated files are committed to the repo (scopes/generated/, data/, types/)
 - The `// @ts-nocheck` in scopes.ts exists because generated types may have complex patterns
+- Test files live in `packages/<pkg>/tests/` alongside a `fixtures/` directory
+- User-facing orb.ts files import from `@orb/build` (or relative path during development)
