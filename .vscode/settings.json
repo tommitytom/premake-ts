@@ -1,6 +1,7 @@
 {
 	"chat.tools.terminal.autoApprove": {
 		"mkdir": true,
-		"Copy-Item": true
+		"Copy-Item": true,
+		"npm install": true
 	}
 }

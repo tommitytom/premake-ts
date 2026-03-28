@@ -1,334 +1,121 @@
-import fs from 'node:fs';
-import path, { dirname, join, resolve } from 'node:path';
-import { pathToFileURL } from 'node:url';
-import { generate } from '@orb/premake-ts/generator';
-import { dumpGlobals, execPremake } from '@orb/premake-ts/util';
-import fields from "@orb/premake-ts/data/fields.json" with { type: "json" };
-import { type IGlobals, PremakeScope } from '@orb/premake-ts/scopes/PremakeScope';
-import type { ProjectScope, WorkspaceScope } from '@orb/premake-ts/scopes';
-import type { IModule, IOrbBase, IPackage } from './types.ts';
+import { existsSync, unlinkSync, writeFileSync } from "node:fs";
+import { basename, dirname, join, resolve } from "node:path";
+import { parseArgs } from "./cli/args.ts";
+import { loadProject } from "./config/loader.ts";
+import { resolveOptions } from "./config/options.ts";
+import { buildDependencyGraph } from "./resolver/graph.ts";
+import { generatePremake } from "./generator/premake.ts";
+import { findProjectRoot } from "./utils/paths.ts";
+import { dumpGlobals, execPremake } from "@orb/premake-ts/util";
+import type { IGlobals } from "@orb/premake-ts/scopes/PremakeScope";
+import * as logger from "./utils/logger.ts";
 
-export interface IBuildOrb<T extends IOrbBase = IOrbBase> {
-	rootDir: string;
-	filename: string;
-	fullName: string;
-	orbModule: T;
+async function main() {
+	const args = parseArgs(process.argv.slice(2));
 
-	privateScope?: PremakeScope;
-	publicScope?: PremakeScope;
-	linkScope?: PremakeScope;
-
-	moduleScope?: PremakeScope;
-}
-
-export interface IModuleOrb extends IBuildOrb<IModule> {}
-
-interface IPendingOrb {
-	rootDir: string;
-	rootName: string;
-	filename?: string;
-}
-
-function findOrb(workingDir: string, rootDir: string, filePath?: string): string | null {
-	if (filePath) {
-		filePath = path.normalize(path.join(rootDir, filePath));
-
-		if (fs.existsSync(path.join(workingDir, filePath))) {
-			return filePath;
-		}
-
-		return null;
+	// Find the orb.ts file
+	const orbFile = args.file ?? findOrbFile();
+	if (!orbFile || !existsSync(orbFile)) {
+		logger.error(`Could not find orb.ts. Use --file to specify the path.`);
+		process.exit(1);
 	}
 
-	filePath = rootDir + '.ts';
-	if (fs.existsSync(path.join(workingDir, filePath))) {
-		return filePath;
-	}
+	const projectRoot = dirname(resolve(orbFile));
 
-	filePath = path.normalize(path.join(rootDir, 'orb.ts'));
-	if (fs.existsSync(path.join(workingDir, filePath))) {
-		return filePath;
-	}
-
-	return null;
-}
-
-async function collectOrbs(filePath: string): Promise<IBuildOrb[]> {
-	const workingDir = path.normalize(path.dirname(filePath));
-
-	const pendingOrbs: IPendingOrb[] = [{ rootDir: '.', filename: path.basename(filePath), rootName: '' }];
-	const orbs: IBuildOrb[] = [];
-	let root: IBuildOrb | null = null;
-
-	console.log('process.cwd()', process.cwd());
-
-
-	while (pendingOrbs.length > 0) {
-		const pending = pendingOrbs.pop()!;
-		const filePath = findOrb(workingDir, pending.rootDir, pending.filename);
-
-		if (!filePath) {
-			throw new Error(`Orb file not found: ${path.join(pending.rootDir, pending.filename ?? '')}`);
-		}
-
-		const orbUrl = pathToFileURL(path.join(workingDir, filePath)).href;
-		const orbModule = (await import(orbUrl)).default as IOrbBase;
-
-		if (!orbModule.type) {
-			throw new Error(`Orb at ${filePath} is missing a type`);
-		}
-
-		if (!root && orbModule.type !== 'Package') {
-			throw new Error(`The root orb must be of type 'Package'`);
-		}
-
-		const buildOrb: IBuildOrb = {
-			rootDir: path.dirname(filePath),
-			filename: path.basename(filePath),
-			fullName: (root && pending.rootName !== '' && pending.rootName !== root.fullName) ? pending.rootName + '/' + orbModule.name : orbModule.name,
-			orbModule: orbModule
-		};
-
-		if (orbModule.type === 'Package') {
-			const pkg = orbModule as IPackage;
-			if (!pkg.items || pkg.items.length === 0) {
-				throw new Error(`Package orb at "${filePath}" has no items`);
-			}
-
-			for (const itemName of pkg.items) {
-				pendingOrbs.push({
-					rootName: buildOrb.fullName,
-					rootDir: path.join(pending.rootDir, itemName),
-				});
-			}
-		}
-
-		if (!root) {
-			root = buildOrb;
-		}
-
-		orbs.push(buildOrb);
-	}
-
-	return orbs;
-}
-
-function resolveDependencies(orbs: Map<string, IModuleOrb>) {
-	for (const [_, buildOrb] of orbs) {
-		const module = buildOrb.orbModule;
-		if (module.dependencies) {
-			for (const depName of module.dependencies) {
-				if (!orbs.has(depName)) {
-					throw new Error(`Module "${buildOrb.fullName}" has unknown dependency "${depName}"`);
-				}
-			}
-		}
-	}
-}
-
-function createLookup(orbs: IModuleOrb[]): Map<string, IModuleOrb> {
-	const map = new Map<string, IModuleOrb>();
-	for (const orb of orbs) {
-		map.set(orb.fullName, orb);
-	}
-
-	return map;
-}
-
-function processScopes(globals: IGlobals, orbs: IModuleOrb[]) {
-	for (const orb of orbs) {
-		const module = orb.orbModule;
-
-		if (module.private) {
-			console.assert(orb.privateScope === undefined, "Private scope already defined");
-			const privateScope = new PremakeScope(globals);
-			module.private(privateScope.createProxy<ProjectScope>());
-			orb.privateScope = privateScope;
-		}
-
-		if (module.public) {
-			console.assert(orb.publicScope === undefined, "Public scope already defined");
-			const publicScope = new PremakeScope(globals);
-			module.public(publicScope.createProxy<ProjectScope>());
-			orb.publicScope = publicScope;
-		}
-
-		if (module.link) {
-			console.assert(orb.linkScope === undefined, "Link scope already defined");
-			const linkScope = new PremakeScope(globals);
-			module.link(linkScope.createProxy<ProjectScope>());
-			orb.linkScope = linkScope;
-		}
-	}
-}
-
-function resolveScopePaths(rootDir: string, scope?: PremakeScope) {
-	if (!scope) {
+	if (args.command === "list") {
+		await listDependencies(orbFile);
 		return;
 	}
 
-	const sanitizePath = (p: string) => {
-		const fullPath = path.isAbsolute(p) ? p : path.normalize(path.join(rootDir, p));
-		return fullPath.replaceAll('\\', '/');
-	};
-
-	const pathKinds = ['path', 'file', 'directory', 'list:path', 'list:file', 'list:directory'];
-
-	const commands = scope.getCommands();
-	for (const cmd of commands) {
-		const found = fields.find(field => field.name === cmd.name && pathKinds.includes(field.kind));
-		if (!found) continue;
-
-		if (found.kind.startsWith('list:')) {
-			const pathArgs = cmd.args as string[];
-			const sanitizedPaths: string[] = [];
-			for (let i = 0; i < pathArgs.length; ++i) {
-				sanitizedPaths.push(sanitizePath(pathArgs[i]));
-			}
-
-			cmd.args = sanitizedPaths;
-		} else {
-			cmd.args = sanitizePath(cmd.args as string);
-		}
-	}
-}
-
-function resolveModulePaths(orbs: IModuleOrb[]) {
-	for (const orb of orbs) {
-		const rootDir = orb.orbModule.rootDir ? path.join(orb.rootDir, orb.orbModule.rootDir) : orb.rootDir;
-		resolveScopePaths(rootDir, orb.publicScope);
-		resolveScopePaths(rootDir, orb.privateScope);
-		resolveScopePaths(rootDir, orb.linkScope);
-	}
-}
-
-function setupWorkspace(w: WorkspaceScope) {
-	w.configurations('Debug', 'Release');
-	w.architecture('x86_64');
-	w.location('build/' + w.action);
-	w.cppDialect('C++20');
-
-	w.when('configurations:Debug', w => {
-		w.defines('DEBUG');
-		w.symbols('On');
-	}).when('configurations:Release', w => {
-		w.defines('NDEBUG');
-		w.optimize('On');
-	});
-}
-
-function createWorkspaceScope(globals: IGlobals, name: string, lookup: Map<string, IModuleOrb>): PremakeScope {
-	const workspaceScope = new PremakeScope(globals);
-	workspaceScope.command("workspace", name);
-
-	setupWorkspace(workspaceScope.createProxy<WorkspaceScope>());
-
-	for (const orb of lookup.values()) {
-		const module = orb.orbModule;
-		console.assert(orb.moduleScope === undefined, "Module scope already defined");
-
-		workspaceScope.command("project", module.name);
-		workspaceScope.command("kind", module.type);
-		workspaceScope.command("files", [path.join(orb.rootDir, orb.filename).replaceAll('\\', '/')]);
-
-		if (module.dependencies) {
-			for (const depName of module.dependencies) {
-				const depOrb = lookup.get(depName)!;
-				console.assert(!!depOrb, `Dependency orb not found: ${depName}`);
-
-				if (depOrb.publicScope) {
-					workspaceScope.addCommands(depOrb.publicScope.getCommands());
-				}
-			}
-		}
-
-		if (orb.publicScope) {
-			workspaceScope.addCommands(orb.publicScope.getCommands());
-		}
-
-		if (orb.privateScope) {
-			workspaceScope.addCommands(orb.privateScope.getCommands());
-		}
-
-		if (module.type === 'ConsoleApp' || module.type === 'WindowedApp') {
-			const deps = collectDependencies(orb, lookup);
-			for (const depOrb of deps) {
-				if (depOrb.linkScope) {
-					workspaceScope.addCommands(depOrb.linkScope.getCommands());
-				} else if (!depOrb.orbModule.headerOnly) {
-					workspaceScope.command("links", [depOrb.orbModule.name]);
-				}
-			}
-		}
-
-		workspaceScope.command("project");
+	if (args.command === "clean") {
+		// TODO: implement clean
+		logger.info("Clean not yet implemented.");
+		return;
 	}
 
-	return workspaceScope;
-}
-
-function collectDependencies(rootOrb: IModuleOrb, lookup: Map<string, IModuleOrb>): IModuleOrb[] {
-	const dependencies: IModuleOrb[] = [];
-	const pendingOrbs: IModuleOrb[] = [rootOrb];
-
-	while (pendingOrbs.length > 0) {
-		const orb = pendingOrbs.pop()!;
-		const module = orb.orbModule;
-		dependencies.push(orb);
-
-		if (module.dependencies) {
-			for (const depName of module.dependencies) {
-				const depOrb = lookup.get(depName)!;
-				console.assert(!!depOrb, `Dependency orb not found: ${depName}`);
-				pendingOrbs.push(depOrb);
-			}
-		}
-	}
-
-	return dependencies;
-}
-
-async function main() {
-	const args = process.argv.slice(2);
-
-	const globals = dumpGlobals('vs2022');
-
-	let scriptPath = 'orb.ts'; // Default to orb.ts in current directory
-	const fileArgIndex = args.findIndex(arg => arg.startsWith('--file='));
-
-	if (fileArgIndex !== -1) {
-		scriptPath = args[fileArgIndex].split('=')[1];
-		// Remove --file from args so it's not passed to premake
-		args.splice(fileArgIndex, 1);
-	}
-
-	try {
-		const absolutePath = resolve(scriptPath);
-
-		const orbs = await collectOrbs(absolutePath);
-		const modules = orbs.filter(orb => orb.orbModule.type !== 'Package') as IModuleOrb[];
-		const lookup = createLookup(modules);
-		resolveDependencies(lookup);
-		processScopes(globals, modules);
-		resolveModulePaths(modules);
-		const workspaceScope = createWorkspaceScope(globals, orbs[0].orbModule.name, lookup);
-		const premakeFile = generate(workspaceScope);
-
-		console.log(premakeFile);
-
-		// Write the Lua file to the same directory as the TypeScript file
-		const scriptDir = dirname(absolutePath);
-		const luaFileName = 'premake5.lua';
-		const luaFilePath = join(scriptDir, luaFileName);
-
-		fs.writeFileSync(luaFilePath, premakeFile, 'utf-8');
-
-		// Pass the generated Lua file path to premake
-		execPremake([`--file=${luaFilePath}`, 'vs2022']);
-	} catch (error) {
-		console.error('Error running script:', error);
+	// generate or build
+	const action = args.action;
+	if (!action) {
+		logger.error("No action specified. Usage: orb generate <action> (e.g., vs2022, gmake2)");
 		process.exit(1);
 	}
+
+	// Load the project
+	const project = await loadProject(orbFile);
+
+	// Resolve options
+	let resolvedOpts: Record<string, unknown> = {};
+	if (project.definition.options) {
+		resolvedOpts = resolveOptions(project.definition.options, args.options ?? {});
+	}
+
+	// Build dependency graph
+	const graph = buildDependencyGraph(project, resolvedOpts);
+
+	// Get premake globals
+	const globals = dumpGlobals(action) as IGlobals;
+
+	// Generate premake Lua
+	const lua = generatePremake({
+		graph,
+		project: project.definition,
+		projectRoot: project.projectRoot,
+		globals,
+		resolvedOptions: resolvedOpts,
+	});
+
+	// Write Lua file
+	const luaFilePath = join(projectRoot, "premake5.lua");
+	writeFileSync(luaFilePath, lua, "utf-8");
+	logger.info(`Generated ${luaFilePath}`);
+
+	if (args.emitOnly) return;
+
+	// Run premake
+	const premakeBinary = args.premakeBinary ?? "premake5";
+	try {
+		await execPremake([`--file=${luaFilePath}`, action], premakeBinary);
+	} finally {
+		// Clean up intermediate Lua file
+		if (existsSync(luaFilePath)) {
+			unlinkSync(luaFilePath);
+		}
+	}
+
+	// If build command, invoke the build tool
+	if (args.command === "build") {
+		// TODO: implement build invocation (msbuild, make, etc.)
+		logger.info("Build invocation not yet implemented. Premake files generated successfully.");
+	}
 }
 
-main();
+function findOrbFile(): string | undefined {
+	const root = findProjectRoot(process.cwd());
+	if (root) return join(root, "orb.ts");
+	return undefined;
+}
+
+async function listDependencies(orbFile: string) {
+	const project = await loadProject(orbFile);
+	const graph = buildDependencyGraph(project);
+
+	logger.info(`Project: ${project.definition.name}\n`);
+
+	for (const qualifiedName of graph.topologicalOrder) {
+		const mod = graph.modules.get(qualifiedName)!;
+		const deps = mod.resolvedDeps;
+		const marker = mod.isRoot ? " (root)" : "";
+		const reachable = mod.reachable ? "" : " [unreachable]";
+
+		if (deps.length > 0) {
+			logger.info(`  ${qualifiedName}${marker}${reachable} → ${deps.join(", ")}`);
+		} else {
+			logger.info(`  ${qualifiedName}${marker}${reachable}`);
+		}
+	}
+}
+
+main().catch((err) => {
+	logger.error(err.message ?? err);
+	process.exit(1);
+});

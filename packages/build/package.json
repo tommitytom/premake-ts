@@ -3,7 +3,17 @@
   "version": "0.1.0",
   "description": "Hierarchical module-based build system built on premake-ts",
   "type": "module",
-  "main": "src/main.ts",
+  "main": "src/index.ts",
+  "exports": {
+    ".": "./src/index.ts",
+    "./config/schema": "./src/config/schema.ts",
+    "./config/helpers": "./src/config/helpers.ts",
+    "./config/loader": "./src/config/loader.ts",
+    "./config/options": "./src/config/options.ts",
+    "./resolver": "./src/resolver/graph.ts",
+    "./generator": "./src/generator/premake.ts",
+    "./generator/filters": "./src/generator/filters.ts"
+  },
   "scripts": {
     "start": "node --experimental-strip-types --disable-warning=DEP0190 src/main.ts"
   },
@@ -15,6 +25,10 @@
   "author": "Tom Yaxley",
   "license": "MIT",
   "dependencies": {
-    "@orb/premake-ts": "1.0.0"
+    "@orb/premake-ts": "1.0.0",
+    "chalk": "^5.6.2",
+    "commander": "^14.0.3",
+    "glob": "^13.0.6",
+    "zod": "^4.3.6"
   }
 }
