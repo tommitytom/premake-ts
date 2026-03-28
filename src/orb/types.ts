@@ -18,21 +18,21 @@ export interface IModule extends IOrbBase {
 	link?: (ctx: ProjectScope) => void;
 }
 
+export interface IPackage extends IOrbBase {
+	type: 'Package';
+	items: Array<string|IModule>;
+	author?: string;
+	version?: string;
+	description?: string;
+	license?: string;
+}
+
 export function defineLibrary(module: Omit<IModule, 'type'>): IModule {
 	return {type: 'StaticLib', ...module};
 }
 
 export function defineExecutable(module: Omit<IModule, 'type'|'public'>): IModule {
 	return {type: 'ConsoleApp', ...module};
-}
-
-export interface IPackage extends IOrbBase {
-	type: 'Package';
-	items: string[];
-	author?: string;
-	version?: string;
-	description?: string;
-	license?: string;
 }
 
 export function definePackage(pkg: Omit<IPackage, 'type'>): IPackage {

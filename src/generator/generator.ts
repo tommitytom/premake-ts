@@ -1,7 +1,7 @@
 import { PremakeScope } from "../scopes/PremakeScope.ts";
 
 const RENAME_COMMANDS = new Map<string, string>([["when", "filter"]]);
-const SCOPED_COMMANDS = new Set(["workspace", "project", "filter", "group"]);
+const SCOPED_COMMANDS = new Set(["workspace", "project", "filter", "group", "usage"]);
 
 function sanitizeCommand(cmd: string): string {
 	if (RENAME_COMMANDS.has(cmd)) {
@@ -33,6 +33,10 @@ export function generate(scope: PremakeScope): string {
 
 			if (cmdName === 'filter') {
 				output.push(`${"\t".repeat(indent)}filter {}`);
+			} else if (cmdName === 'usage') {
+				output.push(`${"\t".repeat(indent)}${cmdName} "PRIVATE"`);
+			} else if (cmdName === 'group') {
+				output.push(`${"\t".repeat(indent)}${cmdName} ""`);
 			}
 		} else {
 			output.push(`${"\t".repeat(indent)}${cmdName.toLowerCase()} ${formatArgs(cmd.args!)}`);

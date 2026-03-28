@@ -3279,6 +3279,19 @@
   },
   {
     "allowed": [],
+    "kind": "string",
+    "name": "usage",
+    "scope": "project",
+    "scopes": [
+      "project"
+    ],
+    "description": "Specifies a reusable block of configuration to be consumed at a later point.\n\n```lua\nusage 'MyUsage'\n```\n\nThe `usage` API is used to define configuration to be consumed by the `uses` API.  Usages must have unique names, except for magic usage block names (as described below).",
+    "parameter": "",
+    "availability": "",
+    "examples": ""
+  },
+  {
+    "allowed": [],
     "kind": "boolean",
     "name": "usefullpaths",
     "scope": "config",

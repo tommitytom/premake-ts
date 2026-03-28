@@ -457,6 +457,16 @@ export interface ProjectScopeGenerated {
 	toolsVersion(identifier: string): this;
 
 	/**
+	 * Specifies a reusable block of configuration to be consumed at a later point.
+	 * The `usage` API is used to define configuration to be consumed by the `uses` API.  Usages must have unique names, except for magic usage block names (as described below).
+	 * 
+	 * 
+	 * @param value
+	 * 
+	 */
+	usage(value: string): this;
+
+	/**
 	 * Sets the [Universally Unique Identifier](http://en.wikipedia.org/wiki/UUID) (UUID) for a project.
 	 * UUIDs are synonymous (for Premake's purposes) with [Globally Unique Identifiers](http://en.wikipedia.org/wiki/Globally_Unique_Identifier) (GUID).
 	 * 

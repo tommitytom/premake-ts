@@ -2460,6 +2460,15 @@
   },
   {
     "allowed": [],
+    "kind": "string",
+    "name": "usage",
+    "scope": "project",
+    "scopes": [
+      "project"
+    ]
+  },
+  {
+    "allowed": [],
     "kind": "boolean",
     "name": "usefullpaths",
     "scope": "config",

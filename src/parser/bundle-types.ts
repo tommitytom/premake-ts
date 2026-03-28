@@ -1,4 +1,4 @@
-import { mkdirSync, readdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, readdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import ts from "typescript";
@@ -8,6 +8,7 @@ const configPath = resolve(__dirname, "tsconfig.declarations.json");
 const configDir = dirname(configPath);
 const targetDir = resolve(__dirname, "..", "..", "types");
 const typesDir = resolve(targetDir, "intermediate");
+const targetTypesFile = resolve(targetDir, "premake-ts.d.ts");
 
 export function bundleTypes() {
 	const configText = ts.sys.readFile(configPath);
@@ -35,9 +36,14 @@ export function bundleTypes() {
 		throw new Error(errorList.join("\n"));
 	}
 
+	if (!existsSync(targetDir)) {
+		mkdirSync(targetDir, { recursive: true });
+	}
+
+	rmSync(typesDir, { recursive: true, force: true });
+	rmSync(targetTypesFile, { force: true });
+
 	// Delete existing content from target dir
-	rmSync(targetDir, { recursive: true, force: true });
-	mkdirSync(targetDir, { recursive: true });
 
 	const program = ts.createProgram(fileNames, options);
 	const result = program.emit();
@@ -77,7 +83,7 @@ export function bundleTypes() {
 
 	// Wrap in module declaration
 	const final = `declare module "premake-ts" {\n${combined}\n}`;
-	writeFileSync(`${targetDir}/premake-ts.d.ts`, final);
+	writeFileSync(targetTypesFile, final);
 
 	rmSync(typesDir, { recursive: true, force: true });
 }

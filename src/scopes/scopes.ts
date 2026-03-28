@@ -38,7 +38,11 @@ export interface ConfigScope extends ConfigScopeGenerated {
 	when(conditions: FilterString|FilterString[], func: (scope: ProjectScope) => void): this;
 }
 
-export interface ProjectScope extends ProjectScopeGenerated, ConfigScope {}
+export type UsageType = 'PUBLIC' | 'PRIVATE' | 'INTERFACE' | string;
+
+export interface ProjectScope extends ProjectScopeGenerated, ConfigScope {
+	usage(name: UsageType, func: (scope: ProjectScope) => void): this;
+}
 
 export interface WorkspaceScope extends WorkspaceScopeGenerated, ProjectScope {
 	/**

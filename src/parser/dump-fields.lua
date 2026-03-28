@@ -79,6 +79,14 @@ table.insert(items, {
 	optional = true
 })
 
+table.insert(items, {
+	allowed = {},
+	kind = "string",
+	name = "usage",
+	scope = "project",
+	scopes = {"project"}
+})
+
 local j, err = json.encode(items)
 if err then
 	print("  Error encoding to JSON: " .. err)

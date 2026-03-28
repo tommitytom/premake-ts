@@ -76,11 +76,13 @@ export function getParamType(name: string, field: DocumentedField): string {
 		case 'file':
 		case 'directory':
 		case 'string':
+		case 'mixed':
 			return `${name}: string`;
 		case 'list:path':
 		case 'list:file':
 		case 'list:directory':
 		case 'list:string':
+		case 'list:mixed':
 			return `...${name}: string[]`;
 		case 'boolean':
 			return `${name}: boolean`;
@@ -116,9 +118,9 @@ export function countOccurrences(str: string, char: string) {
 export function removeSimpleExamples(fields: DocumentedField[]) {
 	fields.forEach(field => {
 		if (field.examples && field.examples.startsWith('```lua') && field.examples.endsWith('```') &&
-				countOccurrences(field.examples, '\n') === 2 &&
-				countOccurrences(field.examples, '%') === 0 &&
-				countOccurrences(field.examples, '/') === 0 )
+			countOccurrences(field.examples, '\n') === 2 &&
+			countOccurrences(field.examples, '%') === 0 &&
+			countOccurrences(field.examples, '/') === 0 )
 		{
 			field.examples = '';
 		}

@@ -597,7 +597,7 @@ export interface ConfigScopeGenerated {
 	 * flags { "NoCopyLocal" }
 	 * ```
 	 */
-	copyLocal(libraries: any): this;
+	copyLocal(...libraries: string[]): this;
 
 	/**
 	 * 
@@ -1314,7 +1314,7 @@ export interface ConfigScopeGenerated {
 	 * @param files Specifies a list of files to be force included. Paths should be specified relative to the currently running script file.
 	 * 
 	 */
-	forceIncludes(files: any): this;
+	forceIncludes(...files: string[]): this;
 
 	/**
 	 * Applies one or more "forced using" files to the project; these includes behave as it they had been injected into the first line of each source file in the project.
@@ -1397,7 +1397,7 @@ export interface ConfigScopeGenerated {
 	 *   ignoredefaultlibraries { "MSVCRT" }
 	 * ```
 	 */
-	ignoreDefaultLibraries(libraries: any): this;
+	ignoreDefaultLibraries(...libraries: string[]): this;
 
 	/**
 	 * Passes arguments directly to the image tool command line without translation.
@@ -1910,7 +1910,7 @@ export interface ConfigScopeGenerated {
 	 *       files "**.cpp"
 	 * ```
 	 */
-	links(references: any): this;
+	links(...references: string[]): this;
 
 	/**
 	 * Emit each data item in a separate section. This help linker optimizations to remove unused data.

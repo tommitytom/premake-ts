@@ -54,6 +54,13 @@ export class PremakeScope {
 		return this;
 	}
 
+	usage(name: string, func: (scope: Omit<WorkspaceScope, 'usage'>) => void) {
+		this.command("usage", name);
+		func(this.createProxy<Omit<WorkspaceScope, 'usage'>>());
+		this.command("usage");
+		return this;
+	}
+
 	when(condition: string|string[], func: (scope: ProjectScope) => void) {
 		this.command("when", condition);
 		func(this.createProxy<ProjectScope>());
@@ -77,7 +84,11 @@ export class PremakeScope {
 
 				// Otherwise, create a function that calls command()
 				return (...args: any[]) => {
-					const field = fields.find(f => f.name === prop.toString().toLowerCase())!;
+					let fieldName = prop.toString().toLowerCase();
+					const isRemover = fieldName.startsWith("remove");
+					if (isRemover) fieldName = fieldName.substring(6);
+
+					const field = fields.find(f => f.name === fieldName)!;
 
 					if (field.kind?.startsWith('list:')) {
 						this.command(prop as string, args);

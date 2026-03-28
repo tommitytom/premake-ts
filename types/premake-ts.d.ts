@@ -1,5 +1,6 @@
 declare module "premake-ts" {
 
+export * as os from "./utils/os.ts";
 /**
  * Creates a new workspace.
  * Workspaces are the top-level objects in a Premake build script, and are synonymous with a Visual Studio solution. Each workspace contains one or more projects, which in turn contain the settings to generate a single binary target.
@@ -59,7 +60,9 @@ export interface ConfigScope extends ConfigScopeGenerated {
      */
     when(conditions: FilterString | FilterString[], func: (scope: ProjectScope) => void): this;
 }
+export type UsageType = 'PUBLIC' | 'PRIVATE' | 'INTERFACE' | string;
 export interface ProjectScope extends ProjectScopeGenerated, ConfigScope {
+    usage(name: UsageType, func: (scope: ProjectScope) => void): this;
 }
 export interface WorkspaceScope extends WorkspaceScopeGenerated, ProjectScope {
     /**
@@ -81,6 +84,8 @@ export interface WorkspaceScope extends WorkspaceScopeGenerated, ProjectScope {
     group(name: string, func: (scope: Omit<WorkspaceScope, 'group'>) => void): this;
 }
 export {};
+
+export function isFile(path: string): boolean;
 
 export type ArchitectureType = 'universal' | 'x86' | 'x86_64' | 'ARM' | 'ARM64' | 'RISCV64' | 'loongarch64' | 'ppc' | 'ppc64' | 'wasm32' | 'wasm64' | 'e2k' | 'armv5' | 'armv7' | 'aarch64' | 'mips' | 'mips64';
 export type AtlType = 'Off' | 'Dynamic' | 'Static';
@@ -653,7 +658,7 @@ export interface ConfigScopeGenerated {
      * flags { "NoCopyLocal" }
      * ```
      */
-    copyLocal(libraries: any): this;
+    copyLocal(...libraries: string[]): this;
     /**
      *
      *
@@ -1328,7 +1333,7 @@ export interface ConfigScopeGenerated {
      * @param files Specifies a list of files to be force included. Paths should be specified relative to the currently running script file.
      *
      */
-    forceIncludes(files: any): this;
+    forceIncludes(...files: string[]): this;
     /**
      * Applies one or more "forced using" files to the project; these includes behave as it they had been injected into the first line of each source file in the project.
      *
@@ -1405,7 +1410,7 @@ export interface ConfigScopeGenerated {
      *   ignoredefaultlibraries { "MSVCRT" }
      * ```
      */
-    ignoreDefaultLibraries(libraries: any): this;
+    ignoreDefaultLibraries(...libraries: string[]): this;
     /**
      * Passes arguments directly to the image tool command line without translation.
      * If a project includes multiple calls to `imageoptions` the lists are concatenated, in the order in which they appear in the script.
@@ -1894,7 +1899,7 @@ export interface ConfigScopeGenerated {
      *       files "**.cpp"
      * ```
      */
-    links(references: any): this;
+    links(...references: string[]): this;
     /**
      * Emit each data item in a separate section. This help linker optimizations to remove unused data.
      *
@@ -3773,6 +3778,15 @@ export interface ProjectScopeGenerated {
      * ```
      */
     toolsVersion(identifier: string): this;
+    /**
+     * Specifies a reusable block of configuration to be consumed at a later point.
+     * The `usage` API is used to define configuration to be consumed by the `uses` API.  Usages must have unique names, except for magic usage block names (as described below).
+     *
+     *
+     * @param value
+     *
+     */
+    usage(value: string): this;
     /**
      * Sets the [Universally Unique Identifier](http://en.wikipedia.org/wiki/UUID) (UUID) for a project.
      * UUIDs are synonymous (for Premake's purposes) with [Globally Unique Identifiers](http://en.wikipedia.org/wiki/Globally_Unique_Identifier) (GUID).
