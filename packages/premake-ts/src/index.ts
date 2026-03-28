@@ -1,4 +1,4 @@
-import type { WorkspaceFunc } from "../scopes/scopes.ts";
+import type { WorkspaceFunc } from "./scopes/scopes.ts";
 
 export * as os from "./utils/os.ts";
 

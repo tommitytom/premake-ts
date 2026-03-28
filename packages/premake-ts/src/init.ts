@@ -159,9 +159,9 @@ export async function initProject(cwd: string = process.cwd()): Promise<void> {
  * Install type definitions only
  */
 export async function installTypes(cwd: string = process.cwd()): Promise<void> {
-	const typesSource = join(__dirname, '../../types/premake-ts.d.ts');
+	const typesSource = join(__dirname, '../types/premake-ts.d.ts');
 	const typesTarget = join(cwd, 'premake-ts.d.ts');
-	const tsConfigSource = join(__dirname, '../../types/tsconfig.json');
+	const tsConfigSource = join(__dirname, '../types/tsconfig.json');
 	const tsConfigTarget = join(cwd, 'tsconfig.json');
 
 	// Check if files exist

@@ -4,7 +4,7 @@ import { dirname, join } from 'path';
 import { fileURLToPath, pathToFileURL } from 'url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const tsFile = join(__dirname, '../src/generator/main.ts');
+const tsFile = join(__dirname, '../src/main.ts');
 const loader = pathToFileURL(join(__dirname, 'register-loader.js')).href;
 
 const child = spawn('node', [

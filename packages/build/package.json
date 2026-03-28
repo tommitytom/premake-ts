@@ -1,0 +1,20 @@
+{
+  "name": "@orb/build",
+  "version": "0.1.0",
+  "description": "Hierarchical module-based build system built on premake-ts",
+  "type": "module",
+  "main": "src/main.ts",
+  "scripts": {
+    "start": "node --experimental-strip-types --disable-warning=DEP0190 src/main.ts"
+  },
+  "keywords": [
+    "build",
+    "premake",
+    "modules"
+  ],
+  "author": "Tom Yaxley",
+  "license": "MIT",
+  "dependencies": {
+    "@orb/premake-ts": "1.0.0"
+  }
+}

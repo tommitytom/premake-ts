@@ -6,7 +6,7 @@ import ts from "typescript";
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const configPath = resolve(__dirname, "tsconfig.declarations.json");
 const configDir = dirname(configPath);
-const targetDir = resolve(__dirname, "..", "..", "types");
+const targetDir = resolve(__dirname, "..", "..", "premake-ts", "types");
 const typesDir = resolve(targetDir, "intermediate");
 const targetTypesFile = resolve(targetDir, "premake-ts.d.ts");
 

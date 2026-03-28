@@ -1,5 +1,5 @@
-import type { KindType } from "../scopes/generated/ConfigScope.generated.ts";
-import type { ProjectScope } from "../scopes/scopes.ts";
+import type { KindType } from "@orb/premake-ts/scopes";
+import type { ProjectScope } from "@orb/premake-ts/scopes";
 
 export type OrbType = KindType|'Package';
 

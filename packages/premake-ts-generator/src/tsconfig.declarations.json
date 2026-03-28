@@ -8,12 +8,12 @@
 		"skipLibCheck": true,
 		"declaration": true,
 		"emitDeclarationOnly": true,
-		"outDir": "../../types/intermediate",
+		"outDir": "../../premake-ts/types/intermediate",
 		"forceConsistentCasingInFileNames": true
 	},
 	"include": [
-		"../scopes/scopes.ts",
-		"../scopes/generated/**/*",
-		"../generator/index.ts"
+		"../../premake-ts/src/scopes/scopes.ts",
+		"../../premake-ts/src/scopes/generated/**/*",
+		"../../premake-ts/src/index.ts"
 	]
 }

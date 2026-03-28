@@ -1,0 +1,25 @@
+{
+  "name": "@orb/premake-ts",
+  "version": "1.0.0",
+  "description": "Write Premake build scripts in TypeScript with full type safety and editor completion",
+  "type": "module",
+  "main": "src/main.ts",
+  "bin": {
+    "premake-ts": "bin/cli.js"
+  },
+  "exports": {
+    ".": "./src/index.ts",
+    "./generator": "./src/generator.ts",
+    "./util": "./src/util.ts",
+    "./scopes": "./src/scopes/scopes.ts",
+    "./scopes/PremakeScope": "./src/scopes/PremakeScope.ts",
+    "./data/fields.json": "./data/fields.json"
+  },
+  "keywords": [
+    "premake",
+    "typescript",
+    "build"
+  ],
+  "author": "Tom Yaxley",
+  "license": "MIT"
+}

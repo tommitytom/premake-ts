@@ -7,6 +7,9 @@ import { generateFunction, generateFunctionType, removeSimpleExamples } from './
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
+/** Path to the @orb/premake-ts package scopes/generated directory */
+const PREMAKE_TS_GENERATED = join(__dirname, '..', '..', 'premake-ts', 'src', 'scopes', 'generated');
+
 export function generateInterface(name: string, scopeFields: DocumentedField[], outputDir: string): void {
 	const output = `// Auto-generated file. Do not edit directly.
 
@@ -46,7 +49,7 @@ export function generateAllInterfaces(sanitized: SanitizedField[]): void {
 	const workspaceScope = sanitized.filter(f => f.scopes.includes('workspace'));
 	const ruleScope = sanitized.filter(f => f.scopes.includes('rule'));
 
-	const outputDir = join(__dirname, '..', 'scopes', 'generated');
+	const outputDir = PREMAKE_TS_GENERATED;
 
 	generateInterface('ConfigScope', configScope, outputDir);
 	generateInterface('ProjectScope', projectScope, outputDir);

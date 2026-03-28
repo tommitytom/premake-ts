@@ -13,11 +13,9 @@
     "noEmit": true
   },
   "include": [
-    "packages/*/src/**/*",
-    "test/**/*"
+    "src/**/*"
   ],
   "exclude": [
-    "node_modules",
-    "dist"
+    "node_modules"
   ]
 }

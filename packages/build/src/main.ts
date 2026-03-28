@@ -1,11 +1,11 @@
 import fs from 'node:fs';
 import path, { dirname, join, resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
-import { generate } from '../generator/generator.ts';
-import { dumpGlobals, execPremake } from '../generator/util.ts';
-import sanitized from "../parser/data/sanitized.json" with { type: "json" };
-import { type IGlobals, PremakeScope } from '../scopes/PremakeScope.ts';
-import type { ProjectScope, WorkspaceScope } from '../scopes/scopes.ts';
+import { generate } from '@orb/premake-ts/generator';
+import { dumpGlobals, execPremake } from '@orb/premake-ts/util';
+import fields from "@orb/premake-ts/data/fields.json" with { type: "json" };
+import { type IGlobals, PremakeScope } from '@orb/premake-ts/scopes/PremakeScope';
+import type { ProjectScope, WorkspaceScope } from '@orb/premake-ts/scopes';
 import type { IModule, IOrbBase, IPackage } from './types.ts';
 
 export interface IBuildOrb<T extends IOrbBase = IOrbBase> {
@@ -176,7 +176,7 @@ function resolveScopePaths(rootDir: string, scope?: PremakeScope) {
 
 	const commands = scope.getCommands();
 	for (const cmd of commands) {
-		const found = sanitized.find(field => field.name === cmd.name && pathKinds.includes(field.kind));
+		const found = fields.find(field => field.name === cmd.name && pathKinds.includes(field.kind));
 		if (!found) continue;
 
 		if (found.kind.startsWith('list:')) {

@@ -1,4 +1,4 @@
-import { workspace } from "../src/generator/index.ts";
+import { workspace } from "../packages/premake-ts/src/index.ts";
 
 export default workspace("MyWorkspace", (w) => {
 	w.configurations("Debug", "Release");

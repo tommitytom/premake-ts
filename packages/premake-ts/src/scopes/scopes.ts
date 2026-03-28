@@ -4,6 +4,8 @@ import type { ConfigScopeGenerated } from "./generated/ConfigScope.generated.ts"
 import type { ProjectScopeGenerated } from "./generated/ProjectScope.generated.ts";
 import type { WorkspaceScopeGenerated } from "./generated/WorkspaceScope.generated.ts";
 
+export type { KindType } from "./generated/ConfigScope.generated.ts";
+
 export type WorkspaceFunc = (scope: WorkspaceScope) => void;
 type FilterType = 'architecture' | 'configurations' | 'files' | 'kind' | 'language' | 'options' | 'platforms' | 'system' | 'tags' | 'toolset';
 type FilterString = `${FilterType}:${string}`;

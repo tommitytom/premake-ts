@@ -151,9 +151,9 @@ export function generateLuaDefinitions(sanitized: SanitizedField[], utils: IClas
 		]
 	};
 
-	const outputPath = path.join(__dirname, '..', '..', 'test', 'premake-definitions', 'library', `premake.lua`);
+	const outputPath = path.join(__dirname, '..', 'premake-definitions', 'library', `premake.lua`);
 	fs.writeFileSync(outputPath, output, 'utf-8');
 
-	const configPath = path.join(__dirname, '..', '..', 'test', 'premake-definitions', `config.json`);
+	const configPath = path.join(__dirname, '..', 'premake-definitions', `config.json`);
 	fs.writeFileSync(configPath, JSON.stringify(config, null, 2), 'utf-8');
 }

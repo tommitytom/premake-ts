@@ -1,0 +1,23 @@
+{
+  "name": "@orb/premake-ts-generator",
+  "version": "1.0.0",
+  "description": "Parser and type generator for premake-ts — extracts Premake field metadata and generates TypeScript interfaces",
+  "type": "module",
+  "main": "src/main.ts",
+  "scripts": {
+    "parse": "node --experimental-strip-types --disable-warning=DEP0190 src/main.ts"
+  },
+  "keywords": [
+    "premake",
+    "typescript",
+    "codegen"
+  ],
+  "author": "Tom Yaxley",
+  "license": "MIT",
+  "dependencies": {
+    "openai": "^6.9.1"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.0"
+  }
+}

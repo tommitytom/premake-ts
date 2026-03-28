@@ -1,7 +1,8 @@
 import { OpenAI } from 'openai';
+import { copyFileSync } from 'node:fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { execPremake } from '../generator/util.ts';
+import { execPremake } from './util.ts';
 import { extractFieldDocumentation, extractGlobalDocumentation, type IClass } from './documentation.ts';
 import { generateLuaDefinitions } from './generate-lua.ts';
 import { generateAllInterfaces } from './generate-ts.ts';
@@ -12,6 +13,9 @@ import { bundleTypes } from './bundle-types.ts';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+
+/** Path to the @orb/premake-ts package (output target) */
+const PREMAKE_TS_PACKAGE = path.resolve(__dirname, '..', '..', 'premake-ts');
 
 const LLM_MODEL = 'qwen2.5-coder-14b-instruct';
 const MAX_FIELDS = 500;
@@ -110,6 +114,12 @@ async function main() {
 
 	console.log('Bundling TypeScript definitions...');
 	bundleTypes();
+
+	// Copy fields.json to the premake-ts package for runtime use
+	console.log('Copying fields.json to @orb/premake-ts...');
+	const fieldsSource = path.join(__dirname, 'data', 'fields.json');
+	const fieldsTarget = path.join(PREMAKE_TS_PACKAGE, 'data', 'fields.json');
+	copyFileSync(fieldsSource, fieldsTarget);
 
 	//console.log('Generating lua definitions...');
 	//generateLuaDefinitions(structuredClone(sanitized), structuredClone(globalDocs));

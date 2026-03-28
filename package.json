@@ -1,21 +1,17 @@
 {
-  "name": "premake-ts",
+  "name": "orb",
   "version": "1.0.0",
-  "description": "TypeScript-based Premake configuration generator",
+  "description": "Monorepo for premake-ts and orb build tools",
+  "private": true,
   "type": "module",
-  "main": "src/generator/main.ts",
-  "typings": "src/generator/index.ts",
+  "workspaces": [
+    "packages/*"
+  ],
   "scripts": {
-    "start": "node --experimental-strip-types --disable-warning=DEP0190 src/generator/main.ts",
+    "start": "node --experimental-strip-types --disable-warning=DEP0190 packages/premake-ts/src/main.ts",
     "test": "npm start -- --file=test/premake5.ts",
-    "parse": "node --experimental-strip-types --disable-warning=DEP0190 src/parser/main.ts",
-    "orb": "node --experimental-strip-types --disable-warning=DEP0190 src/orb/main.ts"
-  },
-  "bin": {
-    "premake-ts": "bin/cli.js"
-  },
-  "exports": {
-    ".": "./src/generator/index.ts"
+    "parse": "node --experimental-strip-types --disable-warning=DEP0190 packages/premake-ts-generator/src/main.ts",
+    "orb": "node --experimental-strip-types --disable-warning=DEP0190 packages/build/src/main.ts"
   },
   "keywords": [
     "premake",
@@ -27,8 +23,5 @@
   "devDependencies": {
     "@types/node": "^24.10.1",
     "typescript": "^5.7.0"
-  },
-  "dependencies": {
-    "openai": "^6.9.1"
   }
 }
