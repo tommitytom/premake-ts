@@ -4,6 +4,9 @@
   "description": "Hierarchical module-based build system built on premake-ts",
   "type": "module",
   "main": "src/index.ts",
+  "bin": {
+    "orb": "bin/cli.js"
+  },
   "exports": {
     ".": "./src/index.ts",
     "./config/schema": "./src/config/schema.ts",
