@@ -43,6 +43,7 @@ async function main() {
 
 	const documented = loadData<DocumentedField>('data/documented.json');
 	const sanitized = loadData<SanitizedField>('data/sanitized.json');
+	const sanitizedTs = loadData<SanitizedField>('data/sanitized-typescript.json');
 
 	// Extract documentation
 	let undocumented: string[] = [];
@@ -110,7 +111,7 @@ async function main() {
 	}
 
 	console.log('Generating TypeScript interfaces...');
-	generateAllInterfaces(structuredClone(sanitized));
+	generateAllInterfaces(structuredClone(sanitizedTs));
 
 	console.log('Bundling TypeScript definitions...');
 	bundleTypes();
