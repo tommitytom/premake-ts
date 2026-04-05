@@ -1,16 +1,15 @@
 {
-  "name": "orb",
+  "name": "premake-ts",
   "version": "1.0.0",
-  "description": "Monorepo for premake-ts and orb build tools",
+  "description": "Monorepo for premake-ts",
   "private": true,
   "type": "module",
   "workspaces": [
     "packages/*"
   ],
   "scripts": {
-    "start": "node --experimental-strip-types --disable-warning=DEP0190 packages/premake-ts/src/main.ts",
-    "parse": "node --experimental-strip-types --disable-warning=DEP0190 packages/premake-ts-generator/src/main.ts",
-    "orb": "node --experimental-strip-types --disable-warning=DEP0190 packages/build/src/main.ts",
+    "start": "node --experimental-strip-types --disable-warning=DEP0190 packages/cli/src/main.ts",
+    "parse": "node --experimental-strip-types --disable-warning=DEP0190 packages/generator/src/main.ts",
     "vitest": "vitest"
   },
   "keywords": [

@@ -1,4 +1,4 @@
-# orb
+# premake-ts
 
 A monorepo containing tools for writing [Premake](https://premake.github.io/) build scripts in TypeScript, with full type safety and editor completion.
 
@@ -6,9 +6,8 @@ A monorepo containing tools for writing [Premake](https://premake.github.io/) bu
 
 | Package | Description |
 |---------|-------------|
-| [`@orb/premake-ts`](packages/premake-ts) | CLI tool that transpiles TypeScript build scripts to Lua and runs Premake |
-| [`@orb/premake-ts-generator`](packages/premake-ts-generator) | Parser and codegen pipeline that extracts Premake metadata and generates TypeScript type definitions |
-| [`@orb/build`](packages/build) | Hierarchical module-based build system built on top of premake-ts |
+| [`@premake-ts/cli`](packages/cli) | CLI tool that transpiles TypeScript build scripts to Lua and runs Premake |
+| [`@premake-ts/generator`](packages/generator) | Parser and codegen pipeline that extracts Premake metadata and generates TypeScript type definitions |
 
 ## Requirements
 
@@ -22,7 +21,7 @@ A monorepo containing tools for writing [Premake](https://premake.github.io/) bu
 ### Install
 
 ```bash
-npm install -g @orb/premake-ts
+npm install -g premake-ts
 ```
 
 ### Initialize a project
@@ -91,8 +90,8 @@ Options:
 ### Setup
 
 ```bash
-git clone <repo-url>
-cd orb
+git clone https://github.com/tommitytom/premake-ts
+cd premake-ts
 npm install
 ```
 
@@ -105,14 +104,8 @@ npm test
 # Run the parser/codegen pipeline (regenerate types from Premake metadata)
 npm run parse
 
-# Run the orb build system on the test project
-npm run orb-test -- vs2022
-
 # Run all unit tests
 npm run vitest
-
-# Run all unit tests once (CI mode)
-npx vitest run
 ```
 
 ### How It Works
@@ -131,87 +124,6 @@ The parser pipeline (`npm run parse`) extracts field metadata from Premake, proc
 - A local LLM server at `http://localhost:1234/v1` (for documentation sanitization)
 
 The generated outputs are committed to the repo, so the parser only needs to be re-run when Premake or its documentation changes.
-
-## Orb Build System
-
-The `@orb/build` package provides a higher-level, module-based build system on top of premake-ts. Instead of writing Premake Lua-style scripts directly, you define projects, packages, and modules using a structured API.
-
-### Project structure
-
-```
-my-project/
-├── orb.ts                  # Project root (defineProject)
-├── src/
-│   ├── orb.ts              # Package (definePackage)
-│   ├── core/
-│   │   └── orb.ts          # Module (defineLibrary)
-│   └── app/
-│       └── orb.ts          # Module (defineExecutable)
-└── thirdparty/
-    ├── orb.ts              # Package (definePackage)
-    └── entt.ts             # Module (defineHeaderOnly)
-```
-
-### Example
-
-**orb.ts** (project root):
-```typescript
-import { defineProject } from "@orb/build";
-
-export default defineProject({
-  name: "MyProject",
-  packages: ["src", "thirdparty"],
-  defaults: {
-    configurations: ["Debug", "Release"],
-    cppDialect: "C++20",
-    characterSet: "Unicode",
-    configurationDefaults: {
-      Debug: (ctx) => {
-        ctx.symbols("On");
-        ctx.optimize("Debug");
-        ctx.defines("DEBUG");
-      },
-      Release: (ctx) => {
-        ctx.symbols("On");
-        ctx.optimize("Full");
-        ctx.defines("NDEBUG");
-      },
-    },
-  },
-});
-```
-
-**src/core/orb.ts** (library module):
-```typescript
-import { defineLibrary } from "@orb/build";
-
-export default defineLibrary({
-  name: "core",
-  dependencies: ["thirdparty/entt"],
-  private(ctx) {
-    ctx.files("*.cpp", "*.h");
-  },
-  public(ctx) {
-    ctx.includeDirs(".");
-  },
-});
-```
-
-### Generate project files
-
-```bash
-orb generate vs2022
-orb generate gmake2
-```
-
-### Key features
-
-- **Automatic dependency resolution** — bare names resolve within the same package, then globally
-- **Transitive public includes** — public scope settings propagate to dependents
-- **Auto-linking** — libraries are automatically linked (HeaderOnly modules are skipped)
-- **Cycle detection** — topological sort catches dependency cycles
-- **Reachability pruning** — only modules reachable from an executable are emitted
-- **Per-config MSVC runtime** — Debug/Release runtime settings are emitted automatically
 
 ## License
 

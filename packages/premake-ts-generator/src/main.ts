@@ -7,16 +7,16 @@ import { extractFieldDocumentation, extractGlobalDocumentation, type IClass } fr
 import { generateLuaDefinitions } from './generate-lua.ts';
 import { generateAllInterfaces } from './generate-ts.ts';
 import { findMissingFields, loadData, saveData } from './load.ts';
-import { sanitizeFields } from './sanitize.ts';
+import { convertExamplesToTypeScript, sanitizeFields } from './sanitize.ts';
 import type { DocumentedField, SanitizedField } from './types.ts';
 import { bundleTypes } from './bundle-types.ts';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const OPENROUTER_TOKEN = process.env.OPENROUTER_TOKEN = process.env.OPENROUTER_TOKEN || '';
-if (!OPENROUTER_TOKEN) {
-	console.warn('OPENROUTER_TOKEN is not set. Sanitization will be disabled.');
+const LLM_TOKEN = process.env.LLM_TOKEN = process.env.LLM_TOKEN || '';
+if (!LLM_TOKEN) {
+	console.warn('LLM_TOKEN is not set. Sanitization will be disabled.');
 }
 
 /** Path to the @orb/premake-ts package (output target) */
@@ -65,6 +65,28 @@ async function main() {
 	const documented = loadData<DocumentedField>('data/documented.json');
 	const sanitized = loadData<SanitizedField>('data/sanitized.json');
 	const sanitizedTs = loadData<SanitizedField>('data/sanitized-typescript.json');
+
+	// Prune entries for fields that no longer exist in fields.json
+	// Use case-insensitive comparison to match the convention in findMissingFields
+	const fieldNamesLower = new Set(fields.map(f => f.name.toLowerCase()));
+	const prunedDocumented = documented.filter(f => fieldNamesLower.has(f.name.toLowerCase()));
+	const prunedSanitized = sanitized.filter(f => fieldNamesLower.has(f.name.toLowerCase()));
+	const prunedSanitizedTs = sanitizedTs.filter(f => fieldNamesLower.has(f.name.toLowerCase()));
+	if (prunedDocumented.length < documented.length) {
+		console.log(`Pruning ${documented.length - prunedDocumented.length} removed fields from documented.json`);
+		documented.splice(0, documented.length, ...prunedDocumented);
+		saveData(documented, 'data/documented.json');
+	}
+	if (prunedSanitized.length < sanitized.length) {
+		console.log(`Pruning ${sanitized.length - prunedSanitized.length} removed fields from sanitized.json`);
+		sanitized.splice(0, sanitized.length, ...prunedSanitized);
+		saveData(sanitized, 'data/sanitized.json');
+	}
+	if (prunedSanitizedTs.length < sanitizedTs.length) {
+		console.log(`Pruning ${sanitizedTs.length - prunedSanitizedTs.length} removed fields from sanitized-typescript.json`);
+		sanitizedTs.splice(0, sanitizedTs.length, ...prunedSanitizedTs);
+		saveData(sanitizedTs, 'data/sanitized-typescript.json');
+	}
 
 	// Extract documentation
 	let undocumented: string[] = [];
@@ -116,18 +138,43 @@ async function main() {
 
 	// Sanitize with LLM
 	let unsanitized: string[] = [];
-	if (OPENROUTER_TOKEN && config.enableSanitization) {
+	if (LLM_TOKEN && config.enableSanitization) {
 		unsanitized = findMissingFields(documented, sanitized);
 		console.log(`Found ${unsanitized.length} unsanitized fields`);
 
+		const client = new OpenAI({ baseURL: config.modelEndpointUrl, apiKey: LLM_TOKEN });
+
 		if (unsanitized.length > 0) {
 			console.log('Sanitizing with LLM...');
-			const client = new OpenAI({ baseURL: config.modelEndpointUrl, apiKey: OPENROUTER_TOKEN });
 			const newlySanitized = await sanitizeFields(client, config.model, documented, unsanitized, config.maxFields);
 			sanitized.push(...newlySanitized);
 			sanitized.sort((a, b) => a.name.localeCompare(b.name));
 			saveData(sanitized, 'data/sanitized.json');
 			console.log('Finished sanitizing.');
+		}
+
+		// Convert Lua examples to TypeScript for any sanitized fields missing from sanitizedTs,
+		// or where the documentation (non-examples fields) has changed since last conversion.
+		const sanitizedTsMap = new Map(sanitizedTs.map(f => [f.name, f]));
+		const needsTsConversion = sanitized
+			.filter(f => {
+				if (!f.examples) return false;
+				const tsEntry = sanitizedTsMap.get(f.name);
+				if (!tsEntry) return true;
+				// Compare all fields except `examples` (which is TS in sanitizedTs vs Lua in sanitized)
+				const { examples: _a, ...sanitizedRest } = f;
+				const { examples: _b, ...tsRest } = tsEntry;
+				return JSON.stringify(sanitizedRest) !== JSON.stringify(tsRest);
+			})
+			.map(f => f.name);
+
+		if (needsTsConversion.length > 0) {
+			console.log(`Found ${needsTsConversion.length} fields needing TypeScript example conversion`);
+			const newlyConverted = await convertExamplesToTypeScript(client, config.model, sanitized, needsTsConversion);
+			sanitizedTs.push(...newlyConverted);
+			sanitizedTs.sort((a, b) => a.name.localeCompare(b.name));
+			saveData(sanitizedTs, 'data/sanitized-typescript.json');
+			console.log('Finished converting examples to TypeScript.');
 		}
 	}
 
@@ -187,7 +234,7 @@ async function main() {
 	console.log(`Report saved to ${reportPath}`);
 
 	//console.log('Generating lua definitions...');
-	//generateLuaDefinitions(structuredClone(sanitized), structuredClone(globalDocs));
+	generateLuaDefinitions(structuredClone(sanitized), structuredClone(globalDocs));
 }
 
 main().catch(console.error);

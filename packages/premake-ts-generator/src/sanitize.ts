@@ -6,7 +6,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import OpenAI from 'openai';
 import type { DocumentedField, PremakeParameter, SanitizedField } from './types.ts';
-import { sanitizeText, sanitizeToJson } from './llm.ts';
+import { queryPrompt, sanitizeText, sanitizeToJson } from './llm.ts';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -78,6 +78,37 @@ export async function sanitizeFields(
 	}
 
 	return sanitized;
+}
+
+// Converts Lua examples in sanitized fields to TypeScript using LLM
+export async function convertExamplesToTypeScript(
+	client: OpenAI,
+	model: string,
+	fields: SanitizedField[],
+	fieldNames: string[]
+): Promise<SanitizedField[]> {
+	const promptsDir = path.join(__dirname, 'prompts');
+	const luaToTsPrompt = fs.readFileSync(path.join(promptsDir, 'lua-to-typescript.md'), 'utf-8');
+
+	const converted: SanitizedField[] = [];
+
+	for (const fieldName of fieldNames) {
+		const field = fields.find(f => f.name === fieldName);
+		if (!field || !field.examples) continue;
+
+		console.log('Converting examples to TypeScript: ' + fieldName);
+
+		const prompt = luaToTsPrompt.replace('{{EXAMPLES}}', field.examples);
+		const result = await queryPrompt(client, model, prompt);
+
+		if (result) {
+			const tsField = structuredClone(field);
+			tsField.examples = result;
+			converted.push(tsField);
+		}
+	}
+
+	return converted;
 }
 
 /**

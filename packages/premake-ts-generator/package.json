@@ -1,5 +1,5 @@
 {
-  "name": "@orb/premake-ts-generator",
+  "name": "@premake-ts/generator",
   "version": "1.0.0",
   "description": "Parser and type generator for premake-ts — extracts Premake field metadata and generates TypeScript interfaces",
   "type": "module",

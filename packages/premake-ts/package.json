@@ -1,5 +1,5 @@
 {
-  "name": "@orb/premake-ts",
+  "name": "@premake-ts/cli",
   "version": "1.0.0",
   "description": "Write Premake build scripts in TypeScript with full type safety and editor completion",
   "type": "module",

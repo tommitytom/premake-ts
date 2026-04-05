@@ -151,9 +151,15 @@ export function generateLuaDefinitions(sanitized: SanitizedField[], utils: IClas
 		]
 	};
 
-	const outputPath = path.join(__dirname, '..', 'premake-definitions', 'library', `premake.lua`);
+	const outputDir = path.join(__dirname, '..', 'types', 'lua');
+	const typesOutputDir = path.join(outputDir, 'library');
+	if (!fs.existsSync(typesOutputDir)) {
+		fs.mkdirSync(typesOutputDir, { recursive: true });
+	}
+
+	const outputPath = path.join(typesOutputDir, `premake.lua`);
 	fs.writeFileSync(outputPath, output, 'utf-8');
 
-	const configPath = path.join(__dirname, '..', 'premake-definitions', `config.json`);
+	const configPath = path.join(outputDir, `config.json`);
 	fs.writeFileSync(configPath, JSON.stringify(config, null, 2), 'utf-8');
 }
