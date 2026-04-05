@@ -17,6 +17,6 @@
   "remoteUser": "node",
   "runArgs": ["--env-file", ".devcontainer/devcontainer.env"],
   "containerEnv": {
-    "PREMAKE_VERSION": "aa960f171d36ebeb5efb811b941105cdebd13ee3"
+    "PREMAKE_VERSION": "5.0.0-beta8"
   }
 }

@@ -6,7 +6,7 @@ import { getSection } from './utils.ts';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const docsPath = path.join(__dirname, 'docs');
+const docsPath = path.join(__dirname, '..', 'docs');
 
 export interface IParameter {
 	name: string;

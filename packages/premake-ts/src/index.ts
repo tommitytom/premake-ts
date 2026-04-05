@@ -1,7 +1,5 @@
 import type { WorkspaceFunc } from "./scopes/scopes.ts";
 
-export * as os from "./utils/os.ts";
-
 /**
  * Creates a new workspace.
  * Workspaces are the top-level objects in a Premake build script, and are synonymous with a Visual Studio solution. Each workspace contains one or more projects, which in turn contain the settings to generate a single binary target.
