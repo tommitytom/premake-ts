@@ -5,4 +5,5 @@ dist/
 **/*.tsbuildinfo
 coverage/
 packages/premake-ts-generator/premake-definitions/
-test/
+packages/premake-ts-generator/docs/
+.devcontainer/devcontainer.env

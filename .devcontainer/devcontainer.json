@@ -1,0 +1,22 @@
+{
+  "name": "premake-ts",
+  "image": "mcr.microsoft.com/devcontainers/javascript-node:24",
+  "postCreateCommand": "bash .devcontainer/post-create.sh",
+  "customizations": {
+    "vscode": {
+      "settings": {
+        "js/ts.tsdk.path": "node_modules/typescript/lib",
+        "js/ts.tsdk.promptToUseWorkspaceVersion": true
+      },
+      "extensions": [
+        "dbaeumer.vscode-eslint",
+        "esbenp.prettier-vscode"
+      ]
+    }
+  },
+  "remoteUser": "node",
+  "runArgs": ["--env-file", ".devcontainer/devcontainer.env"],
+  "containerEnv": {
+    "PREMAKE_VERSION": "aa960f171d36ebeb5efb811b941105cdebd13ee3"
+  }
+}
