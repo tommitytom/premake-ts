@@ -14,6 +14,11 @@ import { bundleTypes } from './bundle-types.ts';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+const OPENROUTER_TOKEN = process.env.OPENROUTER_TOKEN = process.env.OPENROUTER_TOKEN || '';
+if (!OPENROUTER_TOKEN) {
+	console.warn('OPENROUTER_TOKEN is not set. Sanitization will be disabled.');
+}
+
 /** Path to the @orb/premake-ts package (output target) */
 const PREMAKE_TS_PACKAGE = path.resolve(__dirname, '..', '..', 'premake-ts');
 
@@ -111,13 +116,13 @@ async function main() {
 
 	// Sanitize with LLM
 	let unsanitized: string[] = [];
-	if (config.enableSanitization) {
+	if (OPENROUTER_TOKEN && config.enableSanitization) {
 		unsanitized = findMissingFields(documented, sanitized);
 		console.log(`Found ${unsanitized.length} unsanitized fields`);
 
 		if (unsanitized.length > 0) {
 			console.log('Sanitizing with LLM...');
-			const client = new OpenAI({ baseURL: config.modelEndpointUrl, apiKey: 'not-needed' });
+			const client = new OpenAI({ baseURL: config.modelEndpointUrl, apiKey: OPENROUTER_TOKEN });
 			const newlySanitized = await sanitizeFields(client, config.model, documented, unsanitized, config.maxFields);
 			sanitized.push(...newlySanitized);
 			sanitized.sort((a, b) => a.name.localeCompare(b.name));
@@ -146,6 +151,16 @@ async function main() {
 	const addedFields = fields.filter(f => !prevFieldNames.has(f.name)).map(f => f.name);
 	const removedFields = prevFields.filter(f => !newFieldNames.has(f.name)).map(f => f.name);
 
+	const prevFieldMap = new Map(prevFields.map(f => [f.name, f]));
+	const changedFields: { name: string; before: unknown; after: unknown }[] = [];
+	for (const field of fields) {
+		const prev = prevFieldMap.get(field.name);
+		if (!prev) continue;
+		if (JSON.stringify(prev) !== JSON.stringify(field)) {
+			changedFields.push({ name: field.name, before: prev, after: field });
+		}
+	}
+
 	const prevDocMap = new Map(prevDocumented.map(f => [f.name, f.description]));
 	const changedDocs: { name: string; before: string; after: string }[] = [];
 	for (const field of documented) {
@@ -160,6 +175,7 @@ async function main() {
 		fields: {
 			added: addedFields,
 			removed: removedFields,
+			changed: changedFields,
 		},
 		documentation: {
 			changed: changedDocs,
