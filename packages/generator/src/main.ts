@@ -5,11 +5,10 @@ import { fileURLToPath } from 'url';
 import { execPremake } from './util.ts';
 import { extractFieldDocumentation, extractGlobalDocumentation, type IClass } from './documentation.ts';
 import { generateLuaDefinitions } from './generate-lua.ts';
-import { generateAllInterfaces } from './generate-ts.ts';
+import { generateAndWriteDts } from './generate-dts.ts';
 import { findMissingFields, loadData, saveData } from './load.ts';
 import { convertExamplesToTypeScript, sanitizeFields } from './sanitize.ts';
 import type { DocumentedField, SanitizedField } from './types.ts';
-import { bundleTypes } from './bundle-types.ts';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -19,8 +18,8 @@ if (!LLM_TOKEN) {
 	console.warn('LLM_TOKEN is not set. Sanitization will be disabled.');
 }
 
-/** Path to the @orb/premake-ts package (output target) */
-const PREMAKE_TS_PACKAGE = path.resolve(__dirname, '..', '..', 'premake-ts');
+/** Path to the @premake-ts/cli package (output target) */
+const PREMAKE_TS_PACKAGE = path.resolve(__dirname, '..', '..', 'cli');
 
 interface ParserConfig {
 	model: string;
@@ -178,17 +177,17 @@ async function main() {
 		}
 	}
 
-	console.log('Generating TypeScript interfaces...');
-	generateAllInterfaces(structuredClone(sanitizedTs));
-
-	console.log('Bundling TypeScript definitions...');
-	bundleTypes();
+	console.log('Generating type declarations...');
+	generateAndWriteDts(structuredClone(sanitizedTs));
 
 	// Copy fields.json to the premake-ts package for runtime use
-	console.log('Copying fields.json to @orb/premake-ts...');
+	console.log('Copying fields.json to @premake-ts/cli...');
 	const fieldsSource = path.join(__dirname, 'data', 'fields.json');
 	const fieldsTarget = path.join(PREMAKE_TS_PACKAGE, 'data', 'fields.json');
 	copyFileSync(fieldsSource, fieldsTarget);
+
+	console.log('Generating lua definitions...');
+	generateLuaDefinitions(structuredClone(sanitized), structuredClone(globalDocs));
 
 	// Generate report
 	console.log('Generating report...');
@@ -232,9 +231,6 @@ async function main() {
 	const reportPath = path.resolve(__dirname, '..', 'report.json');
 	writeFileSync(reportPath, JSON.stringify(report, null, 2), 'utf-8');
 	console.log(`Report saved to ${reportPath}`);
-
-	//console.log('Generating lua definitions...');
-	generateLuaDefinitions(structuredClone(sanitized), structuredClone(globalDocs));
 }
 
 main().catch(console.error);

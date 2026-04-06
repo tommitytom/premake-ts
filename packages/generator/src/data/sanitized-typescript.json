@@ -260,6 +260,40 @@
     "examples": "```typescript\np.binDirs(\"bin/\", \"scripts/\");\n\n```"
   },
   {
+    "allowed": [
+      "Default",
+      "On",
+      "Off"
+    ],
+    "kind": "string",
+    "name": "bufferSecurityCheck",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "description": "Specifies whether to use stack and buffer protections.",
+    "parameter": {
+      "name": "value",
+      "description": "Specifies if buffer security checks should be enabled.",
+      "options": [
+        {
+          "name": "Off",
+          "description": "Disable buffer security checks."
+        },
+        {
+          "name": "On",
+          "description": "Enable buffer security checks."
+        },
+        {
+          "name": "Default",
+          "description": "Use the default buffer security checks."
+        }
+      ]
+    },
+    "availability": "Premake 5.0.0-beta8 or later.",
+    "examples": "buffersecuritycheck \"On\"\n\n[1]: https://learn.microsoft.com/en-us/cpp/build/reference/gs-buffer-security-check?view=msvc-170\n[2]: https://gcc.gnu.org/onlinedocs/gcc-15.2.0/gcc/Instrumentation-Options.html#Instrumentation-Options\n\n```typescript\np.bufferSecurityCheck(\"On\");\n```"
+  },
+  {
     "allowed": [],
     "kind": "string",
     "name": "buildAction",
@@ -1222,6 +1256,74 @@
     "examples": ""
   },
   {
+    "allowed": [
+      "Default",
+      "On",
+      "Off"
+    ],
+    "kind": "string",
+    "name": "debugEnvsInherit",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "description": "Specifies whether to inherit the parent environment when using debug environment variables.\nWhen set to `On`, the parent environment variables will be included alongside any custom [debugenvs](debugenvs.md) you specify. In Visual Studio, this appends `$(LocalDebuggerEnvironment)` to the environment variable list.",
+    "parameter": {
+      "name": "value",
+      "description": "Specifies the inheritance behavior.",
+      "options": [
+        {
+          "name": "Default",
+          "description": "Use the toolset's default behavior (no explicit setting)"
+        },
+        {
+          "name": "On",
+          "description": "Inherit parent environment variables"
+        },
+        {
+          "name": "Off",
+          "description": "Do not inherit parent environment variables"
+        }
+      ]
+    },
+    "availability": "Premake 5.0.0-beta8 or later.",
+    "examples": "Set custom debug environment variables while preserving system environment:\n\n```typescript\np.when(\"configurations:Debug\", (p) => {\n    p.debugEnvs(\"MY_DEBUG_PATH=C:\\\\temp\\\\debug\");\n    p.debugEnvsInherit(\"On\");\n});\n```\n\nUse only custom environment variables, ignoring parent environment:\n\n```typescript\np.when(\"configurations:Debug\", (p) => {\n    p.debugEnvs(\"ISOLATED_ENV=1\");\n    p.debugEnvsInherit(\"Off\");\n});\n```"
+  },
+  {
+    "allowed": [
+      "Default",
+      "On",
+      "Off"
+    ],
+    "kind": "string",
+    "name": "debugEnvsMerge",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "description": "Specifies whether to merge debug environment variables with the system environment.\nWhen set to `Off`, only the [debugenvs](debugenvs.md) you specify will be used, preventing them from being merged with the existing system environment. This is useful when you want complete control over the debug environment.",
+    "parameter": {
+      "name": "value",
+      "description": "Specifies the merge behavior.",
+      "options": [
+        {
+          "name": "Default",
+          "description": "Use the toolset's default behavior (merge enabled)"
+        },
+        {
+          "name": "On",
+          "description": "Merge debug environment with system environment"
+        },
+        {
+          "name": "Off",
+          "description": "Do not merge with system environment"
+        }
+      ]
+    },
+    "availability": "Premake 5.0.0-beta8 or later.",
+    "examples": "Set debug environment variables without merging with system environment:\n\n```typescript\np.when(\"configurations:Debug\", (p) => {\n    p.debugEnvs(\"PATH=C:\\\\custom\\\\bin\", \"MY_VAR=value\");\n    p.debugEnvsMerge(\"Off\");\n});\n```\n\nExplicitly enable merging (default behavior):\n\n```typescript\np.when(\"configurations:Debug\", (p) => {\n    p.debugEnvs(\"EXTRA_VAR=1\");\n    p.debugEnvsMerge(\"On\");\n});\n```"
+  },
+  {
     "allowed": [],
     "kind": "boolean",
     "name": "debugExtendedProtocol",
@@ -1327,47 +1429,6 @@
     },
     "availability": "Premake 5.0.0 alpha 12 or later.",
     "examples": "```typescript\np.debugger(\"value\");\n\n```"
-  },
-  {
-    "allowed": [
-      "Local",
-      "Remote",
-      "WebBrowser",
-      "WebService"
-    ],
-    "deprecated": {
-      "message": "Use `debugger` instead."
-    },
-    "kind": "string",
-    "name": "debuggerFlavor",
-    "scope": "config",
-    "scopes": [
-      "config"
-    ],
-    "description": "- This page was auto-generated. Feel free to help us improve the documentation by creating a pull request.",
-    "parameter": {
-      "name": "value",
-      "options": [
-        {
-          "name": "Local",
-          "description": "needs documentation"
-        },
-        {
-          "name": "Remote",
-          "description": "needs documentation"
-        },
-        {
-          "name": "WebBrowser",
-          "description": "needs documentation"
-        },
-        {
-          "name": "WebService",
-          "description": "needs documentation"
-        }
-      ]
-    },
-    "availability": "Premake 5.0.0 alpha 14 or later.",
-    "examples": "```typescript\np.debuggerFlavor(value);\n\n```"
   },
   {
     "allowed": [
@@ -1838,6 +1899,41 @@
   },
   {
     "allowed": [
+      "Default",
+      "On",
+      "Off"
+    ],
+    "kind": "string",
+    "name": "enablePch",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "description": "Controls whether precompiled headers (PCH) are enabled for a configuration.\nIf no value is set for a configuration, the toolset's default behavior will be used.",
+    "parameter": {
+      "name": "value",
+      "description": "Specifies the desired behavior.",
+      "options": [
+        {
+          "name": "Default",
+          "description": "Use the toolset default behavior (Default value)"
+        },
+        {
+          "name": "On",
+          "description": "Enable precompiled headers"
+        },
+        {
+          "name": "Off",
+          "description": "Disable precompiled headers"
+        }
+      ],
+      "additional": "Controls whether precompiled headers (PCH) are enabled for a configuration. If no value is set for a configuration, the toolset's default behavior will be used."
+    },
+    "availability": "Premake 5.0.0-beta8 or later.",
+    "examples": "Disable precompiled headers for a debug configuration:\n\n```typescript\np.when(\"configurations:Debug\", (p) => {\n    p.enablePch(\"Off\");\n});\n```"
+  },
+  {
+    "allowed": [
       "On",
       "Off"
     ],
@@ -1879,40 +1975,6 @@
     "parameter": {
       "name": "warnings",
       "description": "A list of warnings to enable."
-    },
-    "availability": "Premake 5.0 or later.",
-    "examples": ""
-  },
-  {
-    "allowed": [
-      "Default",
-      "Little",
-      "Big"
-    ],
-    "kind": "string",
-    "name": "endian",
-    "scope": "config",
-    "scopes": [
-      "config"
-    ],
-    "description": "Specifies the target endian for endian-agnostic architectures.",
-    "parameter": {
-      "name": "value",
-      "description": "Specifies the desired endian.",
-      "options": [
-        {
-          "name": "Default",
-          "description": "Use the toolset's default endian."
-        },
-        {
-          "name": "Little",
-          "description": "Specify little-endian."
-        },
-        {
-          "name": "Big",
-          "description": "Specify big-endian."
-        }
-      ]
     },
     "availability": "Premake 5.0 or later.",
     "examples": ""
@@ -2479,34 +2541,6 @@
     "examples": "```typescript\np.forceUsings(\"stdafx.h\");\n\n```"
   },
   {
-    "allowed": [
-      "Software",
-      "Hardware"
-    ],
-    "kind": "string",
-    "name": "fpu",
-    "scope": "config",
-    "scopes": [
-      "config"
-    ],
-    "description": "Specifies whether to generate code for a hardware FPU.",
-    "parameter": {
-      "name": "value",
-      "options": [
-        {
-          "name": "Software",
-          "description": "Generate software floating-point emulation code."
-        },
-        {
-          "name": "Hardware",
-          "description": "Generate code for a hardware FPU."
-        }
-      ]
-    },
-    "availability": "Premake 5.0 or later.",
-    "examples": ""
-  },
-  {
     "allowed": [],
     "kind": "list:directory",
     "name": "frameworkDirs",
@@ -2652,42 +2686,6 @@
   },
   {
     "allowed": [],
-    "kind": "list:string",
-    "name": "imageOptions",
-    "scope": "config",
-    "scopes": [
-      "config"
-    ],
-    "tokens": true,
-    "description": "Passes arguments directly to the image tool command line without translation.\nIf a project includes multiple calls to `imageoptions` the lists are concatenated, in the order in which they appear in the script.\n\nImage options are currently only supported for Xbox 360 targets.",
-    "parameter": {
-      "name": "options",
-      "description": "A list of image tools flags and options."
-    },
-    "availability": "Premake 5.0 or later.",
-    "examples": ""
-  },
-  {
-    "allowed": [],
-    "kind": "path",
-    "name": "imagePath",
-    "paths": true,
-    "scope": "config",
-    "scopes": [
-      "config"
-    ],
-    "tokens": true,
-    "description": "Sets the file name of the deployment image produced by the build.\nThis value is currently only used by the Xbox 360.",
-    "parameter": {
-      "name": "path",
-      "description": "The full path for the image file, relative to the currently executing script file.",
-      "additional": "This value is currently only used by the Xbox 360."
-    },
-    "availability": "Premake 5.0 or later.",
-    "examples": ""
-  },
-  {
-    "allowed": [],
     "kind": "path",
     "name": "impLibDir",
     "paths": true,
@@ -2807,6 +2805,41 @@
     },
     "availability": "Premake 5.0 or later.\n\nGCC and Clang are the only toolsets supporting the ordering functionality in the gmakelegacy, gmake, and Codelite exporters.  All exporters and toolsets\nsupport appending the directories to the external include directories.",
     "examples": "Define two include file search paths.\n\n```typescript\np.includeDirsAfter(\"../lua/include\", \"../zlib\");\n\n```\n\nYou can also use wildcards to match multiple directories. The * will match against a single directory, ** will recurse into subdirectories as well.\n\n```typescript\np.includeDirsAfter(\"../includes/**\");\n\n```"
+  },
+  {
+    "allowed": [
+      "Default",
+      "On",
+      "Off"
+    ],
+    "kind": "string",
+    "name": "incrementalLink",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "description": "Controls whether incremental linking is enabled for a configuration.\nIncremental linking can improve iteration times during development by only relinking the portions of the binary that have changed. However, it may prevent some optimizations and is typically disabled for release builds.",
+    "parameter": {
+      "name": "value",
+      "description": "Specifies the incremental linking setting.",
+      "options": [
+        {
+          "name": "Default",
+          "description": "Use the default incremental linking behavior. Incremental linking is enabled for debug builds and disabled for optimized builds, static libraries, and when link-time optimization is enabled."
+        },
+        {
+          "name": "On",
+          "description": "Force incremental linking to be enabled."
+        },
+        {
+          "name": "Off",
+          "description": "Force incremental linking to be disabled."
+        }
+      ],
+      "additional": "Controls whether incremental linking is enabled for a configuration. Incremental linking can improve iteration times during development by only relinking the portions of the binary that have changed. However, it may prevent some optimizations and is typically disabled for release builds."
+    },
+    "availability": "Premake 5.0.0-beta8 or later.",
+    "examples": "Force incremental linking off for all configurations:\n\n```typescript\np.when(\"configurations:*\", (p) => {\n    p.incrementalLink(\"Off\");\n});\n```\n\nEnable incremental linking even in release builds:\n\n```typescript\np.when(\"configurations:Release\", (p) => {\n    p.incrementalLink(\"On\");\n});\n```"
   },
   {
     "allowed": [],
@@ -3516,6 +3549,41 @@
   {
     "allowed": [
       "Default",
+      "On",
+      "Off"
+    ],
+    "kind": "string",
+    "name": "manifest",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "description": "Controls whether a Windows manifest file should be generated for the project.\nBy default, Visual Studio will generate an external manifest file for C/C++ executables.",
+    "parameter": {
+      "name": "value",
+      "description": "Controls whether a Windows manifest file should be generated for the project.",
+      "options": [
+        {
+          "name": "Default",
+          "description": "Use default behavior (manifest is generated)"
+        },
+        {
+          "name": "On",
+          "description": "Generate manifest file"
+        },
+        {
+          "name": "Off",
+          "description": "Do not generate manifest file"
+        }
+      ],
+      "additional": "By default, Visual Studio will generate an external manifest file for C/C++ executables."
+    },
+    "availability": "Premake 5.0.0-beta8 or later.",
+    "examples": "Disable manifest generation:\n\n```typescript\np.manifest(\"Off\");\n```\n\nEmbed the manifest into the binary:\n\n```typescript\np.manifest(\"Embed\");\n```"
+  },
+  {
+    "allowed": [
+      "Default",
       "Off",
       "On",
       "Static",
@@ -3556,6 +3624,40 @@
     },
     "availability": "Premake 5.0-beta4 or later on Visual Studio.",
     "examples": ""
+  },
+  {
+    "allowed": [
+      "Default",
+      "On",
+      "Off"
+    ],
+    "kind": "string",
+    "name": "minimalRebuild",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "description": "Sets the minimal rebuild option for Visual Studio projects. This feature was deprecated by Microsoft in Visual Studio 2015 and later versions. When enabled, minimal rebuild allows the compiler to recompile only the source files that are affected by changes to C++ class definitions.",
+    "parameter": {
+      "name": "value",
+      "description": "Sets the minimal rebuild option for Visual Studio projects. This feature was deprecated by Microsoft in Visual Studio 2015 and later versions. When enabled, minimal rebuild allows the compiler to recompile only the source files that are affected by changes to C++ class definitions.",
+      "options": [
+        {
+          "name": "Default",
+          "description": "Uses the default behavior for the toolset."
+        },
+        {
+          "name": "On",
+          "description": "Enables minimal rebuild (Visual Studio 2015 and earlier only)."
+        },
+        {
+          "name": "Off",
+          "description": "Disables minimal rebuild."
+        }
+      ]
+    },
+    "availability": "Premake 5.0.0-beta8 or later for Visual Studio 2015 and earlier.",
+    "examples": "Disable minimal rebuilds for the current project.\n\n```typescript\np.minimalRebuild(false);\n```"
   },
   {
     "allowed": [],
@@ -3607,6 +3709,40 @@
     },
     "availability": "Premake 5.0.",
     "examples": "```typescript\np.nativeWChar(\"Off\");\n\n```"
+  },
+  {
+    "allowed": [
+      "Default",
+      "On",
+      "Off"
+    ],
+    "kind": "string",
+    "name": "nodefaultLib",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "description": "Specifies whether to omit default libraries when linking.",
+    "parameter": {
+      "name": "value",
+      "description": "Specifies whether to omit default libraries when linking.",
+      "options": [
+        {
+          "name": "Default",
+          "description": "Use the toolset's default behavior"
+        },
+        {
+          "name": "On",
+          "description": "Omit all default libraries"
+        },
+        {
+          "name": "Off",
+          "description": "Include default libraries (explicit setting)"
+        }
+      ]
+    },
+    "availability": "Premake 5.0.0-beta8 or later.",
+    "examples": "Omit all default libraries:\n\n```typescript\np.nodefaultlib(\"On\");\n```\n\nExplicitly include default libraries (usually not needed):\n\n```typescript\np.nodefaultlib(\"Off\");\n```"
   },
   {
     "allowed": [],
@@ -4368,6 +4504,51 @@
   },
   {
     "allowed": [
+      "Default",
+      "Off",
+      "StackFrames",
+      "UninitializedVariables",
+      "FastChecks"
+    ],
+    "kind": "string",
+    "name": "runtimeChecks",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "description": "Controls whether runtime error checking is enabled for Visual Studio C/C++ projects.\nIf no value is set for a configuration, the toolset's default behavior will be used. By default, runtime checks are enabled for debug builds.",
+    "parameter": {
+      "name": "value",
+      "description": "Specifies the desired behavior for runtime error checking in Visual Studio C/C++ projects.",
+      "options": [
+        {
+          "name": "Off",
+          "description": "Turns off runtime error checking"
+        },
+        {
+          "name": "Default",
+          "description": "Use the toolset default behavior (Default value)"
+        },
+        {
+          "name": "StackFrames",
+          "description": "Enables runtime checks for stack frames"
+        },
+        {
+          "name": "UninitializedVariables",
+          "description": "Enables runtime checks for uninitialized variables"
+        },
+        {
+          "name": "FastChecks",
+          "description": "Enables all fast runtime checks"
+        }
+      ],
+      "additional": "Controls whether runtime error checking is enabled for Visual Studio C/C++ projects. If no value is set for a configuration, the toolset's default behavior will be used. By default, runtime checks are enabled for debug builds."
+    },
+    "availability": "Premake 5.0.0-beta8 or later in Visual Studio only.",
+    "examples": "Disable runtime checks:\n\n```typescript\np.runtimeChecks(\"Off\");\n```\n\nEnable runtime checks even in optimized builds:\n\n```typescript\np.when([\"configurations:Release\"], (p) => {\n    p.optimize(\"On\");\n    p.runtimeChecks(\"FastChecks\");\n});\n```"
+  },
+  {
+    "allowed": [
       "Address",
       "Fuzzer",
       "Thread",
@@ -5107,27 +5288,6 @@
   },
   {
     "allowed": [],
-    "deprecated": {
-      "message": "Use `externalincludedirs` instead."
-    },
-    "kind": "list:directory",
-    "name": "sysIncludeDirs",
-    "paths": true,
-    "scope": "config",
-    "scopes": [
-      "config"
-    ],
-    "tokens": true,
-    "description": ":::caution\n**This function has been deprecated in Premake 5.0 beta2.** Use the new [externalincludedirs](externalincludedirs.md) function instead. `sysincludedirs` will be not supported in Premake 6.\n:::\n\nAlias of [externalincludedirs](externalincludedirs.md).",
-    "parameter": {
-      "name": "paths",
-      "description": "Specifies a list of include file search directories. Paths should be specified relative to the currently running script file."
-    },
-    "availability": "Premake 5.0 or later.",
-    "examples": "Define two system include file search paths.\n\n```typescript\np.sysIncludeDirs(\"../lua/include\", \"../zlib\");\n\n```\n\nYou can also use wildcards to match multiple directories. The * will match against a single directory, ** will recurse into subdirectories as well.\n\n```typescript\np.sysIncludeDirs(\"../includes/**\");\n\n```"
-  },
-  {
-    "allowed": [],
     "kind": "list:directory",
     "name": "sysLibDirs",
     "paths": true,
@@ -5588,6 +5748,75 @@
     "examples": "```typescript\np.project(\"MyProject\", (p) => {\n    p.useFullPaths(\"On\");\n\n});\n```"
   },
   {
+    "allowed": [
+      "Default",
+      "On",
+      "Off"
+    ],
+    "kind": "string",
+    "name": "useImportlib",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "description": "Sets whether or not to generate an import library for a Windows DLL.",
+    "parameter": {
+      "name": "value",
+      "description": "Specifies the desired import library behavior.",
+      "options": [
+        {
+          "name": "Default",
+          "description": "Performs the toolset default behavior of generating an import library."
+        },
+        {
+          "name": "Off",
+          "description": "Prevents the generation of an import library for a Windows DLL."
+        },
+        {
+          "name": "On",
+          "description": "Explicitly generates an import library for a Windows DLL."
+        }
+      ]
+    },
+    "availability": "Premake 5.0.0-beta8 or later.",
+    "examples": "Disable the use of import libraries.\n\n```typescript\np.useImportLib(\"Off\");\n```"
+  },
+  {
+    "allowed": [
+      "Default",
+      "On",
+      "Off"
+    ],
+    "kind": "string",
+    "name": "userelativelinks",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "description": "Controls whether the linker uses relative or absolute paths for library references.\nIf no value is set for a configuration, the toolset's default behavior will be used.",
+    "parameter": {
+      "name": "value",
+      "description": "Specifies the desired behavior.",
+      "options": [
+        {
+          "name": "Default",
+          "description": "Use the toolset default behavior (Default value)"
+        },
+        {
+          "name": "On",
+          "description": "Use relative paths for library references"
+        },
+        {
+          "name": "Off",
+          "description": "Use absolute paths for library references"
+        }
+      ],
+      "additional": "Controls whether the linker uses relative or absolute paths for library references. If no value is set for a configuration, the toolset's default behavior will be used."
+    },
+    "availability": "Premake 5.0.0-beta8 or later.",
+    "examples": "Use relative paths for library linking:\n\n```typescript\np.userRelativeLinks(true);\n```"
+  },
+  {
     "allowed": [],
     "kind": "list:string",
     "name": "uses",
@@ -5885,6 +6114,41 @@
     },
     "availability": "Premake 4.0 or later.",
     "examples": "Create a new workspace named \"MyWorkspace\", with debug and release build configurations.\n```typescript\nworkspace(\"MyWorkspace\", (p) => {\n    p.configurations(\"Debug\", \"Release\");\n\n});\n```"
+  },
+  {
+    "allowed": [
+      "Default",
+      "On",
+      "Off"
+    ],
+    "kind": "string",
+    "name": "wpf",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "description": "Enable Windows Presentation Foundation (WPF) support for .NET projects.\nIf no value is set for a configuration, the toolset's default option will be used.",
+    "parameter": {
+      "name": "value",
+      "description": "Specifies the desired wpf setting.",
+      "options": [
+        {
+          "name": "Default",
+          "description": "Use the default behavior (WPF not enabled)"
+        },
+        {
+          "name": "On",
+          "description": "Enable WPF support"
+        },
+        {
+          "name": "Off",
+          "description": "Disable WPF support"
+        }
+      ],
+      "additional": "Enable Windows Presentation Foundation (WPF) support for .NET projects.\nIf no value is set for a configuration, the toolset's default option will be used."
+    },
+    "availability": "Premake 5.0.0-beta8 or later for Visual Studio .NET projects.",
+    "examples": "Enable WPF support:\n\n```typescript\np.wpf(\"On\");\n```"
   },
   {
     "allowed": [],

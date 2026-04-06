@@ -9,6 +9,19 @@
     ]
   },
   {
+    "allowed": [
+      "Default",
+      "On",
+      "Off"
+    ],
+    "kind": "string",
+    "name": "allowcopylocal",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ]
+  },
+  {
     "allowed": [],
     "kind": "integer",
     "name": "androidapilevel",
@@ -28,7 +41,9 @@
   },
   {
     "aliases": {
+      "ARM64": "AARCH64",
       "amd64": "x86_64",
+      "arm64": "AARCH64",
       "i386": "x86",
       "x32": "x86",
       "x64": "x86_64"
@@ -38,7 +53,7 @@
       "x86",
       "x86_64",
       "ARM",
-      "ARM64",
+      "AARCH64",
       "RISCV64",
       "loongarch64",
       "ppc",
@@ -46,12 +61,16 @@
       "wasm32",
       "wasm64",
       "e2k",
-      "armv5",
-      "armv7",
-      "aarch64",
-      "mips",
-      "mips64"
+      "mips64el"
     ],
+    "deprecatedaliases": {
+      "i386": {
+        "message": "Use 'x86' instead with `buildoptions { '-march=i386' }`."
+      },
+      "x32": {
+        "message": "Use 'x86' instead. There is no x32 ABI support currently."
+      }
+    },
     "kind": "string",
     "name": "architecture",
     "scope": "config",
@@ -101,6 +120,19 @@
       "config"
     ],
     "tokens": true
+  },
+  {
+    "allowed": [
+      "Default",
+      "On",
+      "Off"
+    ],
+    "kind": "string",
+    "name": "buffersecuritycheck",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ]
   },
   {
     "allowed": [],
@@ -510,6 +542,32 @@
     "tokens": true
   },
   {
+    "allowed": [
+      "Default",
+      "On",
+      "Off"
+    ],
+    "kind": "string",
+    "name": "debugenvsinherit",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ]
+  },
+  {
+    "allowed": [
+      "Default",
+      "On",
+      "Off"
+    ],
+    "kind": "string",
+    "name": "debugenvsmerge",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ]
+  },
+  {
     "allowed": [],
     "kind": "boolean",
     "name": "debugextendedprotocol",
@@ -544,23 +602,6 @@
     ],
     "kind": "string",
     "name": "debugger",
-    "scope": "config",
-    "scopes": [
-      "config"
-    ]
-  },
-  {
-    "allowed": [
-      "Local",
-      "Remote",
-      "WebBrowser",
-      "WebService"
-    ],
-    "deprecated": {
-      "message": "Use `debugger` instead."
-    },
-    "kind": "string",
-    "name": "debuggerflavor",
     "scope": "config",
     "scopes": [
       "config"
@@ -758,6 +799,19 @@
     ]
   },
   {
+    "allowed": [
+      "Default",
+      "On",
+      "Off"
+    ],
+    "kind": "string",
+    "name": "enable64bitchecks",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ]
+  },
+  {
     "allowed": [],
     "default": false,
     "kind": "boolean",
@@ -777,6 +831,19 @@
     "scope": [
       "config"
     ],
+    "scopes": [
+      "config"
+    ]
+  },
+  {
+    "allowed": [
+      "Default",
+      "On",
+      "Off"
+    ],
+    "kind": "string",
+    "name": "enablepch",
+    "scope": "config",
     "scopes": [
       "config"
     ]
@@ -806,19 +873,6 @@
     "tokens": true
   },
   {
-    "allowed": [
-      "Default",
-      "Little",
-      "Big"
-    ],
-    "kind": "string",
-    "name": "endian",
-    "scope": "config",
-    "scopes": [
-      "config"
-    ]
-  },
-  {
     "allowed": [],
     "kind": "string",
     "name": "entrypoint",
@@ -838,6 +892,15 @@
     ],
     "kind": "string",
     "name": "exceptionhandling",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ]
+  },
+  {
+    "allowed": [],
+    "kind": "boolean",
+    "name": "excludefrombuild",
     "scope": "config",
     "scopes": [
       "config"
@@ -952,47 +1015,87 @@
       "DebugEnvsDontMerge",
       "DebugEnvsInherit",
       "ExcludeFromBuild",
-      "FatalCompileWarnings",
-      "FatalLinkWarnings",
-      "FatalWarnings",
-      "LinkTimeOptimization",
       "Maps",
-      "MFC",
       "MultiProcessorCompile",
       "No64BitChecks",
-      "NoCopyLocal",
-      "NoImplicitLink",
       "NoImportLib",
       "NoIncrementalLink",
       "NoManifest",
       "NoMinimalRebuild",
       "NoPCH",
-      "NoRuntimeChecks",
       "NoBufferSecurityCheck",
       "OmitDefaultLibrary",
       "RelativeLinks",
       "ShadowedVariables",
       "UndefinedIdentifiers",
-      "WPF"
+      "WPF",
+      "NoImplicitLink",
+      "NoCopyLocal",
+      "NoRuntimeChecks"
     ],
     "deprecated": {
-      "FatalCompileWarnings": {
-        "message": "Use `fatalwarnings { \"All\" }` instead."
+      "message": "Use dedicated APIs instead."
+    },
+    "deprecatedvalues": {
+      "DebugEnvsDontMerge": {
+        "message": "Use `debugenvsmerge` instead."
       },
-      "FatalLinkWarnings": {
-        "message": "Use `linkerfatalwarnings { \"All\" }` instead."
+      "DebugEnvsInherit": {
+        "message": "Use `debugenvsinherit` instead."
       },
-      "FatalWarnings": {
-        "message": "Use `fatalwarnings { \"All\" }` instead."
+      "ExcludeFromBuild": {
+        "message": "Use `excludefrombuild` API instead."
       },
-      "LinkTimeOptimization": {
-        "message": "Use `linktimeoptimization` instead."
+      "Maps": {
+        "message": "Use `mapfile` instead."
       },
-      "MFC": {
-        "message": "Use `mfc` instead."
+      "MultiProcessorCompile": {
+        "message": "Use `multiprocessorcompile` instead."
+      },
+      "No64BitChecks": {
+        "message": "Use `enable64bitchecks` instead."
+      },
+      "NoBufferSecurityCheck": {
+        "message": "Use `buffersecuritycheck` instead."
+      },
+      "NoCopyLocal": {
+        "message": "Use `allowcopylocal {}` instead."
+      },
+      "NoImplicitLink": {
+        "message": "Use `implicitlink` instead."
+      },
+      "NoImportLib": {
+        "message": "Use `useimportlib` instead."
+      },
+      "NoIncrementalLink": {
+        "message": "Use `incrementallink` instead."
+      },
+      "NoManifest": {
+        "message": "Use `manifest` instead."
+      },
+      "NoMinimalRebuild": {
+        "message": "Use `minimalrebuild` instead."
+      },
+      "NoPCH": {
+        "message": "Use `enablepch` instead."
+      },
+      "NoRuntimeChecks": {
+        "message": "Use `runtimechecks` instead."
+      },
+      "OmitDefaultLibrary": {
+        "message": "Use `nodefaultlib` instead."
+      },
+      "RelativeLinks": {
+        "message": "Use `userelativelinks` instead."
+      },
+      "ShadowedVariables": {
+        "message": "Use `buildoptions` to add warnings instead."
+      },
+      "UndefinedIdentifiers": {
+        "message": "Use `buildoptions` to add warnings instead."
       },
       "WPF": {
-        "message": "Use `dotnetsdk \"WindowsDesktop\"` instead."
+        "message": "Use `wpf` instead."
       }
     },
     "kind": "list:string",
@@ -1004,9 +1107,9 @@
   },
   {
     "allowed": [
-      "soft",
-      "softfp",
-      "hard"
+      "Soft",
+      "SoftFP",
+      "Hard"
     ],
     "kind": "string",
     "name": "floatabi",
@@ -1058,18 +1161,6 @@
       "config"
     ],
     "tokens": true
-  },
-  {
-    "allowed": [
-      "Software",
-      "Hardware"
-    ],
-    "kind": "string",
-    "name": "fpu",
-    "scope": "config",
-    "scopes": [
-      "config"
-    ]
   },
   {
     "allowed": [],
@@ -1147,27 +1238,6 @@
   },
   {
     "allowed": [],
-    "kind": "list:string",
-    "name": "imageoptions",
-    "scope": "config",
-    "scopes": [
-      "config"
-    ],
-    "tokens": true
-  },
-  {
-    "allowed": [],
-    "kind": "path",
-    "name": "imagepath",
-    "paths": true,
-    "scope": "config",
-    "scopes": [
-      "config"
-    ],
-    "tokens": true
-  },
-  {
-    "allowed": [],
     "kind": "path",
     "name": "implibdir",
     "paths": true,
@@ -1218,6 +1288,19 @@
     "tokens": true
   },
   {
+    "allowed": [
+      "Default",
+      "On",
+      "Off"
+    ],
+    "kind": "string",
+    "name": "implicitlink",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ]
+  },
+  {
     "allowed": [],
     "kind": "list:directory",
     "name": "includedirs",
@@ -1238,6 +1321,19 @@
       "config"
     ],
     "tokens": true
+  },
+  {
+    "allowed": [
+      "Default",
+      "On",
+      "Off"
+    ],
+    "kind": "string",
+    "name": "incrementallink",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ]
   },
   {
     "allowed": [],
@@ -1477,6 +1573,7 @@
     "allowed": [
       "Default",
       "On",
+      "Fast",
       "Off"
     ],
     "kind": "string",
@@ -1545,6 +1642,41 @@
   {
     "allowed": [
       "Default",
+      "On",
+      "Off"
+    ],
+    "kind": "string",
+    "name": "manifest",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ]
+  },
+  {
+    "allowed": [
+      "Default",
+      "On",
+      "Off"
+    ],
+    "kind": "string",
+    "name": "mapfile",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ]
+  },
+  {
+    "allowed": [],
+    "kind": "string",
+    "name": "mapfilepath",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ]
+  },
+  {
+    "allowed": [
+      "Default",
       "Off",
       "On",
       "Static",
@@ -1552,6 +1684,32 @@
     ],
     "kind": "string",
     "name": "mfc",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ]
+  },
+  {
+    "allowed": [
+      "Default",
+      "On",
+      "Off"
+    ],
+    "kind": "string",
+    "name": "minimalrebuild",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ]
+  },
+  {
+    "allowed": [
+      "Default",
+      "On",
+      "Off"
+    ],
+    "kind": "string",
+    "name": "multiprocessorcompile",
     "scope": "config",
     "scopes": [
       "config"
@@ -1575,6 +1733,19 @@
     ],
     "kind": "string",
     "name": "nativewchar",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ]
+  },
+  {
+    "allowed": [
+      "Default",
+      "On",
+      "Off"
+    ],
+    "kind": "string",
+    "name": "nodefaultlib",
     "scope": "config",
     "scopes": [
       "config"
@@ -1957,6 +2128,21 @@
   },
   {
     "allowed": [
+      "Default",
+      "Off",
+      "StackFrames",
+      "UninitializedVariables",
+      "FastChecks"
+    ],
+    "kind": "string",
+    "name": "runtimechecks",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ]
+  },
+  {
+    "allowed": [
       "Address",
       "Fuzzer",
       "Thread",
@@ -2253,20 +2439,6 @@
   },
   {
     "allowed": [],
-    "deprecated": {
-      "message": "Use `externalincludedirs` instead."
-    },
-    "kind": "list:directory",
-    "name": "sysincludedirs",
-    "paths": true,
-    "scope": "config",
-    "scopes": [
-      "config"
-    ],
-    "tokens": true
-  },
-  {
-    "allowed": [],
     "kind": "list:directory",
     "name": "syslibdirs",
     "paths": true,
@@ -2282,6 +2454,7 @@
       "bsd",
       "emscripten",
       "haiku",
+      "hurd",
       "ios",
       "linux",
       "macosx",
@@ -2413,6 +2586,9 @@
       "3.8",
       "5.0"
     ],
+    "deprecated": {
+      "message": "Use `toolchain 'gcc-<version>'` or `toolchain 'clang-<version>'` instead."
+    },
     "kind": "string",
     "name": "toolchainversion",
     "scope": "config",
@@ -2477,9 +2653,48 @@
     ]
   },
   {
+    "allowed": [
+      "Default",
+      "On",
+      "Off"
+    ],
+    "kind": "string",
+    "name": "useimportlib",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ]
+  },
+  {
+    "allowed": [
+      "Default",
+      "On",
+      "Off"
+    ],
+    "kind": "string",
+    "name": "userelativelinks",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ]
+  },
+  {
     "allowed": [],
     "kind": "list:string",
     "name": "uses",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ]
+  },
+  {
+    "allowed": [
+      "Default",
+      "On",
+      "Off"
+    ],
+    "kind": "string",
+    "name": "useshortenums",
     "scope": "config",
     "scopes": [
       "config"
@@ -2595,6 +2810,19 @@
     "allowed": [],
     "kind": "string",
     "name": "workspace",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ]
+  },
+  {
+    "allowed": [
+      "Default",
+      "On",
+      "Off"
+    ],
+    "kind": "string",
+    "name": "wpf",
     "scope": "config",
     "scopes": [
       "config"

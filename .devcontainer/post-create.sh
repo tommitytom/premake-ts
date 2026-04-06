@@ -90,7 +90,7 @@ echo "premake5 installed: $(premake5 --version)"
 echo "Pulling premake-core documentation for ${PREMAKE_VERSION}..."
 
 WORKSPACE_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-DOCS_DEST="${WORKSPACE_ROOT}/packages/premake-ts-generator/docs"
+DOCS_DEST="${WORKSPACE_ROOT}/packages/generator/docs"
 
 if [[ "$PREMAKE_VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9] ]]; then
   DOCS_REF="v${PREMAKE_VERSION}"

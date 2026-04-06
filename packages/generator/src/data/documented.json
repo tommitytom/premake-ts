@@ -13,6 +13,23 @@
     "examples": "```lua\nallmodulespublic \"On\"\n```"
   },
   {
+    "allowed": [
+      "Default",
+      "On",
+      "Off"
+    ],
+    "kind": "string",
+    "name": "allowcopylocal",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "description": "Specifies whether or not to allow for copy local of assemblies.\n\n```lua\nallowcopylocal (\"value\")\n```",
+    "parameter": "`value` specifies the desired copy mode:\n\n| Value       | Description                                                       |\n|-------------|-------------------------------------------------------------------|\n| Default     | Perform the default copy local mechanism for the exporter.        |\n| Off         | Do not copy local assemblies to the output directory.             |\n| On          | Allow the local assemblies to be copied to the output directory.  |",
+    "availability": "Premake 5.0.0-beta8 or later for Visual Studio C# Projects.",
+    "examples": ""
+  },
+  {
     "allowed": [],
     "kind": "integer",
     "name": "androidapilevel",
@@ -133,6 +150,23 @@
     "parameter": "`directories` - paths containing executable to run when building command.",
     "availability": "Premake 5.0.0 alpha 12 or later.",
     "examples": "```lua\nbindirs { \"bin/\", \"scripts/\" }\n```"
+  },
+  {
+    "allowed": [
+      "Default",
+      "On",
+      "Off"
+    ],
+    "kind": "string",
+    "name": "buffersecuritycheck",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "description": "Specifies whether to use stack and buffer protections.\n\n```lua\nbuffersecuritycheck \"value\"\n```",
+    "parameter": "*value* specifies if buffer security checks should be enabled.\n\n| Value   | Description                                            |\n|---------|--------------------------------------------------------|\n| Off     | Disable buffer security checks.                        |\n| On      | Enable buffer security checks.                         |\n| Default | Use the default buffer security checks.                |",
+    "availability": "Premake 5.0.0-beta8 or later.",
+    "examples": "```lua\nbuffersecuritycheck \"On\"\n```\n\n[1]: https://learn.microsoft.com/en-us/cpp/build/reference/gs-buffer-security-check?view=msvc-170\n[2]: https://gcc.gnu.org/onlinedocs/gcc-15.2.0/gcc/Instrumentation-Options.html#Instrumentation-Options"
   },
   {
     "allowed": [],
@@ -670,6 +704,40 @@
     "examples": ""
   },
   {
+    "allowed": [
+      "Default",
+      "On",
+      "Off"
+    ],
+    "kind": "string",
+    "name": "debugenvsinherit",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "description": "Specifies whether to inherit the parent environment when using debug environment variables.\n\n```lua\ndebugenvsinherit (\"value\")\n```\n\nWhen set to `On`, the parent environment variables will be included alongside any custom [debugenvs](debugenvs.md) you specify. In Visual Studio, this appends `$(LocalDebuggerEnvironment)` to the environment variable list.",
+    "parameter": "`value` specifies the inheritance behavior:\n\n| Value       | Description                                              |\n|-------------|----------------------------------------------------------|\n| Default     | Use the toolset's default behavior (no explicit setting) |\n| On          | Inherit parent environment variables                     |\n| Off         | Do not inherit parent environment variables              |",
+    "availability": "Premake 5.0.0-beta8 or later.",
+    "examples": "Set custom debug environment variables while preserving system environment:\n\n```lua\nfilter \"configurations:Debug\"\n  debugenvs { \"MY_DEBUG_PATH=C:\\\\temp\\\\debug\" }\n  debugenvsinherit \"On\"\n```\n\nUse only custom environment variables, ignoring parent environment:\n\n```lua\nfilter \"configurations:Debug\"\n  debugenvs { \"ISOLATED_ENV=1\" }\n  debugenvsinherit \"Off\"\n```"
+  },
+  {
+    "allowed": [
+      "Default",
+      "On",
+      "Off"
+    ],
+    "kind": "string",
+    "name": "debugenvsmerge",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "description": "Specifies whether to merge debug environment variables with the system environment.\n\n```lua\ndebugenvsmerge (\"value\")\n```\n\nWhen set to `Off`, only the [debugenvs](debugenvs.md) you specify will be used, preventing them from being merged with the existing system environment. This is useful when you want complete control over the debug environment.",
+    "parameter": "`value` specifies the merge behavior:\n\n| Value       | Description                                              |\n|-------------|----------------------------------------------------------|\n| Default     | Use the toolset's default behavior (merge enabled)       |\n| On          | Merge debug environment with system environment          |\n| Off         | Do not merge with system environment                     |",
+    "availability": "Premake 5.0.0-beta8 or later.",
+    "examples": "Set debug environment variables without merging with system environment:\n\n```lua\nfilter \"configurations:Debug\"\n  debugenvs { \"PATH=C:\\\\custom\\\\bin\", \"MY_VAR=value\" }\n  debugenvsmerge \"Off\"\n```\n\nExplicitly enable merging (default behavior):\n\n```lua\nfilter \"configurations:Debug\"\n  debugenvs { \"EXTRA_VAR=1\" }\n  debugenvsmerge \"On\"\n```"
+  },
+  {
     "allowed": [],
     "kind": "boolean",
     "name": "debugextendedprotocol",
@@ -720,27 +788,6 @@
     "parameter": "`value` one of:\n* `Default` - needs documentation.\n* `GDB` - needs documentation.\n* `LLDB` - needs documentation.\n* `VisualStudioLocal` - needs documentation.\n* `VisualStudioRemote` - needs documentation.\n* `VisualStudioWebBrowser` - needs documentation.\n* `VisualStudioWebService` - needs documentation.",
     "availability": "Premake 5.0.0 alpha 12 or later.",
     "examples": "```lua\ndebugger \"value\"\n```"
-  },
-  {
-    "allowed": [
-      "Local",
-      "Remote",
-      "WebBrowser",
-      "WebService"
-    ],
-    "deprecated": {
-      "message": "Use `debugger` instead."
-    },
-    "kind": "string",
-    "name": "debuggerflavor",
-    "scope": "config",
-    "scopes": [
-      "config"
-    ],
-    "description": "debuggerflavor - This page was auto-generated. Feel free to help us improve the documentation by creating a pull request.\n\n```lua\ndebuggerflavor (value)\n```",
-    "parameter": "`value` is one of:\n\n* `Local`: needs documentation\n* `Remote`: needs documentation\n* `WebBrowser`: needs documentation\n* `WebService`: needs documentation",
-    "availability": "Premake 5.0.0 alpha 14 or later.",
-    "examples": "```lua\ndebuggerflavor (value)\n```"
   },
   {
     "allowed": [
@@ -1006,6 +1053,23 @@
     "examples": "```lua\nembedAndSign {\n\t\"SDL2.framework\",\n\t\"Another.framework\"\n}\n```"
   },
   {
+    "allowed": [
+      "Default",
+      "On",
+      "Off"
+    ],
+    "kind": "string",
+    "name": "enable64bitchecks",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "description": "Sets whether or not to check for 64 bit portability problems.\n\n```lua\nenable64bitchecks (\"value\")\n```",
+    "parameter": "`value` is one of:\n\n| Value   | Description                                         |\n|---------|-----------------------------------------------------|\n| Default | Use the default portability checks for the exporter |\n| Off     | Turn off portability checks.                        |\n| On      | Turn on portability checks                          |",
+    "availability": "Premake 5.0.0-beta8 or later for Visual Studio 2008 and earlier.",
+    "examples": ""
+  },
+  {
     "allowed": [],
     "default": false,
     "kind": "boolean",
@@ -1036,6 +1100,23 @@
     "parameter": "`value` is one of:\n\n- `On`\n- `Off`",
     "availability": "Premake 5.0.0 beta 3 or later for Visual Studio 2019 and later.",
     "examples": ""
+  },
+  {
+    "allowed": [
+      "Default",
+      "On",
+      "Off"
+    ],
+    "kind": "string",
+    "name": "enablepch",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "description": "Controls whether precompiled headers (PCH) are enabled for a configuration.\n\n```lua\nenablepch (\"value\")\n```\n\nIf no value is set for a configuration, the toolset's default behavior will be used.",
+    "parameter": "`value` specifies the desired behavior:\n\n| Value       | Description                                          |\n|-------------|------------------------------------------------------|\n| Default     | Use the toolset default behavior (Default value)     |\n| On          | Enable precompiled headers                           |\n| Off         | Disable precompiled headers                          |",
+    "availability": "Premake 5.0.0-beta8 or later.",
+    "examples": "Disable precompiled headers for a debug configuration:\n\n```lua\nfilter \"configurations:Debug\"\n   enablepch \"Off\"\n```"
   },
   {
     "allowed": [
@@ -1070,23 +1151,6 @@
     "examples": ""
   },
   {
-    "allowed": [
-      "Default",
-      "Little",
-      "Big"
-    ],
-    "kind": "string",
-    "name": "endian",
-    "scope": "config",
-    "scopes": [
-      "config"
-    ],
-    "description": "Specifies the target endian for endian-agnostic architectures.\n\n```lua\nendian \"value\"\n```",
-    "parameter": "`value` specifies the desired endian:\n\n| Value       | Description                                                       |\n|-------------|-------------------------------------------------------------------|\n| Default     | Use the toolset's default endian.                                 |\n| Little      | Specify little-endian.                                            |\n| Big         | Specify big-endian.                                               |",
-    "availability": "Premake 5.0 or later.",
-    "examples": ""
-  },
-  {
     "allowed": [],
     "kind": "string",
     "name": "entrypoint",
@@ -1117,6 +1181,19 @@
     "description": "Enable or disable exception handling.\n\n```lua\nexceptionhandling (\"value\")\n```",
     "parameter": "`value` is one of:\n\n| Value   | Description                                       |\n|---------|---------------------------------------------------|\n| Default | Use the toolset's default setting for exceptions. |\n| On      | Turn on exceptions.                               |\n| Off     | Turn off exceptions.                              |\n| SEH     | Turn on exceptions and use [structured exception handling](https://msdn.microsoft.com/en-us/library/windows/desktop/ms680657(v=vs.85).aspx) when available. |\n| CThrow  | Needs documentation                               |\n| UnwindTables | Needs documentation                          |",
     "availability": "Premake 5.0 or later.",
+    "examples": ""
+  },
+  {
+    "allowed": [],
+    "kind": "boolean",
+    "name": "excludefrombuild",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "description": "Excludes a project from the build or a source file from a configuration.\n\n```lua\nexcludefrombuild (\"value\")\n```",
+    "parameter": "`value` specifies whether to exclude project or source file from build:\n\n| Value       | Description                                  |\n|-------------|----------------------------------------------|\n| On          | Excludes a project from the build.           |\n| Off         | Default behavior, includes project in build. |",
+    "availability": "Premake 5.0.0-beta8 or later on Visual Studio.",
     "examples": ""
   },
   {
@@ -1395,22 +1472,6 @@
     "examples": "```lua\nforceusings { \"stdafx.h\" }\n```"
   },
   {
-    "allowed": [
-      "Software",
-      "Hardware"
-    ],
-    "kind": "string",
-    "name": "fpu",
-    "scope": "config",
-    "scopes": [
-      "config"
-    ],
-    "description": "Specifies whether to generate code for a hardware FPU.\n\n```lua\nfpu \"value\"\n```",
-    "parameter": "`value` specifies the desired FPU mode:\n\n| Value       | Description                                                       |\n|-------------|-------------------------------------------------------------------|\n| Software    | Generate software floating-point emulation code.                  |\n| Hardware    | Generate code for a hardware FPU.                                 |",
-    "availability": "Premake 5.0 or later.",
-    "examples": ""
-  },
-  {
     "allowed": [],
     "kind": "list:directory",
     "name": "frameworkdirs",
@@ -1514,35 +1575,6 @@
   },
   {
     "allowed": [],
-    "kind": "list:string",
-    "name": "imageoptions",
-    "scope": "config",
-    "scopes": [
-      "config"
-    ],
-    "tokens": true,
-    "description": "Passes arguments directly to the image tool command line without translation.\n\n```lua\nimageoptions { \"options\" }\n```\n\nIf a project includes multiple calls to `imageoptions` the lists are concatenated, in the order in which they appear in the script.\n\nImage options are currently only supported for Xbox 360 targets.",
-    "parameter": "`options` is a list of image tools flags and options.",
-    "availability": "Premake 5.0 or later.",
-    "examples": ""
-  },
-  {
-    "allowed": [],
-    "kind": "path",
-    "name": "imagepath",
-    "paths": true,
-    "scope": "config",
-    "scopes": [
-      "config"
-    ],
-    "tokens": true,
-    "description": "Sets the file name of the deployment image produced by the build.\n\n```lua\nimagepath (\"path\")\n```\n\nThis value is currently only used by the Xbox 360.",
-    "parameter": "`path` is the full path for the image file, relative to the currently executing script file.",
-    "availability": "Premake 5.0 or later.",
-    "examples": ""
-  },
-  {
-    "allowed": [],
     "kind": "path",
     "name": "implibdir",
     "paths": true,
@@ -1613,6 +1645,23 @@
     "examples": "```lua\n-- Add \"-d\" to debug versions of files\nfilter { \"configurations:Debug\" }\n   implibsuffix \"-d\"\n```"
   },
   {
+    "allowed": [
+      "Default",
+      "On",
+      "Off"
+    ],
+    "kind": "string",
+    "name": "implicitlink",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "description": "Sets whether or not to implicitly link dependent libraries.\n\n```lua\nimplicitlink (\"value\")\n```",
+    "parameter": "*value* specifies the desired implicit link mode:\n\n| Value       | Description                                                                                            |\n|-------------|---------------------------------------------------------------|\n| Default     | Performs the default implicit link behavior of your exporter. |\n| Off         | Do not implicit link dependent libraries.                     |\n| On          | Implicitly link dependent libraries.                          |",
+    "availability": "Premake 5.0.0-beta8 or later on Visual Studio.",
+    "examples": ""
+  },
+  {
     "allowed": [],
     "kind": "list:directory",
     "name": "includedirs",
@@ -1641,6 +1690,23 @@
     "parameter": "`paths` specifies a list of include file search directories. Paths should be specified relative to the currently running script file.  Search order is evaluated from left\nto right.",
     "availability": "Premake 5.0 or later.\n\nGCC and Clang are the only toolsets supporting the ordering functionality in the gmakelegacy, gmake, and Codelite exporters.  All exporters and toolsets\nsupport appending the directories to the external include directories.",
     "examples": "Define two include file search paths.\n\n```lua\nincludedirsafter { \"../lua/include\", \"../zlib\" }\n```\n\nYou can also use wildcards to match multiple directories. The * will match against a single directory, ** will recurse into subdirectories as well.\n\n```lua\nincludedirsafter { \"../includes/**\" }\n```"
+  },
+  {
+    "allowed": [
+      "Default",
+      "On",
+      "Off"
+    ],
+    "kind": "string",
+    "name": "incrementallink",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "description": "Controls whether incremental linking is enabled for a configuration.\n\n```lua\nincrementallink (\"value\")\n```\n\nIncremental linking can improve iteration times during development by only relinking the portions of the binary that have changed. However, it may prevent some optimizations and is typically disabled for release builds.",
+    "parameter": "`value` specifies the incremental linking setting:\n\n| Value   | Description                                                  |\n|---------|--------------------------------------------------------------|\n| Default | Use the default incremental linking behavior. Incremental linking is enabled for debug builds and disabled for optimized builds, static libraries, and when link-time optimization is enabled. |\n| On      | Force incremental linking to be enabled.                     |\n| Off     | Force incremental linking to be disabled.                    |",
+    "availability": "Premake 5.0.0-beta8 or later.",
+    "examples": "Force incremental linking off for all configurations:\n\n```lua\nfilter \"configurations:*\"\n   incrementallink \"Off\"\n```\n\nEnable incremental linking even in release builds:\n\n```lua\nfilter \"configurations:Release\"\n   incrementallink \"On\"\n```"
   },
   {
     "allowed": [],
@@ -2048,6 +2114,53 @@
   {
     "allowed": [
       "Default",
+      "On",
+      "Off"
+    ],
+    "kind": "string",
+    "name": "manifest",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "description": "Controls whether a Windows manifest file should be generated for the project.\n\n```lua\nmanifest (\"value\")\n```\n\nBy default, Visual Studio will generate an external manifest file for C/C++ executables.",
+    "parameter": "`value` is one of:\n\n| Value       | Description                                                                |\n|-------------|----------------------------------------------------------------------------|\n| Default     | Use default behavior (manifest is generated)                               |\n| On          | Generate manifest file                                                     |\n| Off         | Do not generate manifest file                                              |",
+    "availability": "Premake 5.0.0-beta8 or later.",
+    "examples": "Disable manifest generation:\n\n```lua\nmanifest \"Off\"\n```\n\nEmbed the manifest into the binary:\n\n```lua\nmanifest \"Embed\"\n```"
+  },
+  {
+    "allowed": [
+      "Default",
+      "On",
+      "Off"
+    ],
+    "kind": "string",
+    "name": "mapfile",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "description": "Specifies whether or not to generate a mapfile.\n\n```lua\nmapfile (\"value\")\n```",
+    "parameter": "`value` specifies the desired MAP generation mode:\n\n| Value       | Description                               |\n|-------------|-------------------------------------------|\n| Default     | Perform the default mapfile generation.   |\n| Off         | Do not generate a mapfile for the target. |\n| On          | Generate a mapfile for the target.        |",
+    "availability": "Premake 5.0.0-beta8 or later on Visual Studio.",
+    "examples": ""
+  },
+  {
+    "allowed": [],
+    "kind": "string",
+    "name": "mapfilepath",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "description": "Specifies the path to generate a mapfile at.\n\n```lua\nmapfilepath (\"path\")\n```\n\nIf `mapfile` is not `\"On\"`, then no mapfile will be generated. If `mapfile` is `\"On\"` but this value is not set, this will generate a mapfile at a default location,\nas determined by either the toolset or exporter.",
+    "parameter": "`path` specifies the desired mapfile path",
+    "availability": "Premake 5.0.0-beta8 or later on Visual Studio.",
+    "examples": ""
+  },
+  {
+    "allowed": [
+      "Default",
       "Off",
       "On",
       "Static",
@@ -2062,6 +2175,40 @@
     "description": "Sets the version of the MFC libraries to link against.\n\n```lua\nmfc \"On\"\n```",
     "parameter": "*value* specifies the desired PIC mode:\n\n| Value       | Description                                                                                            |\n|-------------|--------------------------------------------------------------------------------------------------------|\n| Default     | Perform the default linkage against the MFC libraries for your project type.                           |\n| Off         | Do not link against MFC libraries.                                                                     |\n| On          | Link against the MFC libraries corresponding with the runtime type you are using (static or dynamic).  |\n| Static      | Force static linkage to the MFC libraries.                                                             |\n| Dynamic     | Force dynamic linkage to the MFC libraries.                                                            |",
     "availability": "Premake 5.0-beta4 or later on Visual Studio.",
+    "examples": ""
+  },
+  {
+    "allowed": [
+      "Default",
+      "On",
+      "Off"
+    ],
+    "kind": "string",
+    "name": "minimalrebuild",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "description": "Sets the minimal rebuild option for Visual Studio projects. This feature was deprecated by Microsoft in Visual Studio 2015 and later versions. When enabled, minimal rebuild allows the compiler to recompile only the source files that are affected by changes to C++ class definitions.\n\n```lua\nminimalrebuild (\"value\")\n```",
+    "parameter": "`value` is one of:\n\n| Value     | Description                                                     |\n|-----------|-----------------------------------------------------------------|\n| `Default` | Uses the default behavior for the toolset.                      |\n| `On`      | Enables minimal rebuild (Visual Studio 2015 and earlier only).  |\n| `Off`     | Disables minimal rebuild.                                       |",
+    "availability": "Premake 5.0.0-beta8 or later for Visual Studio 2015 and earlier.",
+    "examples": "```lua\nminimalrebuild \"Off\"\n```"
+  },
+  {
+    "allowed": [
+      "Default",
+      "On",
+      "Off"
+    ],
+    "kind": "string",
+    "name": "multiprocessorcompile",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "description": "Controls whether multiple processors are used for compilation.\n\n```lua\nmultiprocessorcompile (\"value\")\n```",
+    "parameter": "`value` is one of:\n\n| Value | Description |\n|-------|-------------|\n| Default | Use the compiler's default behavior. |\n| On | Use multiple processes for compilation. |\n| Off | Use a single process for compilation. |",
+    "availability": "Premake 5.0.0-beta8 or later for the `msc` toolset or in Visual Studio exporters.",
     "examples": ""
   },
   {
@@ -2094,6 +2241,23 @@
     "parameter": "`value` specifies the desired state:\n\n| Value       | Description                                            |\n|-------------|--------------------------------------------------------|\n| Default     | Use the toolset's default settings.                    |\n| On          | Enable native wide character handling.                 |\n| Off         | Disable native wide character handling.                |",
     "availability": "Premake 5.0.",
     "examples": "```lua\nnativewchar \"Off\"\n```"
+  },
+  {
+    "allowed": [
+      "Default",
+      "On",
+      "Off"
+    ],
+    "kind": "string",
+    "name": "nodefaultlib",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "description": "Specifies whether to omit default libraries when linking.\n\n```lua\nnodefaultlib (\"value\")\n```",
+    "parameter": "`value` is one of:\n\n| Value   | Description                                    |\n|---------|------------------------------------------------|\n| Default | Use the toolset's default behavior            |\n| On      | Omit all default libraries                    |\n| Off     | Include default libraries (explicit setting)  |",
+    "availability": "Premake 5.0.0-beta8 or later.",
+    "examples": "Omit all default libraries:\n\n```lua\nnodefaultlib \"On\"\n```\n\nExplicitly include default libraries (usually not needed):\n\n```lua\nnodefaultlib \"Off\"\n```"
   },
   {
     "allowed": [],
@@ -2612,6 +2776,25 @@
   },
   {
     "allowed": [
+      "Default",
+      "Off",
+      "StackFrames",
+      "UninitializedVariables",
+      "FastChecks"
+    ],
+    "kind": "string",
+    "name": "runtimechecks",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "description": "Controls whether runtime error checking is enabled for Visual Studio C/C++ projects.\n\n```lua\nruntimechecks (\"value\")\n```\n\nIf no value is set for a configuration, the toolset's default behavior will be used. By default, runtime checks are enabled for debug builds.",
+    "parameter": "`value` specifies the desired behavior:\n\n| Value                  | Description                                          |\n|------------------------|------------------------------------------------------|\n| Off                    | Turns off runtime error checking                     | \n| Default                | Use the toolset default behavior (Default value)     |\n| StackFrames            | Enables runtime checks for stack frames              |\n| UninitializedVariables | Enables runtime checks for uninitialized variables   |\n| FastChecks             | Enables all fast runtime checks                      |",
+    "availability": "Premake 5.0.0-beta8 or later in Visual Studio only.",
+    "examples": "Disable runtime checks:\n\n```lua\nruntimechecks \"Off\"\n```\n\nEnable runtime checks even in optimized builds:\n\n```lua\nfilter { \"configurations:Release\" }\n\toptimize \"On\"\n\truntimechecks \"FastChecks\"\n```"
+  },
+  {
+    "allowed": [
       "Address",
       "Fuzzer",
       "Thread",
@@ -3000,24 +3183,6 @@
   },
   {
     "allowed": [],
-    "deprecated": {
-      "message": "Use `externalincludedirs` instead."
-    },
-    "kind": "list:directory",
-    "name": "sysincludedirs",
-    "paths": true,
-    "scope": "config",
-    "scopes": [
-      "config"
-    ],
-    "tokens": true,
-    "description": ":::caution\n**This function has been deprecated in Premake 5.0 beta2.** Use the new [externalincludedirs](externalincludedirs.md) function instead. `sysincludedirs` will be not supported in Premake 6.\n:::\n\nAlias of [externalincludedirs](externalincludedirs.md).\n\n```lua\nsysincludedirs { \"paths\" }\n```",
-    "parameter": "*paths* specifies a list of include file search directories. Paths should be specified relative to the currently running script file.",
-    "availability": "Premake 5.0 or later.",
-    "examples": "Define two system include file search paths.\n\n```lua\nsysincludedirs { \"../lua/include\", \"../zlib\" }\n```\n\nYou can also use wildcards to match multiple directories. The * will match against a single directory, ** will recurse into subdirectories as well.\n\n```lua\nsysincludedirs { \"../includes/**\" }\n```"
-  },
-  {
-    "allowed": [],
     "kind": "list:directory",
     "name": "syslibdirs",
     "paths": true,
@@ -3304,6 +3469,40 @@
     "examples": "```lua\nproject \"MyProject\"\n    usefullpaths \"On\" -- Uses full paths in diagnostics\n```"
   },
   {
+    "allowed": [
+      "Default",
+      "On",
+      "Off"
+    ],
+    "kind": "string",
+    "name": "useimportlib",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "description": "Sets whether or not to generate an import library for a Windows DLL.\n\n```lua\nuseimportlib (\"value\")\n```",
+    "parameter": "`value` specifies the desired import library behavior:\n\n| Value       | Description                                                                           |\n|-------------|---------------------------------------------------------------------------------------|\n| Default     | Performs the toolset default behavior of generating an import library.                |\n| Off         | Prevents the generation of an import library for a Windows DLL.                       |\n| On          | Explicitly generates an import library for a Windows DLL.                             |",
+    "availability": "Premake 5.0.0-beta8 or later.",
+    "examples": "```lua\nuseimportlib \"Off\"\n```"
+  },
+  {
+    "allowed": [
+      "Default",
+      "On",
+      "Off"
+    ],
+    "kind": "string",
+    "name": "userelativelinks",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "description": "Controls whether the linker uses relative or absolute paths for library references.\n\n```lua\nuserelativelinks (\"value\")\n```\n\nIf no value is set for a configuration, the toolset's default behavior will be used.",
+    "parameter": "`value` specifies the desired behavior:\n\n| Value       | Description                                          |\n|-------------|------------------------------------------------------|\n| Default     | Use the toolset default behavior (Default value)     |\n| On          | Use relative paths for library references            |\n| Off         | Use absolute paths for library references            |",
+    "availability": "Premake 5.0.0-beta8 or later.",
+    "examples": "Use relative paths for library linking:\n\n```lua\nuserelativelinks \"On\"\n```"
+  },
+  {
     "allowed": [],
     "kind": "list:string",
     "name": "uses",
@@ -3315,6 +3514,23 @@
     "parameter": "",
     "availability": "",
     "examples": "Demonstration of using `uses`. When specifying a `uses` matching a project name containing a `PUBLIC` or `INTERFACE` usage block, the `uses` statement will match against that. If a `project` with a `PUBLIC` or `INTERFACE` usage block\ncannot be found, then it will fall back to searching all `usage` blocks to match the provided name, as described above.\n\n```lua\nproject \"MyProject\"\n    usage \"PUBLIC\"\n        defines { \"PUBLIC_DEF\" }\n    usage \"Custom\"\n        defines { \"CUSTOM_DEF\" }\n\nproject \"MyExe\"\n    uses { \"MyProject\" }\n\nproject \"MyDLL\"\n    uses { \"Custom\" }\n```"
+  },
+  {
+    "allowed": [
+      "Default",
+      "On",
+      "Off"
+    ],
+    "kind": "string",
+    "name": "useshortenums",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "description": "Specifies if short enums should be used.\n\n```lua\nuseshortenums (\"value\")\n```\n\nIf no value is set for a configuration, the toolset's default option will be used.",
+    "parameter": "`value` specifies the desired wpf setting:\n\n| Value      | Description                                       | Notes |\n|------------|---------------------------------------------------|\n| Default    | Use the default behavior                          |\n| On         | Enums are backed by the smallest legal integral.  | Binaries compiled with short enums may not be ABI compatible with those without. It is recommended to compile all projects with the same setting. |\n| Off        | Enums are backed by the default integral.         |",
+    "availability": "Premake 5.0.0-beta8 or later for Android projects in Visual Studio or any GCC/Clang project.",
+    "examples": ""
   },
   {
     "allowed": [
@@ -3466,6 +3682,23 @@
     "parameter": "`name` is a unique name for the workspace. If a workspace with the given name already exists, it is made active and returned.\n\nIf no name is given, the current workspace scope is returned, and also made active.\n\nIf \"\\*\" is used, the \"root\" configuration scope, which applies to all workspaces, is selected and nil is returned.\n\nBy default, the project name will be used as the file name of the generated project file; be careful with spaces and special characters. You can override this default with the [filename](filename.md) call.",
     "availability": "Premake 4.0 or later.",
     "examples": "Create a new workspace named \"MyWorkspace\", with debug and release build configurations.\n```lua\nworkspace \"MyWorkspace\"\n   configurations { \"Debug\", \"Release\" }\n```"
+  },
+  {
+    "allowed": [
+      "Default",
+      "On",
+      "Off"
+    ],
+    "kind": "string",
+    "name": "wpf",
+    "scope": "config",
+    "scopes": [
+      "config"
+    ],
+    "description": "Enable Windows Presentation Foundation (WPF) support for .NET projects.\n\n```lua\nwpf (\"value\")\n```\n\nIf no value is set for a configuration, the toolset's default option will be used.",
+    "parameter": "`value` specifies the desired wpf setting:\n\n| Value      | Description                                       |\n|------------|---------------------------------------------------|\n| Default    | Use the default behavior (WPF not enabled)        |\n| On         | Enable WPF support                                |\n| Off        | Disable WPF support                               |",
+    "availability": "Premake 5.0.0-beta8 or later for Visual Studio .NET projects.",
+    "examples": "Enable WPF support:\n\n```lua\nwpf \"On\"\n```"
   },
   {
     "allowed": [],

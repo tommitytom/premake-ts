@@ -4,6 +4,7 @@ dist/
 *.log
 **/*.tsbuildinfo
 coverage/
-packages/premake-ts-generator/premake-definitions/
-packages/premake-ts-generator/docs/
+packages/generator/premake-definitions/
+packages/generator/docs/
+packages/generator/report.json
 .devcontainer/devcontainer.env
