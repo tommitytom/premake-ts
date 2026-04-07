@@ -30,9 +30,9 @@ export interface ArgDefinition {
  */
 export const PREMAKE_TS_ARGS: ArgDefinition[] = [
 	{ name: '--file=<path>', description: 'Path to the premake5.ts file (default: premake5.ts)', isFlag: false },
-	{ name: '--emitOnly', description: 'Only generate the Lua file without running premake (infers --keepIntermediate)', isFlag: true },
 	{ name: '--premakeBinary=<path>', description: 'Path to a custom premake5 binary (default: premake5)', isFlag: false },
-	{ name: '--keepIntermediate', description: 'Keep the generated premake5.lua file after execution', isFlag: true }
+	{ name: '--keepIntermediate', description: 'Keep the generated premake5.lua file after execution', isFlag: true },
+	{ name: '--emitOnly', description: 'Only generate the Lua file without running premake (infers --keepIntermediate)', isFlag: true },
 ];
 
 /**

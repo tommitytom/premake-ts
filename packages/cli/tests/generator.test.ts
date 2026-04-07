@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { PremakeScope, type IGlobals } from "../src/scopes/PremakeScope.ts";
+import { PremakeScope, type IGlobals } from "../src/PremakeScope.ts";
 import type { WorkspaceScope, ProjectScope } from "../src/scopes/scopes.ts";
 import { generate } from "../src/generator.ts";
 

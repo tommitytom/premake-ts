@@ -1,4 +1,8 @@
-import type { DocumentedField, PremakeParameter } from './types.ts';
+import type { DocumentedField, FieldDeprecation, PremakeParameter, ValueDeprecations } from './types.ts';
+
+function isFieldDeprecation(dep: FieldDeprecation | ValueDeprecations): dep is FieldDeprecation {
+	return typeof (dep as FieldDeprecation).message === 'string';
+}
 
 /**
  * Extracts a specific section from markdown content
@@ -35,15 +39,18 @@ export function jsdocFormat(text: string): string {
 /**
  * Formats parameters for JSDoc comments
  */
-export function jsdocFormatParams(param: PremakeParameter): string {
+export function jsdocFormatParams(param: PremakeParameter, deprecated?: FieldDeprecation | ValueDeprecations): string {
 	const lines: string[] = [];
+	const valueDeprecations = deprecated && !isFieldDeprecation(deprecated) ? deprecated as ValueDeprecations : undefined;
 
 	lines.push(`\t * @param ${param.name}${param.description ? ' ' + param.description : ''}`);
 
 	if (param.options && param.options.length > 0) {
 		lines.push(`\t * Available options:`);
 		param.options.forEach(option => {
-			lines.push(`\t * - \`${option.name}\`${option.description ? ': ' + option.description : ''}`);
+			const dep = valueDeprecations?.[option.name];
+			const depTag = dep ? ` *(deprecated: ${dep.message})*` : '';
+			lines.push(`\t * - \`${option.name}\`${option.description ? ': ' + option.description : ''}${depTag}`);
 		});
 	}
 
@@ -131,12 +138,16 @@ export function removeSimpleExamples(fields: DocumentedField[]) {
  * Generates a complete function definition with JSDoc comments
  */
 export function generateFunction(field: DocumentedField): string {
+	const deprecatedTag = field.deprecated && isFieldDeprecation(field.deprecated)
+		? `\t * @deprecated ${field.deprecated.message}\n`
+		: '';
+
     return `\t/**
 ${jsdocFormat(field.description + '\n')}
 ${jsdocFormat(field.availability ? '\n' + field.availability : '')}
-${jsdocFormatParams(field.parameter as PremakeParameter)}
+${jsdocFormatParams(field.parameter as PremakeParameter, field.deprecated)}
 ${jsdocFormat(field.examples ? '\n### Examples\n' + field.examples : '')}
-	 */
+${deprecatedTag}	 */
 	${generateFunctionDefinition(field)}
 `;
 }

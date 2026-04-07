@@ -1,5 +1,5 @@
 import type { ProjectScope, WorkspaceScope } from "premake-ts";
-import fields from "../../data/fields.json" with { type: "json" };
+import fields from "../data/fields.json" with { type: "json" };
 
 export interface IGlobals {
 	premakeVersion: string;

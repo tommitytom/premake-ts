@@ -11,7 +11,7 @@
     ".": "./src/index.ts",
     "./generator": "./src/generator.ts",
     "./util": "./src/util.ts",
-    "./scopes/PremakeScope": "./src/scopes/PremakeScope.ts",
+    "./PremakeScope": "./src/PremakeScope.ts",
     "./data/fields.json": "./data/fields.json"
   },
   "keywords": [

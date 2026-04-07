@@ -2,6 +2,14 @@
  * Shared type definitions for the parser
  */
 
+export interface FieldDeprecation {
+	message: string;
+}
+
+export interface ValueDeprecations {
+	[valueName: string]: { message: string };
+}
+
 export interface PremakeField {
     allowed: string[];
     kind: string;
@@ -10,6 +18,7 @@ export interface PremakeField {
     scopes: string[];
     tokens: boolean;
 	fieldtype?: string;
+	deprecated?: FieldDeprecation | ValueDeprecations;
 }
 
 export interface PremakeParameter {

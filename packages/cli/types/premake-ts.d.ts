@@ -1510,12 +1510,12 @@ export interface ConfigScopeGenerated {
 	 * @param flag_list Specifies build flags to modify the compiling or linking process.
 	 * Available options:
 	 * - `ExcludeFromBuild`: Exclude a source code file from the build, for the current configuration.
-	 * - `FatalCompileWarnings`: Treat compiler warnings as errors. Deprecated in Premake 5.0.0-beta4. Use `fatalwarnings` API instead.
-	 * - `FatalLinkWarnings`: Treat linker warnings as errors. Deprecated in Premake 5.0.0-beta4. Use `fatalwarnings` API instead.
-	 * - `FatalWarnings`: Treat all warnings as errors; equivalent to FatalCompileWarnings, FatalLinkWarnings. Deprecated in Premake 5.0.0-beta4. Use `fatalwarnings` API instead.
-	 * - `LinkTimeOptimization`: Enable link-time (i.e. whole program) optimizations. Deprecated in Premake 5.0.0-beta4. Use `linktimeoptimization` API instead.
+	 * - `FatalCompileWarnings`: Treat compiler warnings as errors. Deprecated in Premake 5.0.0-beta4. Use `fatalwarnings` API instead. *(deprecated: Use `fatalwarnings { "All" }` instead.)*
+	 * - `FatalLinkWarnings`: Treat linker warnings as errors. Deprecated in Premake 5.0.0-beta4. Use `fatalwarnings` API instead. *(deprecated: Use `linkerfatalwarnings { "All" }` instead.)*
+	 * - `FatalWarnings`: Treat all warnings as errors; equivalent to FatalCompileWarnings, FatalLinkWarnings. Deprecated in Premake 5.0.0-beta4. Use `fatalwarnings` API instead. *(deprecated: Use `fatalwarnings { "All" }` instead.)*
+	 * - `LinkTimeOptimization`: Enable link-time (i.e. whole program) optimizations. Deprecated in Premake 5.0.0-beta4. Use `linktimeoptimization` API instead. *(deprecated: Use `linktimeoptimization` instead.)*
 	 * - `Maps`: Enable Generate Map File for Visual Studio
-	 * - `MFC`: Enable support for Microsoft Foundation Classes. Deprecated in Premake 5.0.0-beta4. Use `mfc` API instead.
+	 * - `MFC`: Enable support for Microsoft Foundation Classes. Deprecated in Premake 5.0.0-beta4. Use `mfc` API instead. *(deprecated: Use `mfc` instead.)*
 	 * - `MultiProcessorCompile`: Enable Visual Studio to use multiple compiler processes when building.
 	 * - `No64BitChecks`: Disable 64-bit portability warnings.
 	 * - `NoBufferSecurityCheck`: Turn off stack protection checks.
@@ -1532,7 +1532,7 @@ export interface ConfigScopeGenerated {
 	 * - `RelativeLinks`: Forces the linker to use relative paths to libraries instead of absolute paths.
 	 * - `ShadowedVariables`: Warn when a variable, type declaration, or function is shadowed.
 	 * - `UndefinedIdentifiers`: Warn if an undefined identifier is evaluated in an #if directive.
-	 * - `WPF`: Mark the project as using Windows Presentation Framework, rather than WinForms.
+	 * - `WPF`: Mark the project as using Windows Presentation Framework, rather than WinForms. *(deprecated: Use `dotnetsdk "WindowsDesktop"` instead.)*
 	 * - `DebugEnvsDontMerge`
 	 * - `DebugEnvsInherit`
 	 * 

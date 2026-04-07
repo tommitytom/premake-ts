@@ -1,7 +1,11 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import type { DocumentedField, SanitizedField } from './types.ts';
+import type { DocumentedField, FieldDeprecation, SanitizedField, ValueDeprecations } from './types.ts';
+
+function isFieldDeprecation(dep: FieldDeprecation | ValueDeprecations): dep is FieldDeprecation {
+	return typeof (dep as FieldDeprecation).message === 'string';
+}
 import { removeSimpleExamples, toUpperCamelCase } from './utils.ts';
 import type { IClass } from './documentation.ts';
 
@@ -59,10 +63,16 @@ function generateFieldFunction(field: SanitizedField): string {
 		items.push(field.parameter.additional);
 	}
 
+	const valueDeprecations = field.deprecated && !isFieldDeprecation(field.deprecated) ? field.deprecated as ValueDeprecations : undefined;
+
 	if (hasOptions) {
 		if (items.length) items.push('');
 		items.push('Options:');
-		items.push(...field.parameter.options.map(a => '- `' + a.name + '`' + (a.description ? ': ' + a.description : '')));
+		items.push(...field.parameter.options.map(a => {
+			const dep = valueDeprecations?.[a.name];
+			const depTag = dep ? ` *(deprecated: ${dep.message})*` : '';
+			return '- `' + a.name + '`' + (a.description ? ': ' + a.description : '') + depTag;
+		}));
 	}
 	if (field.availability && field.availability !== '') {
 		if (items.length) items.push('');
@@ -76,6 +86,9 @@ function generateFieldFunction(field: SanitizedField): string {
 	}
 
 	let description = `--[[\n${items.join('\n')}\n]]`;
+	if (field.deprecated && isFieldDeprecation(field.deprecated)) {
+		description += `\n---@deprecated ${field.deprecated.message}`;
+	}
 	description += `\n---@param ${field.parameter.name} ${getParamType(field)}${field.parameter.description && field.parameter.description !== '' ? ' ' + field.parameter.description : ''}`;
 	description += `\nfunction ${field.name.toLowerCase()}(${field.parameter.name}) end\n`;
 
