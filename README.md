@@ -1,17 +1,17 @@
 # premake-ts
 
-A monorepo containing tools for writing [Premake](https://premake.github.io/) build scripts in TypeScript, with full type safety and editor completion.
+Write [Premake](https://premake.github.io/) build scripts in TypeScript with full type safety and editor completion.
 
 ## Packages
 
 | Package | Description |
 |---------|-------------|
-| [`@premake-ts/cli`](packages/cli) | CLI tool that transpiles TypeScript build scripts to Lua and runs Premake |
-| [`@premake-ts/generator`](packages/generator) | Parser and codegen pipeline that extracts Premake metadata and generates TypeScript type definitions |
+| [`premake-ts`](packages/cli) | CLI tool that transpiles TypeScript build scripts to Lua and runs Premake |
+| [`@premake-ts/generator`](packages/generator) | Internal parser and codegen pipeline that extracts Premake metadata and generates type definitions |
 
 ## Requirements
 
-- **Node.js 23.6+** (uses `--experimental-strip-types` for native TypeScript execution)
+- **Node.js 22.6+** (uses `--experimental-strip-types` for native TypeScript execution)
 - **Premake 5** binary on your PATH (for generating project files)
 
 > **Note:** This project does **not** use ts-node, tsx, or any TypeScript compilation step. It relies on Node.js native type stripping.
@@ -22,6 +22,12 @@ A monorepo containing tools for writing [Premake](https://premake.github.io/) bu
 
 ```bash
 npm install -g premake-ts
+```
+
+Or run directly with npx:
+
+```bash
+npx premake-ts <action>
 ```
 
 ### Initialize a project
@@ -67,6 +73,35 @@ premake-ts xcode
 premake-ts gmake
 ```
 
+## Installing Type Definitions
+
+Type definitions are versioned against specific Premake releases. You can install types matching your Premake version:
+
+### TypeScript types
+
+```bash
+premake-ts install-types                        # latest stable
+premake-ts install-types --version=5.0.0-beta8  # specific release
+premake-ts install-types --version=dev           # latest dev build
+```
+
+Installs `premake-ts.d.ts` and `tsconfig.json` to your project root, giving you full autocomplete and type checking in your `premake5.ts` scripts.
+
+### Lua types (LuaLS addon)
+
+```bash
+premake-ts install-lua-types                        # latest stable
+premake-ts install-lua-types --version=5.0.0-beta8  # specific release
+```
+
+Installs Lua type annotations to `.premake-ts/lua-types/` for use with the [Lua Language Server](https://github.com/LuaLS/lua-language-server). Add this to your `.luarc.json`:
+
+```json
+{
+  "workspace.library": [".premake-ts/lua-types/lua/library"]
+}
+```
+
 ## CLI Reference
 
 ```
@@ -74,7 +109,8 @@ Usage: premake-ts [options] <command|action>
 
 Commands:
   init                 Initialize a new premake-ts project interactively
-  install-types        Install TypeScript type definitions
+  install-types        Install TypeScript type definitions for a specific Premake version
+  install-lua-types    Install Lua type definitions for Premake (LuaLS addon)
   help                 Display help information
   <action>             Run premake with the specified action (e.g., vs2022, xcode, gmake)
 
@@ -83,6 +119,7 @@ Options:
   --emitOnly               Only generate the Lua file without running premake
   --premakeBinary=<path>   Path to a custom premake5 binary (default: premake5)
   --keepIntermediate       Keep the generated premake5.lua file after execution
+  --version=<version>      Premake version for install-types/install-lua-types
 ```
 
 ## Development
@@ -116,14 +153,14 @@ npm run vitest
 4. The Premake binary is invoked with the generated Lua
 5. The intermediate file is cleaned up (unless `--keepIntermediate`)
 
-### Regenerating Types
+### Type Generation
 
-The parser pipeline (`npm run parse`) extracts field metadata from Premake, processes documentation, and generates TypeScript interfaces. It requires:
+Type definitions are generated from Premake source metadata and hosted in the [premake-types](https://github.com/tommitytom/premake-types) repository. A GitHub Action watches [premake-core](https://github.com/premake/premake-core) for new commits and releases, runs the generator pipeline, and creates PRs with updated types when changes are detected.
+
+The generator pipeline (`npm run parse`) extracts field metadata from Premake, processes documentation, and generates both TypeScript and Lua type definitions. It requires:
 
 - Premake 5 binary available
-- A local LLM server at `http://localhost:1234/v1` (for documentation sanitization)
-
-The generated outputs are committed to the repo, so the parser only needs to be re-run when Premake or its documentation changes.
+- An LLM endpoint (for documentation sanitization)
 
 ## License
 

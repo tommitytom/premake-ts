@@ -155,13 +155,12 @@ export function generateLuaDefinitions(sanitized: SanitizedField[], utils: IClas
 
 	const config = {
 		$schema: "https://raw.githubusercontent.com/LuaLS/LLS-Addons/main/schemas/addon_config.schema.json",
-		name: "premake",
+		name: "Premake",
+		words: ["workspace[%s%(\"']+", "premake%."],
+		files: ["premake5.lua", "premake4.lua", "premake%-.*%.lua"],
 		settings: {
 			"Lua.diagnostics.globals": [...sanitized.map(f => f.name.toLowerCase()), ...utils.map(u => u.name)].sort(),
 		},
-		files: [
-			"**/premake5.lua"
-		]
 	};
 
 	const outputDir = path.join(__dirname, '..', 'types', 'lua');

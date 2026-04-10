@@ -5,7 +5,8 @@ import { type IGlobals, PremakeScope } from './PremakeScope.ts';
 import type { WorkspaceFunc, WorkspaceScope } from 'premake-ts';
 import { displayHelp, parseCliArgs } from './cli-args.ts';
 import { generate } from './generator.ts';
-import { initProject, installTypes } from './init.ts';
+import { initProject } from './init.ts';
+import { installLuaTypes, installRemoteTypes } from './remote-types.ts';
 import { dumpGlobals, execPremake } from './util.ts';
 
 function processScope(globals: IGlobals, name: string, func: WorkspaceFunc): PremakeScope {
@@ -31,8 +32,12 @@ async function main() {
 	}
 
 	if (cliArgs.action === 'install-types') {
-		await installTypes();
-		console.log('\nDone! TypeScript definitions installed.');
+		await installRemoteTypes(cliArgs.version);
+		return;
+	}
+
+	if (cliArgs.action === 'install-lua-types') {
+		await installLuaTypes(cliArgs.version);
 		return;
 	}
 

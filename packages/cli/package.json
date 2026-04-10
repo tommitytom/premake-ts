@@ -1,5 +1,5 @@
 {
-  "name": "@premake-ts/cli",
+  "name": "premake-ts",
   "version": "1.0.0",
   "description": "Write Premake build scripts in TypeScript with full type safety and editor completion",
   "type": "module",
@@ -14,11 +14,27 @@
     "./PremakeScope": "./src/PremakeScope.ts",
     "./data/fields.json": "./data/fields.json"
   },
+  "files": [
+    "bin/",
+    "src/",
+    "types/",
+    "data/"
+  ],
+  "engines": {
+    "node": ">=22.6.0"
+  },
   "keywords": [
     "premake",
     "typescript",
     "build"
   ],
   "author": "Tom Yaxley",
-  "license": "MIT"
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tommitytom/premake-ts.git",
+    "directory": "packages/cli"
+  },
+  "homepage": "https://github.com/tommitytom/premake-ts",
+  "bugs": "https://github.com/tommitytom/premake-ts/issues"
 }

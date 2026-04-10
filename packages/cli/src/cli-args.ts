@@ -12,6 +12,8 @@ export interface PremakeTsArgs {
 	keepIntermediate: boolean;
 	/** The action to run (vs2022, xcode, etc.) or 'init' */
 	action?: string;
+	/** Premake version for install-lua-types (e.g., "5.0.0-beta8", "dev", "latest") */
+	version?: string;
 	/** Remaining arguments to pass through to premake */
 	premakeArgs: string[];
 }
@@ -33,6 +35,7 @@ export const PREMAKE_TS_ARGS: ArgDefinition[] = [
 	{ name: '--premakeBinary=<path>', description: 'Path to a custom premake5 binary (default: premake5)', isFlag: false },
 	{ name: '--keepIntermediate', description: 'Keep the generated premake5.lua file after execution', isFlag: true },
 	{ name: '--emitOnly', description: 'Only generate the Lua file without running premake (infers --keepIntermediate)', isFlag: true },
+	{ name: '--version=<version>', description: 'Premake version for install-types/install-lua-types (e.g., "5.0.0-beta8", "dev")', isFlag: false },
 ];
 
 /**
@@ -41,6 +44,7 @@ export const PREMAKE_TS_ARGS: ArgDefinition[] = [
 export const PREMAKE_TS_COMMANDS: ArgDefinition[] = [
 	{ name: 'init', description: 'Initialize a new premake-ts project interactively', isFlag: false },
 	{ name: 'install-types', description: 'Install TypeScript type definitions to ./premake-ts.d.ts and ./tsconfig.json', isFlag: false },
+	{ name: 'install-lua-types', description: 'Install Lua type definitions for Premake (LuaLS addon)', isFlag: false },
 	{ name: 'help', description: 'Display this help information', isFlag: false },
 	{ name: '<action>', description: 'Run premake with the specified action (e.g., vs2022, xcode, gmake)', isFlag: false }
 ];
@@ -60,6 +64,8 @@ export function parseCliArgs(argv: string[]): PremakeTsArgs {
 
 		if (arg.startsWith('--file=')) {
 			result.file = arg.split('=')[1];
+		} else if (arg.startsWith('--version=')) {
+			result.version = arg.split('=')[1];
 		} else if (arg === '--emitOnly') {
 			result.emitOnly = true;
 		} else if (arg.startsWith('--premakeBinary=')) {

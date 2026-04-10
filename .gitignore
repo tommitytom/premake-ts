@@ -8,3 +8,6 @@ packages/generator/premake-definitions/
 packages/generator/docs/
 packages/generator/report.json
 .devcontainer/devcontainer.env
+.premake-ts/
+types-repo/
+.claude
