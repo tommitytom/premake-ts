@@ -1,22 +1,25 @@
 {
   "name": "premake-ts",
-  "version": "1.0.0",
+  "version": "1.0.4",
   "description": "Write Premake build scripts in TypeScript with full type safety and editor completion",
   "type": "module",
-  "main": "src/main.ts",
+  "main": "dist/main.js",
   "bin": {
     "premake-ts": "bin/cli.js"
   },
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json && cp src/dump-globals.lua dist/"
+  },
   "exports": {
-    ".": "./src/index.ts",
-    "./generator": "./src/generator.ts",
-    "./util": "./src/util.ts",
-    "./PremakeScope": "./src/PremakeScope.ts",
+    ".": "./dist/index.js",
+    "./generator": "./dist/generator.js",
+    "./util": "./dist/util.js",
+    "./PremakeScope": "./dist/PremakeScope.js",
     "./data/fields.json": "./data/fields.json"
   },
   "files": [
     "bin/",
-    "src/",
+    "dist/",
     "types/",
     "data/"
   ],
@@ -36,5 +39,8 @@
     "directory": "packages/cli"
   },
   "homepage": "https://github.com/tommitytom/premake-ts",
-  "bugs": "https://github.com/tommitytom/premake-ts/issues"
+  "bugs": "https://github.com/tommitytom/premake-ts/issues",
+  "devDependencies": {
+    "@types/node": "^24.10.1"
+  }
 }

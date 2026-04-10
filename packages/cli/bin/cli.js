@@ -14,7 +14,7 @@ if (major < 22 || (major === 22 && minor < 6)) {
 }
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const tsFile = join(__dirname, '../src/main.ts');
+const tsFile = join(__dirname, '../dist/main.js');
 const loader = pathToFileURL(join(__dirname, 'register-loader.js')).href;
 
 const child = spawn('node', [

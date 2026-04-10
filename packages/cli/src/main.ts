@@ -1,13 +1,13 @@
 import { existsSync, unlinkSync, writeFileSync } from 'node:fs';
 import { basename, dirname, join, resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
-import { type IGlobals, PremakeScope } from './PremakeScope.ts';
+import { type IGlobals, PremakeScope } from './PremakeScope.js';
 import type { WorkspaceFunc, WorkspaceScope } from 'premake-ts';
-import { displayHelp, parseCliArgs } from './cli-args.ts';
-import { generate } from './generator.ts';
-import { initProject } from './init.ts';
-import { installLuaTypes, installRemoteTypes } from './remote-types.ts';
-import { dumpGlobals, execPremake } from './util.ts';
+import { displayHelp, parseCliArgs } from './cli-args.js';
+import { generate } from './generator.js';
+import { initProject } from './init.js';
+import { installLuaTypes, installRemoteTypes } from './remote-types.js';
+import { dumpGlobals, execPremake } from './util.js';
 
 function processScope(globals: IGlobals, name: string, func: WorkspaceFunc): PremakeScope {
 	const scope = new PremakeScope(globals);

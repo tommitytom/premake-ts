@@ -7,7 +7,7 @@ const packageRoot = join(__dirname, '..');
 export async function resolve(specifier, context, nextResolve) {
 	if (specifier === 'premake-ts') {
 		return {
-			url: pathToFileURL(join(packageRoot, 'src/index.ts')).href,
+			url: pathToFileURL(join(packageRoot, 'dist/index.js')).href,
 			shortCircuit: true
 		};
 	}
