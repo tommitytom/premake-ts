@@ -1,8 +1,8 @@
 import { existsSync, unlinkSync, writeFileSync } from 'node:fs';
 import { basename, dirname, join, resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
-import { type IGlobals, PremakeScope } from './PremakeScope.js';
-import type { WorkspaceFunc, WorkspaceScope } from 'premake-ts';
+import { type IGlobals, PremakeScope } from './premake-scope.js';
+import type { WorkspaceFunc, WorkspaceScope } from '../types/premake-ts.d.ts';
 import { displayHelp, parseCliArgs } from './cli-args.js';
 import { generate } from './generator.js';
 import { initProject } from './init.js';

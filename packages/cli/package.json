@@ -1,6 +1,6 @@
 {
   "name": "premake-ts",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Write Premake build scripts in TypeScript with full type safety and editor completion",
   "type": "module",
   "main": "dist/main.js",

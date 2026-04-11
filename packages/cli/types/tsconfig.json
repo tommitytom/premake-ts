@@ -2,9 +2,8 @@
 	"compilerOptions": {
 		"strict": true,
 		"forceConsistentCasingInFileNames": true,
-		"baseUrl": ".",
 		"paths": {
-			"premake-ts": ["premake-ts.d.ts"]
+			"premake-ts": ["./premake-ts.d.ts"]
 		}
 	}
 }

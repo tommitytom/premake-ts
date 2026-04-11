@@ -1,4 +1,4 @@
-import { PremakeScope } from "./PremakeScope.js";
+import { PremakeScope } from "./premake-scope.js";
 
 const RENAME_COMMANDS = new Map<string, string>([["when", "filter"]]);
 const SCOPED_COMMANDS = new Set(["workspace", "project", "filter", "group", "usage"]);

@@ -12,10 +12,7 @@
     "allowImportingTsExtensions": true,
     "noEmit": true,
     "types": ["node"],
-    "outDir": "dist",
-    "paths": {
-      "premake-ts": ["./types/premake-ts.d.ts"]
-    }
+    "outDir": "dist"
   },
   "include": [
     "src/**/*"

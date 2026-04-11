@@ -592,7 +592,7 @@
       "VectorCall"
     ],
     "kind": "string",
-    "name": "callingconvention",
+    "name": "callingConvention",
     "scope": "config",
     "scopes": [
       "config"
@@ -5970,7 +5970,7 @@
       "Off"
     ],
     "kind": "string",
-    "name": "useImportlib",
+    "name": "useImportLib",
     "scope": "config",
     "scopes": [
       "config"
@@ -6004,7 +6004,7 @@
       "Off"
     ],
     "kind": "string",
-    "name": "userelativelinks",
+    "name": "useRelativeLinks",
     "scope": "config",
     "scopes": [
       "config"

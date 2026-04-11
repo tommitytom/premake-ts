@@ -7,12 +7,16 @@ const MANIFEST_URL = `${RAW_BASE}/manifest.json`;
 export interface ManifestEntry {
 	generatorVersion: string;
 	date: string;
+	urls?: {
+		linux: string;
+		windows: string;
+		macos: string;
+		"macos-x64": string;
+	}
 }
 
 export interface Manifest {
 	generatorVersion: string;
-	latest: string;
-	latestDev: string;
 	releases: Record<string, ManifestEntry>;
 	dev: Record<string, ManifestEntry>;
 }
@@ -28,26 +32,35 @@ export async function fetchManifest(): Promise<Manifest> {
 	return res.json() as Promise<Manifest>;
 }
 
+function findLatestVersion(versions: Record<string, ManifestEntry>): string {
+	return Object.entries(versions).reduce((latest, [version, entry]) => {
+		return new Date(entry.date) > new Date(latest.entry.date) ? { version, entry } : latest;
+	}, { version: '', entry: { generatorVersion: '', date: '1970-01-01' } }).version;
+}
+
 /**
  * Resolve a version string to a manifest entry and its path in the repo
  */
 export function resolveVersion(manifest: Manifest, version?: string): { entry: ManifestEntry; label: string; repoPath: string } {
 	const requested = version || 'latest';
 
+	
 	if (requested === 'latest') {
-		const entry = manifest.releases[manifest.latest];
+		const latestRelease = findLatestVersion(manifest.releases);
+		const entry = manifest.releases[latestRelease];
 		if (!entry) {
-			throw new Error(`Latest version "${manifest.latest}" not found in manifest`);
+			throw new Error(`Latest version "${latestRelease}" not found in manifest`);
 		}
-		return { entry, label: manifest.latest, repoPath: `releases/${manifest.latest}` };
+		return { entry, label: latestRelease, repoPath: `releases/${latestRelease}` };
 	}
-
+	
 	if (requested === 'dev') {
-		const entry = manifest.dev[manifest.latestDev];
+		const latestDev = findLatestVersion(manifest.dev);
+		const entry = manifest.dev[latestDev];
 		if (!entry) {
-			throw new Error(`Latest dev version "${manifest.latestDev}" not found in manifest`);
+			throw new Error(`Latest dev version "${latestDev}" not found in manifest`);
 		}
-		return { entry, label: `dev-${manifest.latestDev}`, repoPath: `dev/${manifest.latestDev}` };
+		return { entry, label: `dev-${latestDev}`, repoPath: `dev/${latestDev}` };
 	}
 
 	// Try releases first, then dev
@@ -121,6 +134,10 @@ export async function installLuaTypes(version?: string, cwd: string = process.cw
 	}, null, 2));
 }
 
+function sanitizeDts(dts: string): string {
+	return `declare module "premake-ts" {\n\n${dts}\n}\n`;
+}
+
 /**
  * Install TypeScript type definitions (premake-ts.d.ts + tsconfig.json)
  */
@@ -128,14 +145,14 @@ export async function installRemoteTypes(version?: string, cwd: string = process
 	console.log('Fetching types manifest...');
 	const manifest = await fetchManifest();
 
-	const { entry, label, repoPath } = resolveVersion(manifest, version);
-	console.log(`Installing TypeScript types for premake ${label} (generator ${entry.generatorVersion})...`);
+	const { label, repoPath } = resolveVersion(manifest, version);
+	console.log(`Installing TypeScript types for premake ${label}...`);
 
 	// Download to project root (where the user's premake5.ts lives)
 	const dtsContent = await downloadFile(`${repoPath}/ts/premake-ts.d.ts`);
 	const tsconfigContent = await downloadFile(`${repoPath}/ts/tsconfig.json`);
 
-	writeFileSync(join(cwd, 'premake-ts.d.ts'), dtsContent, 'utf-8');
+	writeFileSync(join(cwd, 'premake-ts.d.ts'), sanitizeDts(dtsContent), 'utf-8');
 	console.log('  ./premake-ts.d.ts');
 
 	writeFileSync(join(cwd, 'tsconfig.json'), tsconfigContent, 'utf-8');

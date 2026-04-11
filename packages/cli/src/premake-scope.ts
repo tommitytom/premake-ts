@@ -1,4 +1,4 @@
-import type { ProjectScope, WorkspaceScope } from "premake-ts";
+import type { ProjectScope, WorkspaceScope } from "../types/premake-ts.d.ts";
 import fields from "../data/fields.json" with { type: "json" };
 
 export interface IGlobals {

@@ -1,10 +1,10 @@
 import { describe, it, expect } from "vitest";
-import { PremakeScope, type IGlobals } from "../src/PremakeScope.ts";
-import type { WorkspaceScope, ProjectScope } from "../src/scopes/scopes.ts";
+import { PremakeScope, type IGlobals } from "../src/premake-scope.ts";
 import { generate } from "../src/generator.ts";
+import type { ProjectScope, WorkspaceScope } from "../types/premake-ts.d.ts";
 
 const globals: IGlobals = {
-	premakeVersion: "5.0.0-beta4",
+	premakeVersion: "5.0.0-beta8",
 	targetOs: "windows",
 	action: "vs2022",
 };

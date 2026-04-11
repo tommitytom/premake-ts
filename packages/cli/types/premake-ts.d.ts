@@ -1,4 +1,3 @@
-declare module "premake-ts" {
 
 /**
  * Creates a new workspace.
@@ -5174,7 +5173,5 @@ export interface RuleScopeGenerated {
 	 * ```
 	 */
 	propertyDefinition(property_definition: any): this;
-
-}
 
 }
